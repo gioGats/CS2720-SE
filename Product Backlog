@@ -1,0 +1,41 @@
+Product Backlog
+
+- Function to add "things" to database
+
+- Pick a design template
+
+- Cashier functionality
+    - Add item to cart
+    - Remove item from cart
+    - Make a transaction
+    - Override price
+    - Override quantity
+    - Calculate today's profit
+    - Item search
+
+- Login functionality
+    - Login!
+
+- Stocker functionality
+    - Add item to inventory
+    - Remove item from inventory
+    - "Update" item in inventory
+
+- Manager functionality
+    -
+
+- Sales scheduler functionality
+    -
+
+- Report generator functionality
+    -
+
+- Cashier window
+- Login window
+- Stocker window
+- Manager window
+- Sales scheduler window
+- Report generator window
+
+
+- Testing suite that adds "lots" of fake things to the database
