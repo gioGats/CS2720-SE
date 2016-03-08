@@ -5,8 +5,9 @@ Product Backlog
 - Pick a design template
 
 - Cashier functionality
-    - Add item to cart
-    - Remove item from cart
+    - Cart Class (Ryan)
+    - Add item to cart 
+    - Remove item from cart 
     - Make a transaction
     - Override price
     - Override quantity
@@ -14,7 +15,6 @@ Product Backlog
     - Item search
 
 - Login functionality
-    - Login!
 
 - Stocker functionality
     - Add item to inventory
