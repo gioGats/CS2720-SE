@@ -1,20 +1,22 @@
 Product Backlog
 
-- Function to add "things" to database
+- Function to add "things" to database (Braden)
+- Reconstruct database
 
-- Pick a design template
+- Pick a design template (Ethan)
+- Work on windows (see below)
 
 - Cashier functionality
     - Cart Class (Ryan)
-    - Add item to cart 
-    - Remove item from cart 
-    - Make a transaction
+        - Add item to cart 
+        - Remove item from cart 
+        - Make a transaction
     - Override price
     - Override quantity
     - Calculate today's profit
     - Item search
 
-- Login functionality
+- Login functionality (Jacob)
 
 - Stocker functionality
     - Add item to inventory
@@ -29,7 +31,6 @@ Product Backlog
 
 - Report generator functionality
     -
-
 - Cashier window
 - Login window
 - Stocker window
