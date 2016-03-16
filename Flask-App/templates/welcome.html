@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+ <head>
+    <title>POS | Welcome </title>
+ </head>
+
+<h2>This is the page after login.</h2>
+<br>
+<p>Click <a href="/">here</a> to go home.</p>
+<br>
+<br>
+
+<h3> Items: </h3>
+{% for post in posts %}
+    <strong>Title:</strong> {{ post.title }}<br>
+    <strong>Post:</strong>  {{ post.description }} <br>
+<br>
+{% endfor %}
+
+<p>There is nothing here, still need to figure out how to connect to the DB. :(</p>
+{% endblock %}

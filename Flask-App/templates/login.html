@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+ <head>
+    <title>POS | Login </title>
+ </head>
+
+<h1>Please Login</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="Username" name="username">
+          <br>
+          <br>
+         <input type="password" placeholder="Password" name="password">
+          <br>
+          <br>
+        <input class="btn btn-default" type="submit" value="Login">
+      </form>
+        <br>
+        <p>Click <a href="/logout">here</a> to logout.  </p>
+        <p>Click <a href="/welcome">here</a> to try to go to the welcome page while logged out, shouldn't let you in.</p>
+        <p>After login, you should be able to hit the link and go to the welcome page without logging in again.</p>
+{% endblock %}
