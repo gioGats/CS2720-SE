@@ -1,9 +1,9 @@
 # CS2720-SE
-Group project for Spring, 2015 section of CS2720: Software Engineering
+Group project for Spring, 2016 section of CS2720: Software Engineering
 
 http://sailingsales.pythonanywhere.com/
 
-Project TBD
+Project: Point of Sales Application
 
 
 Hey guys, before you forget...
