@@ -1,0 +1,36 @@
+<!--
+File       : base.html
+Author     : Jacob Campbell
+Description: This is the parent form for child forms containing base HTML code.
+-->
+
+<!DOCTYPE html>
+
+<html> <!-- Begin HTML code here -->
+
+  <!-- Bootstrap Header Declaration -->
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+
+ <!-- HTML Body Code Declaration -->
+ <body>
+    <div class="container">
+
+      <!-- Child Template Injection -->
+      {% block content %}{% endblock %}
+
+      <!-- Error Handling -->
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}</p>
+      {% endif %}
+
+      <!-- Flash Message Handling -->
+      {% for message in get_flashed_messages() %}
+        {{ message }}
+      {% endfor %}
+    </div>
+  </body>
+
+</html> <!-- End of HTML code here -->
