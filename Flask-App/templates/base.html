@@ -1,41 +1,78 @@
-{% extends "base.html" %}
-{% block content %}
- <head>
-    <title>POS | Login </title>
- </head>
+<!DOCTYPE html>
 
-<center>
-<h1>Please Login</h1>
-      <br>
-<form class="form-signin" role="form" method="post" action="">
-  {{ form.csrf_token }}
-  <p>
-    {{ form.username(placeholder="Username") }} <br>
-    <span class="error">
-      {% if form.username.errors %}
-        {% for error in form.username.errors %}
-          {{ error }}
-        {% endfor %}
-      {% endif %}
-    </span>
-  </p>
-  <p>
-  {{ form.password(placeholder="Password") }} <br>
-      <span class="error">
-      {% if form.password.errors %}
-        {% for error in form.password.errors %}
-          {{ error }}
-        {% endfor %}
-      {% endif %}
-    </span>
-  </p>
-  <button class="btn btn-sm btn-success" type="submit">Log In</button>
-    <a class="btn btn-sm btn-success" type="button" href="/logout">Logout</a>
-</form>
+<html lang="en">
 
+  <!-- Bootstrap Header Declaration -->
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="static/custom.css" rel="stylesheet">
+
+      <link rel="shortcut icon"
+            type="image/x-icon"
+            href="http://www.free-icons-download.net/images/green-dollar-sign-button-icon-12080.png"/>
+  </head>
+
+ <!-- HTML Body Code Declaration -->
+ <body>
+
+     <!-- Fixed navbar -->
+     <div class="NavbarHeader">
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" a href="/">POS Application</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              <li><a href="/">Home</a> </li>
+              <li><a href="/logout">Logout</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    </div>
+
+     <br><br><br>
+
+    <div class="container">
+         <!-- Error Handling -->
+      {% if error %}
         <br>
-        <p>Use admin | admin to get in.</p>
-        <p>Click <a href="/welcome">here</a> to try to go to the welcome page while logged out, shouldn't let you in.</p>
-        <p>After login, you should be able to hit the link and go to the welcome page without logging in again.</p>
-    </center>
-{% endblock %}
+        <p class="error"><strong>Error:</strong> {{ error }}</p>
+      {% endif %}
+
+      <!--Flash Message Handling-->
+      {% for message in get_flashed_messages() %}
+        <br>
+        {{ message }}
+        <br>
+      {% endfor %}
+
+      <!-- Child Template Injection -->
+      {% block content %}{% endblock %}
+    </div>
+
+     <footer class="navbar navbar-default navbar-fixed-bottom">
+        <p class="navbar-text navbar-center">
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
+                <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
+            This work is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
+                Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
+            </a>.
+        </p>
+     </footer>
+
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/static/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+
+</html>
