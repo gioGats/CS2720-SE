@@ -1,36 +1,41 @@
-<!--
-File       : base.html
-Author     : Jacob Campbell
-Description: This is the parent form for child forms containing base HTML code.
--->
+{% extends "base.html" %}
+{% block content %}
+ <head>
+    <title>POS | Login </title>
+ </head>
 
-<!DOCTYPE html>
-
-<html> <!-- Begin HTML code here -->
-
-  <!-- Bootstrap Header Declaration -->
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
-  </head>
-
- <!-- HTML Body Code Declaration -->
- <body>
-    <div class="container">
-
-      <!-- Child Template Injection -->
-      {% block content %}{% endblock %}
-
-      <!-- Error Handling -->
-      {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }}</p>
+<center>
+<h1>Please Login</h1>
+      <br>
+<form class="form-signin" role="form" method="post" action="">
+  {{ form.csrf_token }}
+  <p>
+    {{ form.username(placeholder="Username") }} <br>
+    <span class="error">
+      {% if form.username.errors %}
+        {% for error in form.username.errors %}
+          {{ error }}
+        {% endfor %}
       {% endif %}
+    </span>
+  </p>
+  <p>
+  {{ form.password(placeholder="Password") }} <br>
+      <span class="error">
+      {% if form.password.errors %}
+        {% for error in form.password.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+  <button class="btn btn-sm btn-success" type="submit">Log In</button>
+    <a class="btn btn-sm btn-success" type="button" href="/logout">Logout</a>
+</form>
 
-      <!-- Flash Message Handling -->
-      {% for message in get_flashed_messages() %}
-        {{ message }}
-      {% endfor %}
-    </div>
-  </body>
-
-</html> <!-- End of HTML code here -->
+        <br>
+        <p>Use admin | admin to get in.</p>
+        <p>Click <a href="/welcome">here</a> to try to go to the welcome page while logged out, shouldn't let you in.</p>
+        <p>After login, you should be able to hit the link and go to the welcome page without logging in again.</p>
+    </center>
+{% endblock %}
