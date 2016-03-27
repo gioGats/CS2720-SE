@@ -3,41 +3,70 @@
 # Desc : This is the master file for the Flask application.
 
 
-# Import statements #
+#############################
+# Import Statements
+#############################
 from flask import *
-from functools import wraps
-from templates.form import LoginForm
-
+from POS_helpers import *
+from templates.form import LoginForm, RegisterForm
+from helper import *
+from helper import login_user, login_required, logout_user
+from flask.ext.bcrypt import Bcrypt
+from flask.ext.sqlalchemy import SQLAlchemy
 # -------------------------------------------------- #
 
+
+#############################
+# Configure the Application
+#############################
 
 # Grabs the domain name the app is running on #
 app = Flask(__name__)
-# -------------------------------------------------- #
+
+# Sets bcrypt for unique password hashing #
+bcrypt = Bcrypt(app)
+
+# Configure our application secret key [DO NOT CHANGE!!!]#
+app.secret_key = '\xb7{\xbb\x9b\x9b\x11\xa7\\Ib\xcf\xe4\x00\x99Yi\xafg\xd2\x96\x82\x18\x18\x9d'
+
+# Configure our database settings #
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+    username="SailingSales",
+    password="sailin123$",
+    hostname="SailingSales.mysql.pythonanywhere-services.com",
+    databasename="SailingSales$master",
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+
+# Setup a global instance of the database #
+# use: 'from app import db' #
+db = SQLAlchemy(app)
+
+# Import all the database models from our 'models.py' file
+# NOTE: We import down here because we have to set up the database
+# (right above this) BEFORE we can import our models
+# (thus it cannot go on the top of the page) #
+from models import *
+
+# Setup Flask Login Manager #
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'  # Points to our "login" function "
 
 
-# Secret Key generated randomly to persist through sessions #
-app.secret_key = "\xc7\xd5\x10C\x19\x82q\x13\xb03\xe6>\xeb\xcdEK\xc1I\x1a\xc6\xaa\x08\xd1\t"
+@login_manager.user_loader
+def load_user(user_id):
+    global current_user
+    current_user = User.query.filter(User.id == int(user_id)).first()
+    return User.query.filter(User.id == int(user_id)).first()
 # -------------------------------------------------- #
 
 
 #############################
-# Function Declarations
+# Global Variables
 #############################
-
-
-# Require a user to be logged in to access a page #
-def login_required(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash('Please login to view this page.')
-            return redirect(url_for('login'))
-
-    return wrap
-# -------------------------------------------------- #
+current_user = None
 
 
 #############################
@@ -50,46 +79,113 @@ def login_required(f):
 def login():
     error = None
     form = LoginForm(request.form)
+    global current_user  # allows changing of the globally defined current_user #
 
-    if request.method == 'POST':
+    if request.method == 'POST':  # If the login button was clicked #
         if form.validate_on_submit():
-            if request.form['username'] != 'admin':
-                if request.form['password'] != 'admin':
-                    error = "Invalid username and password. Please try again"
-                    render_template('login.html', form=form, error=error)
-                else:
+
+            user = User.query.filter_by(name=request.form['username']).first()
+
+            if user is None:
                     error = "Invalid username. Please try again"
                     render_template('login.html', form=form, error=error)
             else:
-                if request.form['password'] != 'admin':
-                    error = "Username found, but invalid password. Please try again"
-                    render_template('login.html', form=form, error=error)
-                else:
-                    session['logged_in'] = True
+                if bcrypt.check_password_hash(user.password, request.form['password']):
+                    login_user(user)
+                    current_user = user
                     flash('You have been successfully logged in.')
-                    return redirect(url_for('welcome'))
+
+                    return redirect_after_login(current_user)  #from POS_helpers #
+                else:
+                    error = "Username found, but invalid password. Please try again."
+                    render_template('login.html', form=form, error=error)
         else:
             render_template('login.html', form=form, error=error)
+
+    # If the form was not a submit, we just need to grab the page data (GET request) #
     return render_template('login.html', form=form, error=error)
 # -------------------------------------------------- #
 
 
 # Logout Route(has no page, merely a function) #
 @app.route('/logout')
-@login_required
 def logout():
-    session.pop('logged_in', None)
+    global current_user
+    if current_user is None:
+        flash("You are already signed out.")
+        return redirect(url_for('login'))
+    logout_user()
+    current_user = None
     flash('You have been successfully logged out.')
     return redirect(url_for('login'))
 # -------------------------------------------------- #
 
 
-# Welcome Page (Requires user to be logged in to see) #
-@app.route('/welcome')
+# Manager page
+# Requires: Login, Manager/Admin permission #
+@app.route('/manager')
 @login_required
-def welcome():
-    return render_template("welcome.html")
+def manager():
+    if is_manager(current_user):
+        return render_template("manager.html")
+    else:
+        return redirect('/')
 # -------------------------------------------------- #
+
+
+# Cashier page
+# Requires: Login, Manager/Admin permission #
+@app.route('/cashier')
+@login_required
+def cashier():
+    if is_manager(current_user) or is_cashier(current_user):
+        items = db.session.query(Items).all()
+        return render_template("cashier.html", items=items)
+    else:
+        return redirect('/')
+# -------------------------------------------------- #
+
+
+# Stocker page
+# Requires: Login, Manager/Admin permission #
+@app.route('/stocker')
+@login_required
+def stocker():
+    if is_manager(current_user) or is_stocker(current_user):
+        items = db.session.query(Items).all()
+        return render_template("stocker.html", items=items)
+    else:
+        return redirect('/')
+# -------------------------------------------------- #
+
+
+# Register Page
+# Requires: Login, Manager/Admin permission #
+@app.route('/register', methods=['GET', 'POST'])
+@login_required
+def register():
+    global current_user
+
+    form = RegisterForm()
+    if is_manager(current_user):
+        if form.validate_on_submit():
+            user = User(
+              name=form.username.data,
+              password=form.password.data,
+              permissions=form.permission.data
+            )
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            current_user = user
+            return redirect('/')
+
+        else:
+            return render_template("register.html", form=form)
+    else:
+        return redirect('/')
+# -------------------------------------------------- #
+
 
 
 # Used for local debugging
