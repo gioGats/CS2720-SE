@@ -9,6 +9,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
       <link href="static/custom.css" rel="stylesheet">
+      <link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
 
       <link rel="shortcut icon"
             type="image/x-icon"
@@ -27,6 +28,26 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+              {% if current_user.is_authenticated %}
+                  <li><a> Hello, {{ current_user.name }} </a></li>
+              {% else %}
+                  <li><a> Hello, Guest </a></li>
+              {% endif %}
+
+
+              {%  if current_user.permissions == 1 %}
+                    <li><a href="/manager">Manager</a></li>
+              {% endif %}
+
+              {%  if current_user.permissions == 1 or current_user.permissions == 2 %}
+                    <li><a href="/cashier">Cashier</a></li>
+              {% endif %}
+
+               {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+                    <li><a href="/stocker">Stocker</a></li>
+              {% endif %}
+
+
               <li><a href="/">Home</a> </li>
               <li><a href="/logout">Logout</a></li>
           </ul>
@@ -73,6 +94,7 @@
     <script src="/static/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
   </body>
 
 </html>
