@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+ <head>
+    <title>POS | Cashier </title>
+ </head>
+
+<h1 style="font-family:PT Sans Narrow,serif;font-size:130%;">Cashier Control Panel:</h1>
+
+<center><h3 style="font-family:PT Sans Narrow,serif;font-size:130%;">Current Inventory</h3></center>
+<br>
+<table border="1" rules=rows style="width:100%">
+{% for item in items %}
+    <tr align="center">
+    <td style="padding: 1em"><strong>ID: </strong>{{ item.id }}<br></td>
+    <td style="padding: 1em"><strong>Item:</strong> {{ item.type }} <br></td>
+    <td style="padding: 1em;"><strong>Price:</strong> ${{ item.price }} <br></td>
+    <td style="padding: 1em"><strong>Added By:</strong>  {{ item.author.name }} </td>
+    </tr>
+
+{% endfor %}
+</table>
+
+
+{% endblock %}
