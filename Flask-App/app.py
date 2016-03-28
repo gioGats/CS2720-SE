@@ -30,14 +30,22 @@ bcrypt = Bcrypt(app)
 app.secret_key = '\xb7{\xbb\x9b\x9b\x11\xa7\\Ib\xcf\xe4\x00\x99Yi\xafg\xd2\x96\x82\x18\x18\x9d'
 
 # Configure our database settings #
-SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-    username="SailingSales",
-    password="sailin123$",
-    hostname="SailingSales.mysql.pythonanywhere-services.com",
-    databasename="SailingSales$master",
-)
-app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+
+# Production Database Settings #
+
+# SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+#    username="SailingSales",
+#    password="sailin123$",
+#    hostname="SailingSales.mysql.pythonanywhere-services.com",
+#    databasename="SailingSales$master",
+# )
+#app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+#app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+
+# For a local database, using SQLite, the settings would look like this, instead of what is above. so comment that out #
+ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db' 
+# Where items.db is the created database locally #
+
 
 # Setup a global instance of the database #
 # use: 'from app import db' #
