@@ -3,7 +3,7 @@ Product Backlog
 - Function to add "things" to database (Braden)
 - Reconstruct database
 
-- Pick a design template (Ethan)
+- Pick a design template (Ethan) (Completed ?) 
 - Work on windows (see below)
 
 - Cashier functionality
@@ -16,7 +16,7 @@ Product Backlog
     - Calculate today's profit
     - Item search
 
-- Login functionality (Jacob)
+- Login functionality (Jacob) (Completed)
 
 - Stocker functionality
     - Add item to inventory
