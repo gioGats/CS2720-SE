@@ -21,36 +21,43 @@
  <body>
 
      <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="z-index: 0; max-height: 50px;">
       <div class="container-fluid">
         <!-- each block will have its own version of navbar
         this is done to allow the items in the navbar to stay
         highlighted when they are currently being viewed -->
         {% block navbar %}{% endblock %}
       </div>
-    </nav>
+    
+     {% if error %}
+        <div class="alert alert-danger" style="width:400px; height:3%; z-index: 100; position: absolute; top:8px;left: 200px; right: 0px; margin: 0;">
+          <div style="top: 6px; position: absolute;">
+            <div style="left: 105%; position: absolute;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <p class="error"><strong>Error:</strong> {{ error }}</p>
+            </div>
+          </div>
+        </div>
 
-<!--      <br><br><br>
-
-    <div class="container-fluid">
-         <!-- Error Handling 
-      {% if error %}
-        <br>
-        <p class="error"><strong>Error:</strong> {{ error }}</p>
       {% endif %}
 
-      Flash Message Handling
+      <!-- Flash Message Handling -->
       {% for message in get_flashed_messages() %}
-        <br>
+          <div class="alert alert-success" style="width:400px; max-width: 400px; height:3%; z-index: 100; position: absolute; top:10px;left: 200px; right: 0px; margin: 0;">
+          <div style="top: 6px; position: absolute;">
+              <div style="left: 105%; position: absolute;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              </div>
         {{ message }}
-        <br>
-      {% endfor %} -->
+          </div>
+        </div>
+      {% endfor %}
+    </nav>
 
-      <!-- Child Template Injection -->
+     <!-- Child Template Injection -->
       {% block content %}{% endblock %}
-    </div>
 
-     <footer class="navbar n+tom">
+     <footer class="navbar navbar-inverse n+tom">
         <p class="navbar-text navbar-center">
             <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
                 <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
