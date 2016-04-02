@@ -1,26 +1,76 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "contenttemplate.html" %}
 
+{% block title %} 
+    Stocker Menu
+{% endblock %}
 
- <head>
-    <title>POS | Stocker </title>
- </head>
+<!-- block navbar extended from base.html -->
+{% block navbar %}
+    <div class="navbar-header">
+        <a class="navbar-brand" a href="/">POS Application</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+                <li><a> Hello, {{ current_user.name }} </a></li>
+            {% else %}
+                <li><a> Hello, Guest </a></li>
+            {% endif %}
 
-<h1 style="font-family:PT Sans Narrow,serif;font-size:130%;">Stocker Control Panel:</h1>
+            {%  if current_user.permissions == 1 %}                                       <!-- where does this get passed in? -->
+                <li><a href="/manager">Manager</a></li>
+            {% endif %}
 
-<center><h3 style="font-family:PT Sans Narrow,serif;font-size:130%;">Current Inventory</h3></center>
-<br>
-<table border="1" rules=rows style="width:100%">
-{% for item in items %}
-    <tr align="center">
-    <td style="padding: 1em"><strong>ID: </strong>{{ item.id }}<br></td>
-    <td style="padding: 1em"><strong>Item:</strong> {{ item.type }} <br></td>
-    <td style="padding: 1em;"><strong>Price:</strong> ${{ item.price }} <br></td>
-    <td style="padding: 1em"><strong>Added By:</strong>  {{ item.author.name }} </td>
-    </tr>
+            {% if current_user.permissions == 1 or current_user.permissions == 2 %}
+                <li><a href="/cashier">Cashier</a></li>
+            {% endif %}
 
-{% endfor %}
-</table>
+            {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+                <li class="active"><a href="/stocker">Stocker</a></li>
+            {% endif %}
 
+            <li><a href="/">Home</a> </li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div><!--/.nav-collapse -->
 
 {% endblock %}
+
+{% block sidePanelContent %}
+    <h2>Current Stocking Information</h2>
+    <p>Items Added: {{ stockingTable.rowCount }} </p>
+    <p>Profit Potential: </p>
+{% endblock %}
+
+{% block table %}
+    <thead>
+        <tr>
+          <td>Product Name</td>
+          <td>Product ID</td>
+          <td>Quantity</td>
+          <td>Weight</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for stockingRow in stockingTable.rowsList %}
+            <tr>
+                <td> {{ stockingRow.productName }} </td>
+                <td> {{ stockingRow.productID }} </td>
+                <td> {{ stockingRow.quantity }} </td>
+                <td> {{ stockingRow.weight }} </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %}
+
+{% block tableInput %}
+    <form action="{{ url_for('stockerAddRow') }}" method=post>
+        <input type="text" name="stockerBarcode" placeholder="Enter a barcode" required>
+        <input type="text" name="stockerQuantity" placeholder="Quantity">
+        <input type="text" name="stockerWeight" placeholder="Weight">
+        <input type="submit" name="stockerAddItem" value="Add Item">
+        <input type="submit" name="stockerSubmitTable" value="Update Stock">
+    </form>
+{% endblock %}
+

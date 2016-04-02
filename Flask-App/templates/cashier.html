@@ -1,26 +1,86 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "contenttemplate.html" %}
 
-
- <head>
-    <title>POS | Cashier </title>
- </head>
-
-<h1 style="font-family:PT Sans Narrow,serif;font-size:130%;">Cashier Control Panel:</h1>
-
-<center><h3 style="font-family:PT Sans Narrow,serif;font-size:130%;">Current Inventory</h3></center>
-<br>
-<table border="1" rules=rows style="width:100%">
-{% for item in items %}
-    <tr align="center">
-    <td style="padding: 1em"><strong>ID: </strong>{{ item.id }}<br></td>
-    <td style="padding: 1em"><strong>Item:</strong> {{ item.type }} <br></td>
-    <td style="padding: 1em;"><strong>Price:</strong> ${{ item.price }} <br></td>
-    <td style="padding: 1em"><strong>Added By:</strong>  {{ item.author.name }} </td>
-    </tr>
-
-{% endfor %}
-</table>
-
-
+{% block title %} 
+	Cashier Menu
 {% endblock %}
+
+<!-- block navbar extended from base.html -->
+{% block navbar %}
+	<div class="navbar-header">
+	  	<a class="navbar-brand" a href="/">POS Application</a>
+	</div>
+	<div id="navbar" class="navbar-collapse collapse">
+	  	<ul class="nav navbar-nav navbar-right">
+	      	{% if current_user.is_authenticated %}
+	          	<li><a> Hello, {{ current_user.name }} </a></li>
+	     	{% else %}
+	          	<li><a> Hello, Guest </a></li>
+	     	{% endif %}
+
+	      	{%  if current_user.permissions == 1 %}                                       <!-- where does this get passed in? -->
+	            <li><a href="/manager">Manager</a></li>
+	      	{% endif %}
+
+	      	{%  if current_user.permissions == 1 or current_user.permissions == 2 %}
+	            <li class="active"><a href="/cashier">Cashier</a></li>
+	      	{% endif %}
+
+	       	{%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+	            <li><a href="/stocker">Stocker</a></li>
+	      	{% endif %}
+
+	      	<li><a href="/">Home</a> </li>
+	      	<li><a href="/logout">Logout</a></li>
+	  	</ul>
+	</div><!--/.nav-collapse -->
+{% endblock %}
+
+{% block sidePanelContent %}
+	<h2>Last Item Scanned</h1>
+	<p>Name: </p>
+	<p>Brand: </p>
+	<p>Product ID: </p>
+	<p>Quantity: </p>
+	<p>Weight: </p>
+	<p>Price: </p>
+
+	<h2>Other Information</h2>
+	<p>Transaction ID: </p>
+	<p>Profit Today: </p>
+{% endblock %}
+
+{% block table %}
+	<thead>
+		<tr>
+			<td>Product Name</td>
+			<td>Product ID</td>
+			<td>Quantity</td>
+			<td>Weight</td>
+			<td>Price Per Unit</td>
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for receiptRow in receiptTable.rowsList %}
+			<tr>
+				<td> {{ receiptRow.productName }} </td>
+				<td> {{ receiptRow.productID }} </td>
+				<td> {{ receiptRow.quantity }} </td>
+				<td> {{ receiptRow.weight }} </td>
+				<td> {{ receiptRow.pricePerUnit }} </td>
+			</tr>
+		{% endfor %}
+	</tbody>
+{% endblock %}
+
+{% block tableInput %}
+	<form action="{{ url_for('cashierAddRow') }}" method=post>
+		<input type="text" name="cashierBarcode" placeholder="Enter a barcode" required>
+		<input type="text" name="cashierQuantity" placeholder="Quantity" size=4>
+		<input type="text" name="cashierWeight" placeholder="Weight" size=4>
+		<input type="submit" name="cashierAddItem" value="Add Item">
+		<a class="btn btn-info" href="#">Override Price</a>
+		<input type="submit" name="cashierSubmitTable" value="Finish Transaction">
+	</form>
+{% endblock %}
+

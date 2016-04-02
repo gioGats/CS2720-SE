@@ -13,6 +13,7 @@ from helper import *
 from helper import login_user, login_required, logout_user
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
+from POS_display import *									# used to help with displaying HTML tables
 # -------------------------------------------------- #
 
 
@@ -43,7 +44,7 @@ app.secret_key = '\xb7{\xbb\x9b\x9b\x11\xa7\\Ib\xcf\xe4\x00\x99Yi\xafg\xd2\x96\x
 #app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 
 # For a local database, using SQLite, the settings would look like this, instead of what is above. so comment that out #
- app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db' 
 # Where items.db is the created database locally #
 
 
@@ -135,9 +136,14 @@ def logout():
 @login_required
 def manager():
     if is_manager(current_user):
-        return render_template("manager.html")
+        return render_template("manager.html", saleTable=saleTable)
     else:
         return redirect('/')
+
+@app.route('/manageradd', methods=["POST"])
+def managerAddRow():
+    addSaleRow('managerBarcode', 'managerSaleStart', 'managerSaleEnd', 'managerSalePrice')
+    return redirect(url_for('manager'))
 # -------------------------------------------------- #
 
 
@@ -148,9 +154,15 @@ def manager():
 def cashier():
     if is_manager(current_user) or is_cashier(current_user):
         items = db.session.query(Items).all()
-        return render_template("cashier.html", items=items)
+        return render_template("cashier.html", items=items, receiptTable=receiptTable)
     else:
         return redirect('/')
+
+@app.route('/cashieradd', methods=["POST"])
+def cashierAddRow():
+	addReceiptRow('cashierBarcode', 'cashierQuantity', 'cashierWeight')
+	return redirect(url_for('cashier'))
+
 # -------------------------------------------------- #
 
 
@@ -161,9 +173,14 @@ def cashier():
 def stocker():
     if is_manager(current_user) or is_stocker(current_user):
         items = db.session.query(Items).all()
-        return render_template("stocker.html", items=items)
+        return render_template("stocker.html", items=items, stockingTable=stockingTable)
     else:
         return redirect('/')
+
+@app.route('/stockeradd', methods=["POST"])
+def stockerAddRow():
+    addStockingRow('stockerBarcode', 'stockerQuantity', 'stockerWeight')
+    return redirect(url_for('stocker'))
 # -------------------------------------------------- #
 
 

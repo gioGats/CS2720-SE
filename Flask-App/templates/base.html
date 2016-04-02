@@ -4,10 +4,11 @@
 
   <!-- Bootstrap Header Declaration -->
   <head>
+      <title>{% block title %}{% endblock %}</title>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
       <link href="static/custom.css" rel="stylesheet">
       <link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
 
@@ -20,63 +21,36 @@
  <body>
 
      <!-- Fixed navbar -->
-     <div class="NavbarHeader">
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" a href="/">POS Application</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-              {% if current_user.is_authenticated %}
-                  <li><a> Hello, {{ current_user.name }} </a></li>
-              {% else %}
-                  <li><a> Hello, Guest </a></li>
-              {% endif %}
-
-
-              {%  if current_user.permissions == 1 %}
-                    <li><a href="/manager">Manager</a></li>
-              {% endif %}
-
-              {%  if current_user.permissions == 1 or current_user.permissions == 2 %}
-                    <li><a href="/cashier">Cashier</a></li>
-              {% endif %}
-
-               {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
-                    <li><a href="/stocker">Stocker</a></li>
-              {% endif %}
-
-
-              <li><a href="/">Home</a> </li>
-              <li><a href="/logout">Logout</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- each block will have its own version of navbar
+        this is done to allow the items in the navbar to stay
+        highlighted when they are currently being viewed -->
+        {% block navbar %}{% endblock %}
       </div>
     </nav>
-    </div>
 
-     <br><br><br>
+<!--      <br><br><br>
 
-    <div class="container">
-         <!-- Error Handling -->
+    <div class="container-fluid">
+         <!-- Error Handling 
       {% if error %}
         <br>
         <p class="error"><strong>Error:</strong> {{ error }}</p>
       {% endif %}
 
-      <!--Flash Message Handling-->
+      Flash Message Handling
       {% for message in get_flashed_messages() %}
         <br>
         {{ message }}
         <br>
-      {% endfor %}
+      {% endfor %} -->
 
       <!-- Child Template Injection -->
       {% block content %}{% endblock %}
     </div>
 
-     <footer class="navbar navbar-default navbar-fixed-bottom">
+     <footer class="navbar n+tom">
         <p class="navbar-text navbar-center">
             <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
                 <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>

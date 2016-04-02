@@ -1,0 +1,24 @@
+<!-- notes about blocks:
+	- all 3 main pages have a similar format (side panel, main panel, and a table)
+		> side panel specifies information about the current page (e.g. transaction ID) as well as various buttons and links
+		> main panel holds the table and all functions related to it (e.g. adding an item to the current working receipt)
+		> table holds the different tables for each of the pages 
+-->
+{% extends "base.html" %}
+{% block content %}
+	<div class="container-fluid" id="pagecontent">
+		<div class="col-md-3" id="sidepanel">
+			{% block sidePanelContent %}{% endblock %}
+		</div>
+		<div class="col-md-9" id="mainpanel"> 
+			<div id="tablewindow">
+				<table class="table table-striped">
+					{% block table %}{% endblock %}
+				</table>
+			</div>
+			<div id="tableinput">
+				{% block tableInput %}{% endblock %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
