@@ -41,9 +41,9 @@
 		<p>Name: {{ receiptTable.mostRecentRow.productName }} </p>
 		<p>Brand: </p>
 		<p>Product ID: {{ receiptTable.mostRecentRow.productID }} </p>
-		<p>Quantity: {{ receiptTable.mostRecentRow.name }} </p>
-		<p>Weight: {{ receiptTable.mostRecentRow.name }} </p>
-		<p>Price: {{ receiptTable.mostRecentRow.name }} </p>
+		<p>Quantity: {{ receiptTable.mostRecentRow.quantity }} </p>
+		<p>Weight: {{ receiptTable.mostRecentRow.weight }} </p>
+		<p>Price: {{ receiptTable.mostRecentRow.pricePerUnit }} </p>
 	</div>
 	<div class="side-panel-bot">
 		<h2>Other Information</h2>
@@ -53,7 +53,7 @@
 {% endblock %}
 
 {% block table %}
-	<thead>
+	<thead class="table-header">
 		<tr>
 			<td>Product Name</td>
 			<td>Product ID</td>

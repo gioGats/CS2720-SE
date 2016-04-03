@@ -89,3 +89,23 @@ def addSaleRow(productID, saleStart, saleEnd, salePrice):
 	saleTable.rowsList.append(newRow)
 	saleTable.rowCount += 1
 
+#####################################################################################################################################################################################
+# TEST FUNCTION DEFINITIONS 																																						#
+#####################################################################################################################################################################################
+
+# In:		tableName (table object)
+# Out:		none
+# Purpose:	to populate the GUI tables for testing purposes
+def fillTable(tableName):
+	if (tableName == "receiptTable"):
+		for x in range(100):
+			newRow = receiptRow("bananas", 12345, "N/A", 300, 0.57)
+			receiptTable.rowsList.append(newRow)
+	elif (tableName == "stockingTable"):
+		for x in range(100):
+			newRow = stockRow("matches", 13200, 300, "N/A")
+			stockingTable.rowsList.append(newRow)
+	elif (tableName == "saleTable"):
+		for x in range(100):
+			newRow = saleRow("shoes", 13402, "07/23/2016", "07/25/2016", 0.02)
+			saleTable.rowsList.append(newRow)

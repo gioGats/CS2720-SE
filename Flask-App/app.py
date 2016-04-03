@@ -47,7 +47,6 @@ app.secret_key = '\xb7{\xbb\x9b\x9b\x11\xa7\\Ib\xcf\xe4\x00\x99Yi\xafg\xd2\x96\x
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db' 
 # Where items.db is the created database locally #
 
-
 # Setup a global instance of the database #
 # use: 'from app import db' #
 db = SQLAlchemy(app)
@@ -57,6 +56,11 @@ db = SQLAlchemy(app)
 # (right above this) BEFORE we can import our models
 # (thus it cannot go on the top of the page) #
 from models import *
+
+# FOR TESTING ONLY
+fillTable("receiptTable")
+fillTable("stockingTable")
+fillTable("saleTable")
 
 # Setup Flask Login Manager #
 login_manager = LoginManager()
