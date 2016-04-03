@@ -37,9 +37,11 @@
 {% endblock %}
 
 {% block sidePanelContent %}
-    <h2>Current Stocking Information</h2>
-    <p>Items Added: {{ stockingTable.rowCount }} </p>
-    <p>Profit Potential: </p>
+    <div class="side-panel-top">
+        <h2>Current Stocking Information</h2>
+        <p>Items Added: {{ stockingTable.rowCount }} </p>
+        <p>Profit Potential: </p>
+    </div>
 {% endblock %}
 
 {% block table %}

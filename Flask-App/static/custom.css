@@ -1,7 +1,36 @@
+/* Author: Ethan Morisette
+/* Purpose: to add custom styling on top of the bootstrap styling
+/* Notes: please alphabetize selector properties for enhanced readability */
+
 html						{background-color:#000000;}
-#sidepanel					{background-color:#616161; height:100%; border-style: solid ridge none none; border-width:5px 10px 0px 0px; border-color: black #2e2e2e;}
+#pagecontent				{height:750px; margin-top:50px; padding:0px;}
+
+/************************************************************************************************************************************************
+	  HEADER STYLING
+************************************************************************************************************************************************/
+nav.navbar					{border-radius:0px; margin:0px;}
+
+
+/************************************************************************************************************************************************
+      SIDE PANEL STYLING		   
+************************************************************************************************************************************************/
+#sidepanel					{background-color:#616161; border-color:black #2e2e2e; border-style:solid ridge none none; border-width:5px 10px 0px 0px; height:100%; position:relative;}
+.side-panel-top				{position:absolute; top:10px;}
+.side-panel-bot				{bottom:10px; position:absolute;}
+
+/************************************************************************************************************************************************
+	  MAIN PANEL STYLING
+************************************************************************************************************************************************/
 #mainpanel					{background-color:#8A0651; height:100%;}
-#pagecontent				{margin-top:50px; padding:0px; height:750px;}
-#tablewindow				{height:500px; margin:20px; border:3px solid black; overflow-y:scroll; background-color:#FDE1F0;}
+
+/***********************************************************************************************************************************************
+	  TABLE STYLING
+************************************************************************************************************************************************/
+#tablewindow				{background-color:#FDE1F0; border:3px solid black; height:500px; margin:20px; overflow-y:scroll;}
+
+
+/************************************************************************************************************************************************
+	  TABLE FORM STYLING
+************************************************************************************************************************************************/
 #tableinput					{height:200px; margin:20px;}
-nav.navbar					{margin:0px; border-radius:0px;}
+

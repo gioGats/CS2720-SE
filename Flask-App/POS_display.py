@@ -40,8 +40,9 @@ class saleRow:
 # Purpose: to hold a variety of table information beyond the rows themselves (e.g. table rows, potential profit from all items currently in the table, etc.)
 class table:
 	def __init__(self):
-		self.rowsList = []	# list of objects (receiptRow, stockRow, or saleRow)
-		self.rowCount = 0	# integer
+		self.rowsList 		= []		# list of row objects (receiptRow, stockRow, or saleRow)
+		self.rowCount 		= 0			# integer
+		self.mostRecentRow 	= None		# row object (receiptRow, stockRow, or saleRow)
 
 #######################################################################################################################################################################################
 # GLOBAL VARIABLES          																																						  #
@@ -65,6 +66,7 @@ def addReceiptRow(productID, quantity, weight):
 	newRow			= receiptRow(productName, request.form[productID], request.form[quantity], request.form[weight], pricePerUnit)
 	receiptTable.rowsList.append(newRow)
 	receiptTable.rowCount += 1
+	receiptTable.mostRecentRow = newRow
 
 # In:		productID (string), quantity (string), weight (string)
 # Out:		none
@@ -75,6 +77,7 @@ def addStockingRow(productID, quantity, weight):
 	newRow 			= stockRow(productName, request.form[productID], request.form[quantity], request.form[weight])
 	stockingTable.rowsList.append(newRow)
 	stockingTable.rowCount += 1
+
 
 # In:		productID (string), saleStart (string), saleEnd (string), salePrice (string)
 # Out:		none

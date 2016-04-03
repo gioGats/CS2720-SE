@@ -36,22 +36,26 @@
 {% endblock %}
 
 {% block sidePanelContent %}
-    <h2>Generate a Report</h2>
-    <form id="manager-form">
-        <select class="form-control" form="manager-form">
-            <option value="earnings_report">Earnings Report</option>
-            <option value="item_inventory_report">Item Inventory Report</option>
-            <option value="product_inventory_report">Product Inventory Report</option>
-            <option value="transaction_report">Transaction Report</option>
-        </select>
-        <input type="date" name="managerReportStart">
-        <input type="date" name="managerReportEnd">
-        <button type="submit" name="managerReportDownload" class="btn btn-info">Download Report</button>
-    </form>
-    <h2>Other Administrative Tools</h2>
-    <a class="btn btn-info" href="/register">Create Account</a>
-    <a class="btn btn-info" href="#">Make Purchase Order</a>
-  
+    <div class="side-panel-top">
+        <h2>Generate a Report</h2>
+        <form id="manager-form">
+            <select class="form-control" form="manager-form">
+                <option value="earnings_report">Earnings Report</option>
+                <option value="item_inventory_report">Item Inventory Report</option>
+                <option value="product_inventory_report">Product Inventory Report</option>
+                <option value="transaction_report">Transaction Report</option>
+            </select>
+            <input type="date" name="managerReportStart">
+            <input type="date" name="managerReportEnd">
+            <button type="submit" name="managerReportDownload" class="btn btn-info">Download Report</button>
+        </form>
+    </div>
+
+    <div class="side-panel-bot">
+        <h2>Other Administrative Tools</h2>
+        <a class="btn btn-info" href="/register">Create Account</a>
+        <a class="btn btn-info" href="#">Make Purchase Order</a>
+    </div>
 {% endblock %}
 
 {% block table %}
