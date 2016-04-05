@@ -37,6 +37,10 @@ class Inventory(db.Model):
         self.inventory_cost = inventory_cost
         self.expiration_date = None # TODO Set to today + shelf_life from Products table
 
+    def get_item(self, item_id)
+        # TODO return all fields associated with item_id
+        return []
+
     def __repr__(self):
         return '{} {} {} {} {}'.format(self.item_id, self.product_id,self.item_type,
                                           self.inventory_cost, self.expiration_date)
@@ -61,10 +65,16 @@ class Products(db.Model):
         self.min_inventory = min_inventory
         self.shelf_life = shelf_life
         self.standard_price = standard_price
+        self.sale_price = standard_price
+
+    def get_price(self, product_id):
+        # TODO get sale_price of this product
+        return self.sale_price
 
     def __repr__(self):
-        return '{} {} {} {} {} {}'.format(self.product_id, self.supplier_id, self.inventory_count,
-                                          self.min_inventory, self.shelf_life, self.standard_price)
+        return '{} {} {} {} {} {} {}'.format(self.product_id, self.supplier_id, self.inventory_count,
+                                             self.min_inventory, self.shelf_life, self.standard_price,
+                                             self.sale_price)
 
 
 class Sales(db.Model):
@@ -121,6 +131,10 @@ class Transaction(db.Model):
         self.payment_type = payment_type
         self.date = None  # TODO Auto-assign date
         self.transaction_id = None  # TODO Add logic to auto assign supplier_id
+
+    def get_transaction(self, transaction_id):
+        # TODO return all fields associated with transaction_id
+        return []
 
     def __repr__(self):
         return '{} {} {} {} {}'.format(self.cust_name, self.cust_contact, self.payment_type,
