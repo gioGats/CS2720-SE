@@ -3,14 +3,14 @@ class Item(object):
     Item class stores relevant data from database
     """
     def __init__(self):
-        self._id = 0
-        self._price = 0
+        self.id = 0
+        self.price = 0
 
     def get_price(self):
-        return self._price
+        return self.price
 
     def set_price(self, price):
-        self._price = price
+        self.price = price
 
 
 class Cart(object):
@@ -18,21 +18,30 @@ class Cart(object):
     Cart class stores items
     """
     def __init__(self):
-        self._items = []
-        self._subtotal = 0
-        self._salestax = 0.07
-        self._total = 0
+        self.items = []
+        self.item_counter = {}
+        self.subtotal = 0
+        self.salestax = 0.07
+        self.total = 0
 
     def add_to_cart(self, item):
-        self._items.append(item)
-        self._subtotal += item.getPrice()
-        self._total = self._subtotal * (1+self._salestax)
+        self.items.append(item)
+        if item._id in self._item_counter:
+            self._item_counter[item.id] += 1
+        else:
+            self.item_counter[item._id] + 1
+        self.subtotal += item.getPrice()
+        self.total = self.subtotal * (1+self.salestax)
 
     def remove_from_cart(self, item):
-        self._items.remove(item)
+        self.items.remove(item)
 
     def override_price(self, item, price):
-        self._items[item].setPrice(price)
+        self.items[item].setPrice(price)
 
     def process_transaction(self):
+        # Interate through items in cart
+            # Add item to Sales table
+            # Remove item from Inventory table
+        # Add transaction to Transactions table
         return
