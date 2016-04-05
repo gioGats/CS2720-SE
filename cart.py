@@ -30,10 +30,11 @@ class Cart(object):
 
     def add_to_cart(self, item):
         self.items.append(item)
-        if item._id in self._item_counter:
-            self._item_counter[item.id] += 1
+        # TODO Fix item id to product id
+        if item.product_id in self.product_counter:
+            self.product_counter[item.product_id] += 1
         else:
-            self.item_counter[item._id] + 1
+            self.item_counter[item.product_id] = 1
         self.subtotal += item.get_price()
         self.total = self.subtotal * (1+self.salestax)
 
