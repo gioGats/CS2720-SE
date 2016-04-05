@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="3050862503">
+    <data-source source="LOCAL" name="Sqlite (Xerial) - items.db" uuid="29bab8bd-1868-404c-86e5-fbf927321003">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/Flask-App/items.db</jdbc-url>
+    </data-source>
+  </component>
+</project>
