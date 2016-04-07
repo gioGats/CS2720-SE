@@ -12,8 +12,6 @@ New Backlog!
 -Tweak positional stuff. ( )
 	-Make it pretty. ( )
 
--Fix header - BROKEN ( )
-
 ------------------------------
 -----------Database-----------
 ------------------------------
