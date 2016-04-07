@@ -21,7 +21,7 @@ New Backlog!
 	-Additionally, discounts table (not in old docs)
 
 -Database population -!Braden! ( )
-	-Add items and such        		( )
+	-Add items and such        		        ( )
 	-Add lots of items to have a working-set( )
 
 ------------------------------
