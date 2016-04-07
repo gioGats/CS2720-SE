@@ -1,0 +1,53 @@
+New Backlog!
+------------------------------
+--------------UI--------------
+-Ethan wants all of the below-
+------------------------------
+-Restructure into new tabs: ( )
+	-Transactions (Currently cashier)	( )
+	-Inventory    (Currently stocker)	( )
+	-Discounts    (Currently manager)	( )
+	-Reporting    (Currently manager)	( )
+
+-Tweak positional stuff. ( )
+	-Make it pretty. ( )
+
+------------------------------
+-----------Database-----------
+------------------------------
+-Reference to Jacob for SQAlchemy tutorial (4/7/2016?) ( )
+
+-Implementing tables/Database Setup -!Ryan! ( )
+	-Additionally, discounts table (not in old docs)
+
+-Database population -!Braden! ( )
+	-Add items and such        		( )
+	-Add lots of items to have a working-set( )
+
+------------------------------
+------------Logics------------
+------------------------------
+-Merge cart/reciept logic -!Ethan/Ryan! ( )
+
+-Implement discounts logic (Piggyback off of inventory)
+	-Add item/date range ( )
+	-Scheduling cleanup? - Maybe for scalability?
+
+-Implement inventory logic -!Ethan! ( )
+	-Add item et. al.   ( )
+	-Change item et. al.( )
+
+-Implement report generation stuff ( ) 
+
+-Update interfaces to deal with new database setup ( )
+
+------------------------------
+------Project Management------
+------------------------------
+
+-System Documentation ( )
+
+-Project Report ( )
+
+-Testing Instructions ( )
+	-Readme, what the code does, &c. ( )
