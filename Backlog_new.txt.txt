@@ -14,7 +14,11 @@ New Backlog!
 
 - Make Purchase Order (Jacob)
 
-- Get date time working. 
+- Get date time working.
+
+- Make table headers fixed
+
+- Get rid of "weight" text inputs
 
 ------------------------------
 -----------Database-----------
@@ -45,6 +49,7 @@ New Backlog!
 
 -Update interfaces to deal with new database setup ( )
 
+-Implement item removal from tables ( )
 ------------------------------
 ------Project Management------
 ------------------------------
