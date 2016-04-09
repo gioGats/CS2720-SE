@@ -13,7 +13,9 @@ from helper import *
 from helper import login_user, login_required, logout_user
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
-from POS_display import *									# used to help with displaying HTML tables
+from POS_display import *	
+from sqlalchemy.engine import Engine
+from sqlalchemy import event								# used to help with displaying HTML tables
 # -------------------------------------------------- #
 
 
@@ -51,6 +53,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db'
 # use: 'from app import db' #
 db = SQLAlchemy(app)
 
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+
 # Import all the database models from our 'models.py' file
 # NOTE: We import down here because we have to set up the database
 # (right above this) BEFORE we can import our models
@@ -58,16 +66,16 @@ db = SQLAlchemy(app)
 from models import *
 
 # FOR TESTING ONLY
-fillTable("receiptTable")
-fillTable("stockingTable")
-fillTable("saleTable")
+#fillTable("receiptTable")
+#fillTable("stockingTable")
+#fillTable("saleTable")
 
 # Setup Flask Login Manager #
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'  # Points to our "login" function "
 
-
+# The magic that makes foreign keys activated in sqlite
 @login_manager.user_loader
 def load_user(user_id):
     global current_user
@@ -157,7 +165,7 @@ def managerAddRow():
 @login_required
 def cashier():
     if is_manager(current_user) or is_cashier(current_user):
-        items = db.session.query(Items).all()
+        items = db.session.query(Item).all()
         return render_template("cashier.html", items=items, receiptTable=receiptTable)
     else:
         return redirect('/')
@@ -176,7 +184,7 @@ def cashierAddRow():
 @login_required
 def stocker():
     if is_manager(current_user) or is_stocker(current_user):
-        items = db.session.query(Items).all()
+        items = db.session.query(Item).all()
         return render_template("stocker.html", items=items, stockingTable=stockingTable)
     else:
         return redirect('/')
