@@ -28,6 +28,7 @@ class Product(db.Model):
 	__tablename__ = "products"
 
 	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String, nullable=False)
 	supplier_id = db.Column(db.Integer, ForeignKey("suppliers.id"), nullable=False)
 	inventory_count = db.Column(db.Integer, nullable=False)
 	min_count = db.Column(db.Integer)
@@ -35,7 +36,8 @@ class Product(db.Model):
 	standard_price = db.Column(db.Float, nullable=False)
 	sale_price = db.Column(db.Float)
 
-	def __init__(self, supplier_id, inventory_count, shelf_life, standard_price):
+	def __init__(self, name, supplier_id, inventory_count, shelf_life, standard_price):
+		self.name = name
 		self.supplier_id = supplier_id
 		self.inventory_count = inventory_count
 		self.shelf_life = shelf_life
