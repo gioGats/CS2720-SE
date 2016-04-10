@@ -50,7 +50,6 @@
           <td>Product Name</td>
           <td>Product ID</td>
           <td>Quantity</td>
-          <td>Weight</td>
         </tr>
     </thead>
 
@@ -60,7 +59,6 @@
                 <td> {{ stockingRow.productName }} </td>
                 <td> {{ stockingRow.productID }} </td>
                 <td> {{ stockingRow.quantity }} </td>
-                <td> {{ stockingRow.weight }} </td>
             </tr>
         {% endfor %}
     </tbody>
@@ -70,7 +68,6 @@
     <form action="{{ url_for('stockerAddRow') }}" method=post>
         <input type="text" name="stockerBarcode" placeholder="Enter a barcode" required>
         <input type="text" name="stockerQuantity" placeholder="Quantity">
-        <input type="text" name="stockerWeight" placeholder="Weight">
         <input type="submit" name="stockerAddItem" value="Add Item">
     </form>
 	<form action="{{ url_for('stockerUpdateStock') }}" method=post>

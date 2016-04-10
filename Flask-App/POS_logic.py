@@ -13,20 +13,18 @@ from flask import *
 
 # Purpose: holds all information in a row of the receipt table (aka information for a receipt!)
 class receiptRow:
-	def __init__(self, productName, productID, quantity, weight, pricePerUnit):
+	def __init__(self, productName, productID, quantity, pricePerUnit):
 		self.productName 	= productName			# string
 		self.productID 		= productID				# integer
 		self.quantity 		= quantity				# integer
-		self.weight 		= weight				# float	
 		self.pricePerUnit 	= pricePerUnit			# float
 
 # Purpose: holds all information in a row of the stocking table 
 class stockRow:
-	def __init__(self, productName, productID, quantity, weight):
+	def __init__(self, productName, productID, quantity):
 		self.productName 	= productName			# string
 		self.productID		= productID				# integer
 		self.quantity 		= quantity				# integer
-		self.weight			= weight				# float
 
 # Purpose: holds all information in a row of the sale table
 class saleRow:
@@ -79,7 +77,7 @@ saleTable		= table()
 # Purpose: 	
 # Note: 	the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
 def addReceiptRow(productName, productID, quantity, pricePerUnit):
-	newRow = receiptRow(productName, productID, quantity, 10.00, pricePerUnit)
+	newRow = receiptRow(productName, productID, quantity, pricePerUnit)
 	receiptTable.addRow(newRow)
 
 # In:		productID (string), quantity (string), weight (string)
@@ -87,7 +85,7 @@ def addReceiptRow(productName, productID, quantity, pricePerUnit):
 # Purpose:	
 # Note:		the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
 def addStockingRow(productName, productID, quantity):
-	newRow = stockRow(productName, productID, quantity, 10.5)
+	newRow = stockRow(productName, productID, quantity)
 	stockingTable.addRow(newRow)
 
 # In:		productID (string), saleStart (string), saleEnd (string), salePrice (string)
@@ -108,11 +106,11 @@ def addSaleRow(productName, productID, saleStart, saleEnd, salePrice):
 def fillTable(tableName):
 	if (tableName == "receiptTable"):
 		for x in range(100):
-			newRow = receiptRow("bananas", 12345, "N/A", 300, 0.57)
+			newRow = receiptRow("bananas", 12345, "N/A", 0.57)
 			receiptTable.rowsList.append(newRow)
 	elif (tableName == "stockingTable"):
 		for x in range(100):
-			newRow = stockRow("matches", 13200, 300, "N/A")
+			newRow = stockRow("matches", 13200, "N/A")
 			stockingTable.rowsList.append(newRow)
 	elif (tableName == "saleTable"):
 		for x in range(100):

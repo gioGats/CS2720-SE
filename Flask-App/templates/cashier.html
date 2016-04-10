@@ -58,7 +58,6 @@
 			<td>Product Name</td>
 			<td>Product ID</td>
 			<td>Quantity</td>
-			<td>Weight</td>
 			<td>Price Per Unit</td>
 		</tr>
 	</thead>
@@ -69,7 +68,6 @@
 				<td> {{ receiptRow.productName }} </td>
 				<td> {{ receiptRow.productID }} </td>
 				<td> {{ receiptRow.quantity }} </td>
-				<td> {{ receiptRow.weight }} </td>
 				<td> {{ receiptRow.pricePerUnit }} </td>
 			</tr>
 		{% endfor %}
@@ -80,7 +78,6 @@
 	<form action="{{ url_for('cashierAddRow') }}" method=post>
 		<input type="text" name="cashierBarcode" placeholder="Enter a barcode" required>
 		<input type="text" name="cashierQuantity" placeholder="Quantity" size=4>
-		<input type="text" name="cashierWeight" placeholder="Weight" size=4>
 		<input type="submit" name="cashierAddItem" value="Add Item">
 		<a class="btn btn-info" href="#">Override Price</a>
 	</form>
