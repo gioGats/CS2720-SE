@@ -16,7 +16,7 @@ from flask import *
 # Out: 		dictionary
 # Purpose: 	to get user input from the GUI and pass it into the system
 # Note: 
-def getReceiptRow(request):
+def getTransactionRow(request):
 	inputDict = dict()
 	inputDict["productID"] 	= request.form["productID"]
 	inputDict["quantity"] 	= request.form["quantity"]
@@ -26,7 +26,7 @@ def getReceiptRow(request):
 # Out: 		a list of entries
 # Purpose: 	to get user input from the GUI and pass it into the system
 # Note: 
-def getStockerRow(request):
+def getInventoryRow(request):
 	inputDict = dict()
 	inputDict["productID"] 	= request.form["productID"]
 	inputDict["quantity"] 	= request.form["quantity"]
@@ -36,7 +36,7 @@ def getStockerRow(request):
 # Out: 		a list of entries
 # Purpose: 	to get user input from the GUI and pass it into the system
 # Note: 
-def getSaleRow(request):
+def getDiscountRow(request):
 	inputDict = dict()
 	inputDict["productID"] 	= request.form["productID"]
 	inputDict["saleStart"] 	= request.form["saleStart"]
