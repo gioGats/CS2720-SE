@@ -19,6 +19,8 @@ New Backlog!
 
 - Get rid of "weight" text inputs (COMPLETED)
 
+- add expiration date text input to inventory tab - !Ethan! ( )
+
 ------------------------------
 -----------Database-----------
 ------------------------------
@@ -39,16 +41,17 @@ New Backlog!
 -Implement discounts logic (Piggyback off of inventory)
 	-Add item/date range ( )
 	-Scheduling cleanup? - Maybe for scalability?
+	- remove item ( ) 
 
 -Implement inventory logic -!Ethan! ( )
 	- Add item et. al.   (COMPLETED)
-	-Change item et. al.( )
+	- Change item et. al.( )
+	- Remove item from current session ( )
+	- calculate profit potential ( )
 
 -Implement report generation stuff ( ) 
 
 -Update interfaces to deal with new database setup ( )
-
--Implement item removal from tables ( )
 ------------------------------
 ------Project Management------
 ------------------------------
