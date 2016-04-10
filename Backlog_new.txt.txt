@@ -13,7 +13,7 @@ New Backlog!
 
 - Make Purchase Order - !Jacob! ( )
 
-- Get date time working.
+- Get date time working -!Ethan! (COMPLETED)
 
 - Make table headers fixed
 
