@@ -2,11 +2,11 @@ New Backlog!
 ------------------------------
 --------------UI--------------
 ------------------------------
--Restructure into new tabs: ( )
-	-Transactions (Currently cashier)		( )
-	-Inventory    (Currently stocker)		( )
-	-Discounts    (Currently manager)		( )
-	-Reporting    (Currently manager) - !Ethan!	( )
+-Restructure into new tabs: (COMPLETED)
+	-Transactions (Currently cashier) - !Ethan!	(COMPLETED)
+	-Inventory    (Currently stocker) - !Ethan!	(COMPLETED)
+	-Discounts    (Currently manager) - !Ethan!	(COMPLETED)
+	-Reporting    (Currently manager) - !Ethan!	(COMPLETED)
 
 -Tweak positional stuff. - !Ethan! ( )
 	-Make it pretty. ( )
