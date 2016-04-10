@@ -7,16 +7,12 @@ class Item(db.Model):
 	__tablename__ = "items"
 
 	id = db.Column(db.Integer, primary_key=True)
-	type = db.Column(db.String(30), nullable=False)
-	price = db.Column(db.Float, nullable=False)
 	product_id = db.Column(db.Integer, ForeignKey("products.id"), nullable=False)
 	exp_date = db.Column(db.Date, nullable=False)
 
 	author_id = db.Column(db.Integer, ForeignKey('users.id'))
 
-	def __init__(self, type, price, product_id, exp_date, author_id):
-		self.type = type
-		self.price = price
+	def __init__(self, product_id, exp_date, author_id):
 		self.product_id = product_id
 		self.exp_date = exp_date
 		self.author_id = author_id
@@ -29,6 +25,7 @@ class Product(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String, nullable=False)
+	type = db.Column(db.String(30), nullable=False)
 	supplier_id = db.Column(db.Integer, ForeignKey("suppliers.id"), nullable=False)
 	inventory_count = db.Column(db.Integer, nullable=False)
 	min_count = db.Column(db.Integer)
@@ -36,8 +33,9 @@ class Product(db.Model):
 	standard_price = db.Column(db.Float, nullable=False)
 	sale_price = db.Column(db.Float)
 
-	def __init__(self, name, supplier_id, inventory_count, shelf_life, standard_price):
+	def __init__(self, name, type, supplier_id, inventory_count, shelf_life, standard_price):
 		self.name = name
+		self.type = type
 		self.supplier_id = supplier_id
 		self.inventory_count = inventory_count
 		self.shelf_life = shelf_life

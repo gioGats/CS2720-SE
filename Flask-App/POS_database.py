@@ -6,19 +6,18 @@
 #################################################################################################################################################
 # IMPORTS																																		#
 #################################################################################################################################################
-from app import db
 from models import *
-from POS_display import *
+from datetime import date
 
 #################################################################################################################################################
 # FUNCTION DEFINITIONS																															#
 #################################################################################################################################################
 
-# In: 		productId (integer) 
+# In: 		db (pointer to a database), productId (integer) 
 # Out: 		productName (string)
 # Purpose: 	to return the name of a given product ID
 # Notes:
-def getProductName(productID):
+def getProductName(db, productID):
 	#TODO add error handling
 	# make the query and receive a single tuple (first() allows us to do this)
 	result = db.session.query(Product.name).filter(Product.id == productID).first()
@@ -26,11 +25,11 @@ def getProductName(productID):
 	name = result.name
 	return name
 
-# In: 		productID (integer)
+# In: 		db (pointer to a database), productID (integer)
 # Out: 		productPrice (float)
 # Purpose:	to retun the price of a given product ID
 # Notes:
-def getProductPrice(productID):
+def getProductPrice(db, productID):
 	#TODO check if there is a sale price and if there is use that instead
 	#TODO add error handling
 	# make the query and receive a single tuple (first() allows us to do this)
@@ -39,10 +38,12 @@ def getProductPrice(productID):
 	price = result.standard_price
 	return price
 
-# In: 		localTable (POS_display.table object), databaseTable (models class)
+# In: 		db (pointer to a database), rowsList (a list of stockRow objects)
 # Out:		none
 # Purpose:	to commit a batch of data held in the current user's session
 # Notes:	this is intended to take all of the rows we add locally and commit them together to the DB; 
 #			"Update Stock" and "Finish Transaction" buttons will use this procedure
-def updateTable(localTable, databaseTable):
-	return localTable
+def updateItemTable(db, rowsList):
+	for row in rowsList:
+		db.session.add(Item(row.productID, date(2016, 4, 5), 1))
+	db.session.commit()

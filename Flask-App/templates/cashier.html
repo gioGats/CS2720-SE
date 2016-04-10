@@ -83,6 +83,8 @@
 		<input type="text" name="cashierWeight" placeholder="Weight" size=4>
 		<input type="submit" name="cashierAddItem" value="Add Item">
 		<a class="btn btn-info" href="#">Override Price</a>
+	</form>
+	<form action="{{ url_for('cashierFinishTransaction') }}" method=post>
 		<input type="submit" name="cashierSubmitTable" value="Finish Transaction">
 	</form>
 {% endblock %}

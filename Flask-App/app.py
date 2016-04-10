@@ -13,9 +13,11 @@ from helper import *
 from helper import login_user, login_required, logout_user
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
-from POS_display import *	
 from sqlalchemy.engine import Engine
 from sqlalchemy import event								# used to help with displaying HTML tables
+import POS_display
+import POS_logic
+
 # -------------------------------------------------- #
 
 
@@ -64,11 +66,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 # (right above this) BEFORE we can import our models
 # (thus it cannot go on the top of the page) #
 from models import *
-
-# FOR TESTING ONLY
-#fillTable("receiptTable")
-#fillTable("stockingTable")
-#fillTable("saleTable")
+import POS_database
 
 # Setup Flask Login Manager #
 login_manager = LoginManager()
@@ -148,13 +146,17 @@ def logout():
 @login_required
 def manager():
     if is_manager(current_user):
-        return render_template("manager.html", saleTable=saleTable)
+        return render_template("manager.html", saleTable=POS_logic.saleTable)
     else:
         return redirect('/')
 
 @app.route('/manageradd', methods=["POST"])
 def managerAddRow():
-    addSaleRow('managerBarcode', 'managerSaleStart', 'managerSaleEnd', 'managerSalePrice')
+    # get the information from the user
+    inputDict = POS_display.getSaleRow(request)
+    # get the product name from the database
+    productName = POS_database.getProductName(db, inputDict["productID"])
+    POS_logic.addSaleRow(productName, inputDict["productID"], inputDict["saleStart"], inputDict["saleEnd"], inputDict["salePrice"])
     return redirect(url_for('manager'))
 # -------------------------------------------------- #
 
@@ -166,14 +168,28 @@ def managerAddRow():
 def cashier():
     if is_manager(current_user) or is_cashier(current_user):
         items = db.session.query(Item).all()
-        return render_template("cashier.html", items=items, receiptTable=receiptTable)
+        return render_template("cashier.html", items=items, receiptTable=POS_logic.receiptTable)
     else:
         return redirect('/')
 
 @app.route('/cashieradd', methods=["POST"])
 def cashierAddRow():
-	addReceiptRow('cashierBarcode', 'cashierQuantity', 'cashierWeight')
-	return redirect(url_for('cashier'))
+    # get the information from the user
+    inputDict = POS_display.getReceiptRow(request)
+    # get the product name and price from the database
+    productName = POS_database.getProductName(db, inputDict["productID"])
+    pricePerUnit = POS_database.getProductPrice(db, inputDict["productID"])
+    # add the received information to the local receipt table
+    POS_logic.addReceiptRow(productName, inputDict["productID"], inputDict["quantity"], pricePerUnit)
+    return redirect(url_for('cashier'))
+
+@app.route('/cashiercommit', methods=["POST"])
+def cashierFinishTransaction():
+    # TODO send all information from the local receipt table to the database for storage
+    
+    # clear the local receipt table out
+    POS_logic.receiptTable.clearTable()
+    return redirect(url_for('cashier'))
 
 # -------------------------------------------------- #
 
@@ -185,14 +201,27 @@ def cashierAddRow():
 def stocker():
     if is_manager(current_user) or is_stocker(current_user):
         items = db.session.query(Item).all()
-        return render_template("stocker.html", items=items, stockingTable=stockingTable)
+        return render_template("stocker.html", items=items, stockingTable=POS_logic.stockingTable)
     else:
         return redirect('/')
 
 @app.route('/stockeradd', methods=["POST"])
 def stockerAddRow():
-    addStockingRow('stockerBarcode', 'stockerQuantity', 'stockerWeight')
+    # get the information from the user
+    inputDict   = POS_display.getStockerRow(request)
+    # get the product name from the database
+    productName = POS_database.getProductName(db, inputDict['productID'])
+    # add all of the information received to the local stocking table
+    POS_logic.addStockingRow(productName, inputDict['productID'], inputDict['quantity'])
     return redirect(url_for('stocker'))
+
+@app.route('/stockercommit', methods=["POST"])
+def stockerUpdateStock():
+    # send all information from the local stocking table to the database for storage
+	POS_database.updateItemTable(db, POS_logic.stockingTable.rowsList)
+    # clear the local stocking table out
+	POS_logic.stockingTable.clearTable()
+	return redirect(url_for('stocker'))
 # -------------------------------------------------- #
 
 

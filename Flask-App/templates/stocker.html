@@ -72,7 +72,9 @@
         <input type="text" name="stockerQuantity" placeholder="Quantity">
         <input type="text" name="stockerWeight" placeholder="Weight">
         <input type="submit" name="stockerAddItem" value="Add Item">
-        <input type="submit" name="stockerSubmitTable" value="Update Stock">
     </form>
+	<form action="{{ url_for('stockerUpdateStock') }}" method=post>
+		<input type="submit" name="stockerUpdateStock" value="Update Stock">
+	</form>
 {% endblock %}
 
