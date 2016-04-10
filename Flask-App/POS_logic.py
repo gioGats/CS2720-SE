@@ -71,17 +71,13 @@ class inventoryTable(table):
 		table.clearTable(self)
 		self.profitPotential = 0.00
 
-	def addRow(self, newRow):
-		table.addRow(self, newRow)
-		self.profitPotential = 0
-
-	# In:		itemCost (float), productSalePrice (float)
+	# In:		itemCost (float), productSalePrice (float), quantity (integer)
 	# Out:		none
 	# Purpose:	to update the profit potential of the current inventory session by calculating productPrice - itemCost for each item added
 	# Note:	
-	def addProfitPotential(self, itemCost, productSalePrice):
-		itemProfit = productSalePrice - itemCost
-		profitPotential += itemProfit
+	def addProfitPotential(self, itemCost, productSalePrice, quantity):
+		itemProfit 				= (productSalePrice - itemCost) * quantity
+		self.profitPotential 	+= itemProfit
 
 
 #######################################################################################################################################################################################
@@ -104,13 +100,14 @@ def addTransactionRow(productName, productID, quantity, pricePerUnit):
 	newRow = transactionRow(productName, productID, quantity, pricePerUnit)
 	transactionTable.addRow(newRow)
 
-# In:		productID (integer), quantity (integer), expDate (POS_display.formattedDate), itemCost (float)
+# In:		productID (integer), quantity (integer), expDate (POS_display.formattedDate), itemCost (float), productPrice (float)
 # Out:		none
 # Purpose:	
 # Note:		the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
-def addInventoryRow(productName, productID, quantity, expDate, itemCost):
+def addInventoryRow(productName, productID, quantity, expDate, itemCost, productPrice):
 	newRow = inventoryRow(productName, productID, quantity, expDate, itemCost)
 	inventoryTable.addRow(newRow)
+	inventoryTable.addProfitPotential(itemCost, productPrice, quantity)
 
 # In:		productID (integer), saleStart (date), saleEnd (date), salePrice (float)
 # Out:		none

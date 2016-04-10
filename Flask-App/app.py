@@ -222,8 +222,10 @@ def inventoryAddRow():
     inputDict   = POS_display.getInventoryRow(request)
     # get the product name from the database
     productName = POS_database.getProductName(db, inputDict['productID'])
+    # get the product price from the database
+    productPrice = float(POS_database.getProductPrice(db, inputDict['productID']))
     # add all of the information received to the local stocking table
-    POS_logic.addInventoryRow(productName, inputDict['productID'], inputDict['quantity'], inputDict['exp-date'], inputDict['item-cost'])
+    POS_logic.addInventoryRow(productName, inputDict['productID'], int(inputDict['quantity']), inputDict['exp-date'], float(inputDict['item-cost']), productPrice)
     return redirect(url_for('inventory'))
 
 @app.route('/inventorycommit', methods=["POST"])

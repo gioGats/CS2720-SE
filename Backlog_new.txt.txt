@@ -47,9 +47,11 @@ New Backlog!
 	- Add item et. al.   (COMPLETED)
 	- Change item et. al.( )
 	- Remove item from current session ( )
-	- calculate profit potential ( )
+	- calculate profit potential (COMPLETED)
 
 -Implement report generation stuff ( ) 
+
+- Enforce typing ( )
 
 -Update interfaces to deal with new database setup ( )
 ------------------------------
