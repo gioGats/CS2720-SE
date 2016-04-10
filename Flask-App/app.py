@@ -145,7 +145,7 @@ def logout():
 @login_required
 def discounts():
     if is_manager(current_user):
-        return render_template("discounts.html", saleTable=POS_logic.discountTable)
+        return render_template("discounts.html", discountTable=POS_logic.discountTable)
     else:
         return redirect('/')
 
@@ -179,7 +179,7 @@ def reports():
 def transactions():
     if is_manager(current_user) or is_cashier(current_user):
         items = db.session.query(Item).all()
-        return render_template("transactions.html", items=items, receiptTable=POS_logic.transactionTable)
+        return render_template("transactions.html", items=items, transactionTable=POS_logic.transactionTable)
     else:
         return redirect('/')
 
@@ -212,7 +212,7 @@ def finishTransaction():
 def inventory():
     if is_manager(current_user) or is_stocker(current_user):
         items = db.session.query(Item).all()
-        return render_template("inventory.html", items=items, stockingTable=POS_logic.inventoryTable)
+        return render_template("inventory.html", items=items, inventoryTable=POS_logic.inventoryTable)
     else:
         return redirect('/')
 

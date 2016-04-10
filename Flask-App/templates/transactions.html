@@ -39,12 +39,12 @@
 {% block sidePanelContent %}
 	<div class="side-panel-top">
 		<h2>Last Item Scanned</h1>
-		<p>Name: {{ receiptTable.mostRecentRow.productName }} </p>
+		<p>Name: {{ transactionTable.mostRecentRow.productName }} </p>
 		<p>Brand: </p>
-		<p>Product ID: {{ receiptTable.mostRecentRow.productID }} </p>
-		<p>Quantity: {{ receiptTable.mostRecentRow.quantity }} </p>
-		<p>Weight: {{ receiptTable.mostRecentRow.weight }} </p>
-		<p>Price: {{ receiptTable.mostRecentRow.pricePerUnit }} </p>
+		<p>Product ID: {{ transactionTable.mostRecentRow.productID }} </p>
+		<p>Quantity: {{ transactionTable.mostRecentRow.quantity }} </p>
+		<p>Weight: {{ transactionTable.mostRecentRow.weight }} </p>
+		<p>Price: {{ transactionTable.mostRecentRow.pricePerUnit }} </p>
 	</div>
 	<div class="side-panel-bot">
 		<h2>Other Information</h2>
@@ -64,12 +64,12 @@
 	</thead>
 
 	<tbody>
-		{% for receiptRow in receiptTable.rowsList %}
+		{% for transactionRow in transactionTable.rowsList %}
 			<tr>
-				<td> {{ receiptRow.productName }} </td>
-				<td> {{ receiptRow.productID }} </td>
-				<td> {{ receiptRow.quantity }} </td>
-				<td> {{ receiptRow.pricePerUnit }} </td>
+				<td> {{ transactionRow.productName }} </td>
+				<td> {{ transactionRow.productID }} </td>
+				<td> {{ transactionRow.quantity }} </td>
+				<td> {{ transactionRow.pricePerUnit }} </td>
 			</tr>
 		{% endfor %}
 	</tbody>

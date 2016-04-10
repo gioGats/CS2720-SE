@@ -56,13 +56,13 @@
     </thead>
 
     <tbody>
-        {% for saleRow in saleTable.rowsList %}
+        {% for discountRow in discountTable.rowsList %}
             <tr>
-                <td> {{ saleRow.productName }} </td>
-                <td> {{ saleRow.productID }} </td>
-                <td> {{ saleRow.saleStart }} </td>
-                <td> {{ saleRow.saleEnd }} </td>
-                <td> {{ saleRow.salePrice }} </td>
+                <td> {{ discountRow.productName }} </td>
+                <td> {{ discountRow.productID }} </td>
+                <td> {{ discountRow.saleStart }} </td>
+                <td> {{ discountRow.saleEnd }} </td>
+                <td> {{ discountRow.salePrice }} </td>
             </tr>
         {% endfor %}
     </tbody>

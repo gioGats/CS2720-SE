@@ -40,7 +40,7 @@
 {% block sidePanelContent %}
     <div class="side-panel-top">
         <h2>Current Stocking Information</h2>
-        <p>Items Added: {{ stockingTable.rowCount }} </p>
+        <p>Items Added: {{ inventoryTable.rowCount }} </p>
         <p>Profit Potential: </p>
     </div>
 {% endblock %}
@@ -56,12 +56,12 @@
     </thead>
 
     <tbody>
-        {% for stockingRow in stockingTable.rowsList %}
+        {% for inventoryRow in inventoryTable.rowsList %}
             <tr>
-                <td> {{ stockingRow.productName }} </td>
-                <td> {{ stockingRow.productID }} </td>
-                <td> {{ stockingRow.quantity }} </td>
-                <td> {{ stockingRow.expDate }} </td>
+                <td> {{ inventoryRow.productName }} </td>
+                <td> {{ inventoryRow.productID }} </td>
+                <td> {{ inventoryRow.quantity }} </td>
+                <td> {{ inventoryRow.expDate }} </td>
             </tr>
         {% endfor %}
     </tbody>
