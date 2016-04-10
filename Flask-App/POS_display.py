@@ -18,8 +18,8 @@ from flask import *
 # Note: 
 def getReceiptRow(request):
 	inputDict = dict()
-	inputDict["productID"] 	= request.form["cashierBarcode"]
-	inputDict["quantity"] 	= request.form["cashierQuantity"]
+	inputDict["productID"] 	= request.form["productID"]
+	inputDict["quantity"] 	= request.form["quantity"]
 	return inputDict
 
 # In: 		request (request object)
@@ -28,8 +28,8 @@ def getReceiptRow(request):
 # Note: 
 def getStockerRow(request):
 	inputDict = dict()
-	inputDict["productID"] 	= request.form["stockerBarcode"]
-	inputDict["quantity"] 	= request.form["stockerQuantity"]
+	inputDict["productID"] 	= request.form["productID"]
+	inputDict["quantity"] 	= request.form["quantity"]
 	return inputDict
 
 # In: 		request (request object)
@@ -38,8 +38,8 @@ def getStockerRow(request):
 # Note: 
 def getSaleRow(request):
 	inputDict = dict()
-	inputDict["productID"] 	= request.form["managerBarcode"]
-	inputDict["saleStart"] 	= request.form["managerSaleStart"]
-	inputDict["saleEnd"] 	= request.form["managerSaleEnd"]
-	inputDict["salePrice"] 	= request.form["managerSalePrice"]
+	inputDict["productID"] 	= request.form["productID"]
+	inputDict["saleStart"] 	= request.form["saleStart"]
+	inputDict["saleEnd"] 	= request.form["saleEnd"]
+	inputDict["salePrice"] 	= request.form["salePrice"]
 	return inputDict
