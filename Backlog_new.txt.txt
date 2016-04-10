@@ -1,29 +1,28 @@
 New Backlog!
 ------------------------------
 --------------UI--------------
--Ethan wants all of the below-
 ------------------------------
 -Restructure into new tabs: ( )
-	-Transactions (Currently cashier)	( )
-	-Inventory    (Currently stocker)	( )
-	-Discounts    (Currently manager)	( )
-	-Reporting    (Currently manager)	( )
+	-Transactions (Currently cashier)		( )
+	-Inventory    (Currently stocker)		( )
+	-Discounts    (Currently manager)		( )
+	-Reporting    (Currently manager) - !Ethan!	( )
 
--Tweak positional stuff. ( )
+-Tweak positional stuff. - !Ethan! ( )
 	-Make it pretty. ( )
 
-- Make Purchase Order (Jacob)
+- Make Purchase Order - !Jacob! ( )
 
 - Get date time working.
 
 - Make table headers fixed
 
-- Get rid of "weight" text inputs
+- Get rid of "weight" text inputs (COMPLETED)
 
 ------------------------------
 -----------Database-----------
 ------------------------------
--Reference to Jacob for SQAlchemy tutorial (4/7/2016?) ( )
+-Reference to Jacob for SQAlchemy tutorial (4/7/2016?) (COMPLETED)
 
 -Implementing tables/Database Setup -!Ryan! ( )
 	-Additionally, discounts table (not in old docs)
@@ -42,7 +41,7 @@ New Backlog!
 	-Scheduling cleanup? - Maybe for scalability?
 
 -Implement inventory logic -!Ethan! ( )
-	-Add item et. al.   ( )
+	- Add item et. al.   (COMPLETED)
 	-Change item et. al.( )
 
 -Implement report generation stuff ( ) 
