@@ -146,17 +146,17 @@ def logout():
 @login_required
 def discounts():
     if is_manager(current_user):
-        return render_template("discounts.html", saleTable=POS_logic.saleTable)
+        return render_template("discounts.html", saleTable=POS_logic.discountTable)
     else:
         return redirect('/')
 
 @app.route('/discountsadd', methods=["POST"])
 def discountsAddRow():
     # get the information from the user
-    inputDict = POS_display.getSaleRow(request)
+    inputDict = POS_display.getDiscountRow(request)
     # get the product name from the database
     productName = POS_database.getProductName(db, inputDict["productID"])
-    POS_logic.addSaleRow(productName, inputDict["productID"], inputDict["saleStart"], inputDict["saleEnd"], inputDict["salePrice"])
+    POS_logic.addDiscountRow(productName, inputDict["productID"], inputDict["saleStart"], inputDict["saleEnd"], inputDict["salePrice"])
     return redirect(url_for('discounts'))
 # -------------------------------------------------- #
 
@@ -180,19 +180,19 @@ def reports():
 def transactions():
     if is_manager(current_user) or is_cashier(current_user):
         items = db.session.query(Item).all()
-        return render_template("transactions.html", items=items, receiptTable=POS_logic.receiptTable)
+        return render_template("transactions.html", items=items, receiptTable=POS_logic.transactionTable)
     else:
         return redirect('/')
 
 @app.route('/transactionadd', methods=["POST"])
 def transactionsAddRow():
     # get the information from the user
-    inputDict = POS_display.getReceiptRow(request)
+    inputDict = POS_display.getTransactionRow(request)
     # get the product name and price from the database
     productName = POS_database.getProductName(db, inputDict["productID"])
     pricePerUnit = POS_database.getProductPrice(db, inputDict["productID"])
     # add the received information to the local receipt table
-    POS_logic.addReceiptRow(productName, inputDict["productID"], inputDict["quantity"], pricePerUnit)
+    POS_logic.addTransactionRow(productName, inputDict["productID"], inputDict["quantity"], pricePerUnit)
     return redirect(url_for('transactions'))
 
 @app.route('/transactioncommit', methods=["POST"])
@@ -200,7 +200,7 @@ def finishTransaction():
     # TODO send all information from the local receipt table to the database for storage
     
     # clear the local receipt table out
-    POS_logic.receiptTable.clearTable()
+    POS_logic.transactionTable.clearTable()
     return redirect(url_for('transactions'))
 
 # -------------------------------------------------- #
@@ -213,26 +213,26 @@ def finishTransaction():
 def inventory():
     if is_manager(current_user) or is_stocker(current_user):
         items = db.session.query(Item).all()
-        return render_template("inventory.html", items=items, stockingTable=POS_logic.stockingTable)
+        return render_template("inventory.html", items=items, stockingTable=POS_logic.inventoryTable)
     else:
         return redirect('/')
 
 @app.route('/inventoryadd', methods=["POST"])
 def inventoryAddRow():
     # get the information from the user
-    inputDict   = POS_display.getStockerRow(request)
+    inputDict   = POS_display.getInventoryRow(request)
     # get the product name from the database
     productName = POS_database.getProductName(db, inputDict['productID'])
     # add all of the information received to the local stocking table
-    POS_logic.addStockingRow(productName, inputDict['productID'], inputDict['quantity'])
+    POS_logic.addInventoryRow(productName, inputDict['productID'], inputDict['quantity'])
     return redirect(url_for('inventory'))
 
 @app.route('/inventorycommit', methods=["POST"])
 def updateInventory():
     # send all information from the local stocking table to the database for storage
-	POS_database.updateItemTable(db, POS_logic.stockingTable.rowsList)
+	POS_database.updateItemTable(db, POS_logic.inventoryTable.rowsList)
     # clear the local stocking table out
-	POS_logic.stockingTable.clearTable()
+	POS_logic.inventoryTable.clearTable()
 	return redirect(url_for('inventory'))
 # -------------------------------------------------- #
 

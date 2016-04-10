@@ -12,7 +12,7 @@ from flask import *
 #######################################################################################################################################################################################
 
 # Purpose: holds all information in a row of the receipt table (aka information for a receipt!)
-class receiptRow:
+class transactionRow:
 	def __init__(self, productName, productID, quantity, pricePerUnit):
 		self.productName 	= productName			# string
 		self.productID 		= productID				# integer
@@ -20,19 +20,19 @@ class receiptRow:
 		self.pricePerUnit 	= pricePerUnit			# float
 
 # Purpose: holds all information in a row of the stocking table 
-class stockRow:
+class inventoryRow:
 	def __init__(self, productName, productID, quantity):
 		self.productName 	= productName			# string
 		self.productID		= productID				# integer
 		self.quantity 		= quantity				# integer
 
 # Purpose: holds all information in a row of the sale table
-class saleRow:
+class discountRow:
 	def __init__(self, productName, productID, saleStart, saleEnd, salePrice):
 		self.productName 	= productName			# string
 		self.productID 		= productID				# integer
-		self.saleStart		= saleStart				# string
-		self.saleEnd 		= saleEnd				# string
+		self.saleStart		= saleStart				# POS_display.formattedDate 
+		self.saleEnd 		= saleEnd				# POS_display.formattedDate
 		self.salePrice 		= salePrice				# float
 
 # Purpose: to hold a variety of table information beyond the rows themselves (e.g. table rows, potential profit from all items currently in the table, etc.)
@@ -64,9 +64,9 @@ class table:
 # GLOBAL VARIABLES          																																						  #
 #######################################################################################################################################################################################
 
-receiptTable	= table()
-stockingTable	= table()
-saleTable		= table()
+transactionTable	= table()
+inventoryTable		= table()
+discountTable		= table()
 
 #######################################################################################################################################################################################
 # FUNCTION DEFINITIONS         																																						  #
@@ -76,25 +76,25 @@ saleTable		= table()
 # Out: 		none
 # Purpose: 	
 # Note: 	the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
-def addReceiptRow(productName, productID, quantity, pricePerUnit):
-	newRow = receiptRow(productName, productID, quantity, pricePerUnit)
-	receiptTable.addRow(newRow)
+def addTransactionRow(productName, productID, quantity, pricePerUnit):
+	newRow = transactionRow(productName, productID, quantity, pricePerUnit)
+	transactionTable.addRow(newRow)
 
-# In:		productID (string), quantity (string), weight (string)
+# In:		productID (integer), quantity (integer)
 # Out:		none
 # Purpose:	
 # Note:		the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
-def addStockingRow(productName, productID, quantity):
-	newRow = stockRow(productName, productID, quantity)
-	stockingTable.addRow(newRow)
+def addInventoryRow(productName, productID, quantity):
+	newRow = inventoryRow(productName, productID, quantity)
+	inventoryTable.addRow(newRow)
 
-# In:		productID (string), saleStart (string), saleEnd (string), salePrice (string)
+# In:		productID (integer), saleStart (date), saleEnd (date), salePrice (float)
 # Out:		none
 # Purpose:	
 # Note:		the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
-def addSaleRow(productName, productID, saleStart, saleEnd, salePrice):
-	newRow = saleRow(productName, productID, saleStart, saleEnd, salePrice)
-	saleTable.addRow(newRow)
+def addDiscountRow(productName, productID, saleStart, saleEnd, salePrice):
+	newRow = discountRow(productName, productID, saleStart, saleEnd, salePrice)
+	discountTable.addRow(newRow)
 
 #####################################################################################################################################################################################
 # TEST FUNCTION DEFINITIONS 																																						#
@@ -104,15 +104,15 @@ def addSaleRow(productName, productID, saleStart, saleEnd, salePrice):
 # Out:		none
 # Purpose:	to populate the GUI tables for testing purposes
 def fillTable(tableName):
-	if (tableName == "receiptTable"):
+	if (tableName == "transactionTable"):
 		for x in range(100):
-			newRow = receiptRow("bananas", 12345, "N/A", 0.57)
+			newRow = transactionRow("bananas", 12345, "N/A", 0.57)
 			receiptTable.rowsList.append(newRow)
-	elif (tableName == "stockingTable"):
+	elif (tableName == "inventoryTable"):
 		for x in range(100):
-			newRow = stockRow("matches", 13200, "N/A")
+			newRow = inventoryRow("matches", 13200, "N/A")
 			stockingTable.rowsList.append(newRow)
-	elif (tableName == "saleTable"):
+	elif (tableName == "discountTable"):
 		for x in range(100):
-			newRow = saleRow("shoes", 13402, "07/23/2016", "07/25/2016", 0.02)
+			newRow = discountRow("shoes", 13402, "07/23/2016", "07/25/2016", 0.02)
 			saleTable.rowsList.append(newRow)
