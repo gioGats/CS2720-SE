@@ -9,11 +9,13 @@ class Item(db.Model):
 	id 				= 	db.Column(db.Integer, primary_key=True)
 	product_id 		= 	db.Column(db.Integer, ForeignKey("products.id"), nullable=False)
 	exp_date 		= 	db.Column(db.Date, nullable=False)
+	item_cost		=	db.Column(db.Float, nullable=False)
 	author_id 		= 	db.Column(db.Integer, ForeignKey('users.id'))
 
-	def __init__(self, product_id, exp_date, author_id):
+	def __init__(self, product_id, exp_date, item_cost, author_id):
 		self.product_id 	= 	product_id
 		self.exp_date 		= 	exp_date
+		self.item_cost		=	item_cost
 		self.author_id 		= 	author_id
 
 	def __repr__(self):

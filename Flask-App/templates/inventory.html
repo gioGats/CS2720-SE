@@ -52,6 +52,7 @@
             <td>Product ID</td>
             <td>Quantity</td>
             <td>Exp. Date</td>
+            <td>Item Cost</td>
         </tr>
     </thead>
 
@@ -62,6 +63,7 @@
                 <td> {{ inventoryRow.productID }} </td>
                 <td> {{ inventoryRow.quantity }} </td>
                 <td> {{ inventoryRow.expDate }} </td>
+                <td> {{ inventoryRow.itemCost }} </td>
             </tr>
         {% endfor %}
     </tbody>
@@ -72,6 +74,7 @@
         <input type="text" name="productID" placeholder="Enter a barcode" required>
         <input type="text" name="quantity" placeholder="Quantity">
         <input type="date" name="exp-date">
+        <input type="text" name="item-cost" placeholder="Item Cost (format: 0.00)">
         <input type="submit" value="Add Item">
     </form>
 	<form action="{{ url_for('updateInventory') }}" method=post>

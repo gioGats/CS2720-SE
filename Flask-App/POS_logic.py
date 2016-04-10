@@ -21,11 +21,12 @@ class transactionRow:
 
 # Purpose: holds all information in a row of the stocking table 
 class inventoryRow:
-	def __init__(self, productName, productID, quantity, expDate):
+	def __init__(self, productName, productID, quantity, expDate, itemCost):
 		self.productName 	= productName			# string
 		self.productID		= productID				# integer
 		self.quantity 		= quantity				# integer
 		self.expDate		= expDate				# POS_display.formattedDate
+		self.itemCost		= itemCost				# float
 
 # Purpose: holds all information in a row of the sale table
 class discountRow:
@@ -61,12 +62,34 @@ class table:
 		self.rowCount 		+= 1
 		self.mostRecentRow 	= newRow
 
+class inventoryTable(table):
+	def __init__(self):
+		table.__init__(self)
+		self.profitPotential = 0.00
+
+	def clearTable(self):
+		table.clearTable(self)
+		self.profitPotential = 0.00
+
+	def addRow(self, newRow):
+		table.addRow(self, newRow)
+		self.profitPotential = 0
+
+	# In:		itemCost (float), productSalePrice (float)
+	# Out:		none
+	# Purpose:	to update the profit potential of the current inventory session by calculating productPrice - itemCost for each item added
+	# Note:	
+	def addProfitPotential(self, itemCost, productSalePrice):
+		itemProfit = productSalePrice - itemCost
+		profitPotential += itemProfit
+
+
 #######################################################################################################################################################################################
 # GLOBAL VARIABLES          																																						  #
 #######################################################################################################################################################################################
 
 transactionTable	= table()
-inventoryTable		= table()
+inventoryTable		= inventoryTable()
 discountTable		= table()
 
 #######################################################################################################################################################################################
@@ -81,13 +104,12 @@ def addTransactionRow(productName, productID, quantity, pricePerUnit):
 	newRow = transactionRow(productName, productID, quantity, pricePerUnit)
 	transactionTable.addRow(newRow)
 
-# In:		productID (integer), quantity (integer)
+# In:		productID (integer), quantity (integer), expDate (POS_display.formattedDate), itemCost (float)
 # Out:		none
 # Purpose:	
 # Note:		the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
-def addInventoryRow(productName, productID, quantity, expDate):
-	newRow = inventoryRow(productName, productID, quantity, expDate)
-	print(expDate)
+def addInventoryRow(productName, productID, quantity, expDate, itemCost):
+	newRow = inventoryRow(productName, productID, quantity, expDate, itemCost)
 	inventoryTable.addRow(newRow)
 
 # In:		productID (integer), saleStart (date), saleEnd (date), salePrice (float)

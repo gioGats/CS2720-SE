@@ -58,6 +58,7 @@ def getInventoryRow(request):
 	inputDict["productID"] 	= 	request.form["productID"]
 	inputDict["quantity"] 	= 	request.form["quantity"]
 	inputDict["exp-date"]	=	convertStringToDate(request.form["exp-date"])
+	inputDict["item-cost"]	=	request.form["item-cost"]
 	return inputDict
 
 # In: 		request (request object)

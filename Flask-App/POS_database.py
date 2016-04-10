@@ -45,5 +45,5 @@ def getProductPrice(db, productID):
 #			"Update Stock" and "Finish Transaction" buttons will use this procedure
 def updateItemTable(db, rowsList):
 	for row in rowsList:
-		db.session.add(Item(row.productID, row.expDate, 1))
+		db.session.add(Item(row.productID, row.expDate, row.itemCost, 1))
 	db.session.commit()
