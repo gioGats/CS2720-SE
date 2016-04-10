@@ -14,7 +14,7 @@ from helper import login_user, login_required, logout_user
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.engine import Engine
-from sqlalchemy import event								# used to help with displaying HTML tables
+from sqlalchemy import event								
 import POS_display
 import POS_logic
 
@@ -139,7 +139,6 @@ def logout():
     return redirect(url_for('login'))
 # -------------------------------------------------- #
 
-
 # Discounts Page
 # Requires: Login, Manager/Admin permission #
 @app.route('/discounts')
@@ -224,7 +223,7 @@ def inventoryAddRow():
     # get the product name from the database
     productName = POS_database.getProductName(db, inputDict['productID'])
     # add all of the information received to the local stocking table
-    POS_logic.addInventoryRow(productName, inputDict['productID'], inputDict['quantity'])
+    POS_logic.addInventoryRow(productName, inputDict['productID'], inputDict['quantity'], inputDict['exp-date'])
     return redirect(url_for('inventory'))
 
 @app.route('/inventorycommit', methods=["POST"])

@@ -21,10 +21,11 @@ class transactionRow:
 
 # Purpose: holds all information in a row of the stocking table 
 class inventoryRow:
-	def __init__(self, productName, productID, quantity):
+	def __init__(self, productName, productID, quantity, expDate):
 		self.productName 	= productName			# string
 		self.productID		= productID				# integer
 		self.quantity 		= quantity				# integer
+		self.expDate		= expDate				# POS_display.formattedDate
 
 # Purpose: holds all information in a row of the sale table
 class discountRow:
@@ -84,8 +85,9 @@ def addTransactionRow(productName, productID, quantity, pricePerUnit):
 # Out:		none
 # Purpose:	
 # Note:		the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
-def addInventoryRow(productName, productID, quantity):
-	newRow = inventoryRow(productName, productID, quantity)
+def addInventoryRow(productName, productID, quantity, expDate):
+	newRow = inventoryRow(productName, productID, quantity, expDate)
+	print(expDate)
 	inventoryTable.addRow(newRow)
 
 # In:		productID (integer), saleStart (date), saleEnd (date), salePrice (float)
