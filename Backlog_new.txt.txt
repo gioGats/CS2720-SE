@@ -19,7 +19,7 @@ New Backlog!
 
 - Get rid of "weight" text inputs (COMPLETED)
 
-- add expiration date text input to inventory tab - !Ethan! ( )
+- add expiration date text input to inventory tab - !Ethan! (COMPLETED)
 
 ------------------------------
 -----------Database-----------
