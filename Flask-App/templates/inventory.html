@@ -1,0 +1,77 @@
+{% extends "contenttemplate.html" %}
+
+{% block title %}
+	Inventory Menu
+{% endblock %}
+
+
+{% block navbar %}
+    <div class="navbar-header">
+        <a class="navbar-brand" a href="/">POS Application</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+                <li><a> Hello, {{ current_user.name }} </a></li>
+            {% else %}
+                <li><a> Hello, Guest </a></li>
+            {% endif %}
+
+            {%  if current_user.permissions == 1 %}                                      
+                <li><a href="/discounts">Discounts</a></li>
+                <li><a href="/reports">Reports</a></li>
+            {% endif %}
+
+            {% if current_user.permissions == 1 or current_user.permissions == 2 %}
+                <li><a href="/transactions">Transactions</a></li>
+            {% endif %}
+
+            {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+                <li class="active"><a href="/inventory">Inventory</a></li>
+            {% endif %}
+
+            <li><a href="/">Home</a> </li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div><!--/.nav-collapse -->
+
+{% endblock %}
+
+{% block sidePanelContent %}
+    <div class="side-panel-top">
+        <h2>Current Stocking Information</h2>
+        <p>Items Added: {{ stockingTable.rowCount }} </p>
+        <p>Profit Potential: </p>
+    </div>
+{% endblock %}
+
+{% block table %}
+    <thead class="table-header">
+        <tr>
+          <td>Product Name</td>
+          <td>Product ID</td>
+          <td>Quantity</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for stockingRow in stockingTable.rowsList %}
+            <tr>
+                <td> {{ stockingRow.productName }} </td>
+                <td> {{ stockingRow.productID }} </td>
+                <td> {{ stockingRow.quantity }} </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %}
+
+{% block tableInput %}
+    <form action="{{ url_for('inventoryAddRow') }}" method=post>
+        <input type="text" name="productID" placeholder="Enter a barcode" required>
+        <input type="text" name="quantity" placeholder="Quantity">
+        <input type="submit" value="Add Item">
+    </form>
+	<form action="{{ url_for('updateInventory') }}" method=post>
+		<input type="submit" value="Update Inventory">
+	</form>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "contenttemplate.html" %}
+
+{% block title %}
+	Reports Menu
+{% endblock %}
+
+
+{% block navbar %}
+    <div class="navbar-header">
+        <a class="navbar-brand" a href="/">POS Application</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+                <li><a> Hello, {{ current_user.name }} </a></li>
+            {% else %}
+                <li><a> Hello, Guest </a></li>
+            {% endif %}
+
+            {%  if current_user.permissions == 1 %}                                       <!-- where does this get passed in? -->
+                <li><a href="/discounts">Discounts</a></li>
+                <li class="active"><a href="/reports">Reports</a></li>
+            {% endif %}
+
+            {% if current_user.permissions == 1 or current_user.permissions == 2 %}
+                <li><a href="/transactions">Transactions</a></li>
+            {% endif %}
+
+            {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+                <li class="active"><a href="/inventory">Inventory</a></li>
+            {% endif %}
+
+            <li><a href="/">Home</a> </li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div><!--/.nav-collapse -->
+{% endblock %}
+
+{% block sidePanelContent %}
+    <div class="side-panel-top">
+        <h2>Generate a Report</h2>
+        <form id="manager-form">
+            <select class="form-control" form="manager-form">
+                <option value="earnings_report">Earnings Report</option>
+                <option value="item_inventory_report">Item Inventory Report</option>
+                <option value="product_inventory_report">Product Inventory Report</option>
+                <option value="transaction_report">Transaction Report</option>
+            </select>
+            <input type="date" name="managerReportStart">
+            <input type="date" name="managerReportEnd">
+            <button type="submit" name="managerReportDownload" class="btn btn-info">Download Report</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block table %}
+{% endblock %}
+
+{% block tableInput %}
+{% endblock %}

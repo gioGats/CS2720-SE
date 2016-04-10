@@ -1,0 +1,79 @@
+{% extends "contenttemplate.html" %}
+
+{% block title %}
+	Discounts Menu
+{% endblock %}
+
+
+{% block navbar %}
+    <div class="navbar-header">
+        <a class="navbar-brand" a href="/">POS Application</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+                <li><a> Hello, {{ current_user.name }} </a></li>
+            {% else %}
+                <li><a> Hello, Guest </a></li>
+            {% endif %}
+
+            {%  if current_user.permissions == 1 %}                                       
+                <li class="active"><a href="/discounts">Discounts</a></li>
+                <li><a href="/reports">Reports</a></li>
+            {% endif %}
+
+            {%  if current_user.permissions == 1 or current_user.permissions == 2 %}
+                <li><a href="/transactions">Transactions</a></li>
+            {% endif %}
+
+           {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+                <li><a href="/inventory">Inventory</a></li>
+            {% endif %}
+
+            <li><a href="/">Home</a> </li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div><!--/.nav-collapse -->
+{% endblock %}
+
+{% block sidePanelContent %}
+    <div class="side-panel-top">
+        <h2>Other Administrative Tools</h2>
+        <a class="btn btn-info" href="/register">Create Account</a>
+        <a class="btn btn-info" href="#">Make Purchase Order</a>
+    </div>
+{% endblock %}
+
+{% block table %}
+    <thead class="table-header">
+        <tr>
+            <td>Product Name</td>
+            <td>Product ID</td>
+            <td>Start Date</td>
+            <td>End Date</td>
+            <td>Sale Price</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for saleRow in saleTable.rowsList %}
+            <tr>
+                <td> {{ saleRow.productName }} </td>
+                <td> {{ saleRow.productID }} </td>
+                <td> {{ saleRow.start }} </td>
+                <td> {{ saleRow.end }} </td>
+                <td> {{ saleRow.salePrice }} </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %}
+
+{% block tableInput %}
+    <form action="{{ url_for('discountsAddRow') }}" method=post>
+        <input type="text" name="productID" placeholder="Enter the product ID (i.e. barcode)" required>
+        <input type="date" name="saleStart">
+        <input type="date" name="saleEnd">
+        <input type="text" name="salePrice" placeholder="Sale Price">
+        <input type="submit" value="Add Sale">
+    </form>
+{% endblock %}

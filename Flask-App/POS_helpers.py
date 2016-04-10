@@ -29,11 +29,11 @@ def is_stocker(current_user):
 
 def redirect_after_login(current_user):
     if is_manager(current_user):
-        return redirect('/manager')
+        return redirect('/discounts')
     elif is_cashier(current_user):
-        return redirect('/cashier')
+        return redirect('/transactions')
     elif is_stocker(current_user):
-        return redirect('/stocker')
+        return redirect('/inventory')
     else:
         return redirect('/')
 # -------------------------------------------------- #

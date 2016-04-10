@@ -1,0 +1,88 @@
+{% extends "contenttemplate.html" %}
+
+{% block title %}
+	Transactions Menu
+{% endblock %}
+
+
+{% block navbar %}
+	<div class="navbar-header">
+	  	<a class="navbar-brand" a href="/">POS Application</a>
+	</div>
+	<div id="navbar" class="navbar-collapse collapse">
+	  	<ul class="nav navbar-nav navbar-right">
+	      	{% if current_user.is_authenticated %}
+	          	<li><a> Hello, {{ current_user.name }} </a></li>
+	     	{% else %}
+	          	<li><a> Hello, Guest </a></li>
+	     	{% endif %}
+
+	      	{%  if current_user.permissions == 1 %}                                       
+	            <li><a href="/discounts">Discounts</a></li>
+	            <li><a href="/reports">Reports</a></li>
+	      	{% endif %}
+
+	      	{%  if current_user.permissions == 1 or current_user.permissions == 2 %}
+	            <li class="active"><a href="/transactions">Transactions</a></li>
+	      	{% endif %}
+
+	       	{%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+	            <li><a href="/inventory">Inventory</a></li>
+	      	{% endif %}
+
+	      	<li><a href="/">Home</a> </li>
+	      	<li><a href="/logout">Logout</a></li>
+	  	</ul>
+	</div><!--/.nav-collapse -->
+{% endblock %}
+
+{% block sidePanelContent %}
+	<div class="side-panel-top">
+		<h2>Last Item Scanned</h1>
+		<p>Name: {{ receiptTable.mostRecentRow.productName }} </p>
+		<p>Brand: </p>
+		<p>Product ID: {{ receiptTable.mostRecentRow.productID }} </p>
+		<p>Quantity: {{ receiptTable.mostRecentRow.quantity }} </p>
+		<p>Weight: {{ receiptTable.mostRecentRow.weight }} </p>
+		<p>Price: {{ receiptTable.mostRecentRow.pricePerUnit }} </p>
+	</div>
+	<div class="side-panel-bot">
+		<h2>Other Information</h2>
+		<p>Transaction ID: </p>
+		<p>Profit Today: </p>
+	</div>
+{% endblock %}
+
+{% block table %}
+	<thead class="table-header">
+		<tr>
+			<td>Product Name</td>
+			<td>Product ID</td>
+			<td>Quantity</td>
+			<td>Price Per Unit</td>
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for receiptRow in receiptTable.rowsList %}
+			<tr>
+				<td> {{ receiptRow.productName }} </td>
+				<td> {{ receiptRow.productID }} </td>
+				<td> {{ receiptRow.quantity }} </td>
+				<td> {{ receiptRow.pricePerUnit }} </td>
+			</tr>
+		{% endfor %}
+	</tbody>
+{% endblock %}
+
+{% block tableInput %}
+	<form action="{{ url_for('transactionsAddRow') }}" method=post>
+		<input type="text" name="productID" placeholder="Enter a barcode" required>
+		<input type="text" name="quantity" placeholder="Quantity" size=4>
+		<input type="submit" value="Add Item">
+		<a class="btn btn-info" href="#">Override Price</a>
+	</form>
+	<form action="{{ url_for('finishTransaction') }}" method=post>
+		<input type="submit" value="Finish Transaction">
+	</form>
+{% endblock %}

@@ -20,15 +20,16 @@
 
 
             {%  if current_user.permissions == 1 %}                                       <!-- where does this get passed in? -->
-                  <li><a href="/manager">Manager</a></li>
+                  <li><a href="/discounts">Discounts</a></li>
+                  <li><a href="/reports">Reports</a></li>
             {% endif %}
 
             {%  if current_user.permissions == 1 or current_user.permissions == 2 %}
-                  <li><a href="/cashier">Cashier</a></li>
+                  <li><a href="/transactions">Transactions</a></li>
             {% endif %}
 
              {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
-                  <li><a href="/stocker">Stocker</a></li>
+                  <li><a href="/inventory">Inventory</a></li>
             {% endif %}
 
 
