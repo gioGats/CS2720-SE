@@ -21,6 +21,13 @@ New Backlog!
 
 - add expiration date text input to inventory tab - !Ethan! (COMPLETED)
 
+- Add clear button to clear the current to table ( )
+    - All interfaces ( )
+
+- Add a way to add: (in frontend)
+    - Supplier to DB ( )
+    - Product  to DB ( )
+
 ------------------------------
 -----------Database-----------
 ------------------------------
@@ -45,6 +52,8 @@ New Backlog!
 
 -Implement inventory logic -!Ethan! ( )
 	- Add item et. al.   (COMPLETED)
+	    - Make adding items also update the product amount ( )
+	    - Also make adding multiple items make individual rows as items ( )
 	- Change item et. al.( )
 	- Remove item from current session ( )
 	- calculate profit potential (COMPLETED)

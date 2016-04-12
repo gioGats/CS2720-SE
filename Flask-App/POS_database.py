@@ -9,6 +9,7 @@
 from models import *
 from datetime import date
 
+
 #################################################################################################################################################
 # FUNCTION DEFINITIONS																															#
 #################################################################################################################################################
@@ -18,25 +19,29 @@ from datetime import date
 # Purpose: 	to return the name of a given product ID
 # Notes:
 def getProductName(db, productID):
-	#TODO add error handling
-	# make the query and receive a single tuple (first() allows us to do this)
-	result = db.session.query(Product.name).filter(Product.id == productID).first()
-	# grab the name in the keyed tuple received 
-	name = result.name
-	return name
+    # TODO add error handling
+    # make the query and receive a single tuple (first() allows us to do this)
+    result = db.session.query(Product.name).filter(Product.id == productID).first()
+    # grab the name in the keyed tuple received
+    name = result.name
+    return name
+
 
 # In: 		db (pointer to a database), productID (integer)
 # Out: 		productPrice (float)
 # Purpose:	to retun the price of a given product ID
 # Notes:
 def getProductPrice(db, productID):
-	#TODO check if there is a sale price and if there is use that instead
-	#TODO add error handling
-	# make the query and receive a single tuple (first() allows us to do this)
-	result = db.session.query(Product.standard_price).filter(Product.id == productID).first()
-	# grab the name in the keyed tuple received 
-	price = result.standard_price
-	return price
+    # TODO check if there is a sale price and if there is use that instead
+    # TODO add error handling
+    # make the query and receive a single tuple (first() allows us to do this)
+    result = db.session.query(Product.standard_price).filter(Product.id == productID).first()
+    # grab the name in the keyed tuple received
+    price = result.standard_price
+    return price
+
+
+# TODO getProduct : type, shelf_life, min_inventory, inventory_count, supplier_id
 
 # In: 		db (pointer to a database), rowsList (a list of stockRow objects)
 # Out:		none
@@ -44,6 +49,11 @@ def getProductPrice(db, productID):
 # Notes:	this is intended to take all of the rows we add locally and commit them together to the DB; 
 #			"Update Stock" and "Finish Transaction" buttons will use this procedure
 def updateItemTable(db, rowsList):
-	for row in rowsList:
-		db.session.add(Item(row.productID, row.expDate, row.itemCost, 1))
-	db.session.commit()
+    for row in rowsList:
+        db.session.add(Item(row.productID, row.expDate, row.itemCost, 1))
+    db.session.commit()
+
+# TODO add supplier to db
+# TODO get supplier from db
+# TODO getDiscount
+# TODO getTransaction
