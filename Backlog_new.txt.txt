@@ -28,6 +28,8 @@ New Backlog!
     - Supplier to DB ( )
     - Product  to DB ( )
 
+-Add errorchecking to frontend and such ( )
+
 ------------------------------
 -----------Database-----------
 ------------------------------
