@@ -2,13 +2,12 @@ from app import db
 from models import *
 from datetime import *
 
-
 # Create the database and the db tables #
 db.create_all()
 
-#############################################################################################################################################################################################
-# INSERT ITEMS INTO TABLES!																																									#
-#############################################################################################################################################################################################
+#######################################################################################################################
+#  INSERT ITEMS INTO TABLES!																																									#
+#######################################################################################################################
 
 # SUPPLIERS				name		email
 db.session.add(Supplier("Ethan", 	"myEmail@email.com"))
@@ -16,6 +15,8 @@ db.session.add(Supplier("Ethan", 	"myEmail@email.com"))
 
 # USERS				username	password	permissions
 db.session.add(User("admin", 	"admin", 	1))
+db.session.add(User("cashier",  "admin",    2))
+db.session.add(User("stocker",  "admin",    3))
 
 # PRODUCTS				name			type			s_id	qty.	shelf	std. price
 db.session.add(Product("poop", 			"human waste", 	1, 		10, 	1, 		10.40))
