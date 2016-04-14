@@ -53,7 +53,46 @@ def updateItemTable(db, rowsList):
         db.session.add(Item(row.productID, row.expDate, row.itemCost, 1))
     db.session.commit()
 
-# TODO add supplier to db
-# TODO get supplier from db
-# TODO getDiscount
+# In: 		db (pointer to a database), supplierID (integer)
+# Out:      tuple of supplier: name,email (str, str)
+# Purpose:	gives all info about a supplier
+# Notes:
+def getSupplier(db, supplierID):
+    #Grab the whole Supplier
+    result = db.session.query(Supplier).filter(Supplier.id == supplierID).first()
+    #filter the ID since we already have that.
+    retTuple = tuple([result.name, result.email])
+    return retTuple
+
+# In: 		db (pointer to a database), supplierName (string)
+# Out:      The ID of the supplier (since it's genned)
+# Purpose:	gets the ID from a name. May just be supplemental for insSupplier
+# Notes:
+def getSupplierID(db, supplierString):
+    #Get the supplier
+    result = db.session.query(Supplier).filter(Supplier.name == supplierString).first()
+    # just hand back the ID
+    return result.id
+
+# In: 		db (pointer to a database), supplierName (string), supplierEmail (string)
+# Out:      The ID of the supplier (since it's genned)
+# Purpose:	inserts a supplier into the supplier db
+# Notes:
+def insertSupplier(db, supplierName, supplierEmail):
+    #Add and construct the supplier
+    db.session.add(Supplier(supplierName, supplierEmail))
+    #Extract the ID from the database (since it gens on-the-spot)
+    retID = getSupplierID(db, supplierName)
+    #Return
+    return retID
+
+# In: 		db (pointer to a database), productID
+# Out:      Any sale price for the given productID
+# Purpose:	gets the sale price for an item
+# Notes:
+def getDiscount(db, productID):
+    #Get the a discount object if it exists
+    #Filter the price out
+    #return TODO: Do this coding.
+
 # TODO getTransaction
