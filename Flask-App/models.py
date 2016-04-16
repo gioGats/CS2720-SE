@@ -3,6 +3,7 @@ from app import bcrypt
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 import datetime
+from sqlalchemy.exc import SQLAlchemyError
 
 
 class Item(db.Model):
@@ -22,7 +23,10 @@ class Item(db.Model):
         self.get_product(product_id).inventory_count += 1
 
     def get_product(self, product_id):
-        return Product.query.filter_by(id=product_id).first()
+        try:
+            return Product.query.filter_by(id=product_id).first()
+        except SQLAlchemyError:
+            raise Exception("get_product failed.  You suck.")
 
     def __repr__(self):
         return '{} {} {} {}'.format(self.id, self.product_id, self.inventory_cost, self.expiration_date)
@@ -79,30 +83,55 @@ class Product(db.Model):
         self.standard_price = standard_price
         self.sale_price = standard_price
 
+    '''
+    def get_price(self, product_id):
+        today = datetime.date.today()
+        try:
+            discount = Discount.query.filter_by(product_id=product_id).first()
+            if (today <= discount.end_date) and (today >= discount.start_date):
+                sale_price = self.standard_price * discount.discount
+                return sale_price
+            else:
+                return self.standard_price
+        except SQLAlchemyError:
+            return self.standard_price
+
     def __repr__(self):
         return '{} {} {} {} {} {} {} {}'.format(self.id, self. name, self.supplier_id, self.inventory_count,
                                              self.min_inventory, self.shelf_life, self.standard_price, self.sale_price)
+    '''
 
 
 class ItemSold(db.Model):
     __tablename__ = "items_sold"
 
     id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.Integer, ForeignKey('items.id'))
+    item_id = db.Column(db.Integer, nullable=False)
     product_id = db.Column(db.Integer, ForeignKey('products.id'))
     price_sold = db.Column(db.Float, nullable=False)
-    inventory_cost = db.Column(db.Float, ForeignKey('items.inventory_cost'))
+    inventory_cost = db.Column(db.Float, nullable=False)
     transaction_id = db.Column(db.Float, nullable=False)
 
     def __init__(self, item_id, price_sold, transaction_id):
         self.item_id = item_id
+        self.product_id = self.get_product_id(item_id)
         self.price_sold = price_sold
         self.inventory_cost = self.get_cost(item_id)
         self.transaction_id = transaction_id
 
+    def get_product_id(self, item_id):
+        try:
+            item = Item.query.filter_by(id=item_id).first()
+            return item.product_id
+        except Exception:
+            return None  # TODO Exception
+
     def get_cost(self, item_id):
-        item = Item.query.filter_by(id=item_id).first()
-        return item.inventory_cost
+        try:
+            item = Item.query.filter_by(id=item_id).first()
+            return item.inventory_cost
+        except SQLAlchemyError:
+            raise Exception("get_cost failed.  You suck.")
 
     def __repr__(self):
         return '{} {} {} {} {} {}'.format(self.id, self.item_id, self.product_id, self.price_sold,
@@ -147,7 +176,7 @@ class Discount(db.Model):
     __tablename__ = "discounts"
 
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, nullable=False)
+    product_id = db.Column(db.Integer, ForeignKey('products.id'))
     start_date = db.Column(db.DATE, nullable=False)
     end_date = db.Column(db.DATE, nullable=False)
     discount = db.Column(db.Float, nullable=False)
