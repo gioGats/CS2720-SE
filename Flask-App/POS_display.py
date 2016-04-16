@@ -1,74 +1,87 @@
-# Author: Ethan Morisette
-# Created: 4/9/2016
-# Last Modified: 
-# Description: a module that holds all data specifically dealing with getting code from and to the GUI
-
+"""
+Author: Ethan Morisette
+Created: 4/9/2016
+Last Modified:
+Description: a module that holds all data specifically dealing with getting code from and to the GUI
+"""
 ######################################################################################
 # IMPORTS																			 #
 ######################################################################################
 from flask import *
 from datetime import date
 
+
 ######################################################################################
 # CLASS DEFINITIONS				  													 #
 ######################################################################################
 
-# Purpose: to hold a date formatted as MM-DD-YYYY
-class formattedDate(date):
-	def __repr__(self):
-		return "{}-{}-{}".format(self.month, self.day, self.year)
 
-	def __str__(self):
-		return "{}-{}-{}".format(self.month, self.day, self.year)
+class FormattedDate(date):
+    """
+    Purpose: to hold a date formatted as MM-DD-YYYY
+    """
+    def __repr__(self):
+        return "{}-{}-{}".format(self.month, self.day, self.year)
+
+    def __str__(self):
+        return "{}-{}-{}".format(self.month, self.day, self.year)
 
 
 ######################################################################################
 # FUNCTION DEFINITIONS																 #
 ######################################################################################
 
-# In: 		dateString (string) 
-# Out: 		dateResult (formattedDate)
-# Purpose: 	to convert date inputs to a date object
-# Note: 	expecting this format: YYYY-MM-DD
-def convertStringToDate(dateString):
-	stringList 	= 	dateString.split("-")
-	year 		= 	int(stringList[0])
-	month		= 	int(stringList[1])
-	day 		= 	int(stringList[2])
-	dateResult	= 	formattedDate(year=year, month=month, day=day)
-	
-	return dateResult
 
-# In: 		request (request object)
-# Out: 		dictionary
-# Purpose: 	to get user input from the GUI and pass it into the system
-# Note: 
-def getTransactionRow(request):
-	inputDict = dict()
-	inputDict["productID"] 	= 	request.form["productID"]
-	inputDict["quantity"] 	= 	request.form["quantity"]
-	return inputDict
+def convert_string_to_date(dateString):
+    """
+    Purpose: 	to convert date inputs to a date object
+    :param dateString: String coming from HTML user-input in format YYYY-MM-DD
+    :return: Instance of FormattedDate
+    """
+    string_list = dateString.split("-")
+    year = int(string_list[0])
+    month = int(string_list[1])
+    day = int(string_list[2])
+    date_result = FormattedDate(year=year, month=month, day=day)
 
-# In: 		request (request object)
-# Out: 		a list of entries
-# Purpose: 	to get user input from the GUI and pass it into the system
-# Note: 
-def getInventoryRow(request):
-	inputDict = dict()
-	inputDict["productID"] 	= 	request.form["productID"]
-	inputDict["quantity"] 	= 	request.form["quantity"]
-	inputDict["exp-date"]	=	convertStringToDate(request.form["exp-date"])
-	inputDict["item-cost"]	=	request.form["item-cost"]
-	return inputDict
+    return date_result
 
-# In: 		request (request object)
-# Out: 		a list of entries
-# Purpose: 	to get user input from the GUI and pass it into the system
-# Note: 
-def getDiscountRow(request):
-	inputDict = dict()
-	inputDict["productID"] 	= 	request.form["productID"]
-	inputDict["saleStart"] 	= 	convertStringToDate(request.form["saleStart"])
-	inputDict["saleEnd"] 	= 	convertStringToDate(request.form["saleEnd"])
-	inputDict["salePrice"] 	= 	request.form["salePrice"]
-	return inputDict
+
+def get_transaction_row(request):
+    """
+    Purpose: 	to get user input from the GUI and pass it into the system
+    :param request: request (request object)
+    :return: dictionary
+    """
+    input_dict = dict()
+    input_dict["productID"] = request.form["productID"]
+    input_dict["quantity"] = request.form["quantity"]
+    return input_dict
+
+
+def get_inventory_row(request):
+    """
+    Purpose: 	to get user input from the GUI and pass it into the system
+    :param request: request (request object)
+    :return: a list of entries
+    """
+    input_dict = dict()
+    input_dict["productID"] = request.form["productID"]
+    input_dict["quantity"] = request.form["quantity"]
+    input_dict["exp-date"] = convert_string_to_date(request.form["exp-date"])
+    input_dict["item-cost"] = request.form["item-cost"]
+    return input_dict
+
+
+def get_discount_row(request):
+    """
+    Purpose: 	to get user input from the GUI and pass it into the system
+    :param request: request (request object)
+    :return: a list of entries
+    """
+    input_dict = dict()
+    input_dict["productID"] = request.form["productID"]
+    input_dict["saleStart"] = convert_string_to_date(request.form["saleStart"])
+    input_dict["saleEnd"] = convert_string_to_date(request.form["saleEnd"])
+    input_dict["salePrice"] = request.form["salePrice"]
+    return input_dict

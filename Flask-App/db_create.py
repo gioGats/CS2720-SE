@@ -9,34 +9,104 @@ db.create_all()
 #  INSERT ITEMS INTO TABLES!																																									#
 #######################################################################################################################
 
-# SUPPLIERS				name		email
-db.session.add(Supplier("Ethan", 	"myEmail@email.com"))
+users_init = [
+    # username, password, permissions
+    ["admin", "admin", 1],
+    ["cashier",  "admin", 2],
+    ["stocker", "admin", 3]
+]
 
+suppliers_init = [
+    # name, email
+    ["Ethan", "myEmail@email.com"],
+    ["BopBoop", "3195551234"]
+]
 
-# USERS				username	password	permissions
-db.session.add(User("admin", 	"admin", 	1))
-db.session.add(User("cashier",  "admin",    2))
-db.session.add(User("stocker",  "admin",    3))
+products_init = [
+    # name, supplier_id, min_inventory, shelf_life, standard_price
+    ["poop", 1, 10, 10, 1.50],
+    ["banana", 1, 20, 5, 0.50],
+    ["matches", 2, 15, 100, 0.25]
+]
 
-# PRODUCTS				name			type			s_id	qty.	shelf	std. price
-db.session.add(Product("poop", 			"human waste", 	1, 		10, 	1, 		10.40))
-db.session.add(Product("apples",		"fruit", 		1, 		3,	 	32, 	0.40))
-db.session.add(Product("carrots",		"vegetable", 	1, 		34, 	43, 	1.45))
-db.session.add(Product("matches",		"tool", 		1, 		84, 	1, 		0.34))
-db.session.add(Product("shoes",			"clothing", 	1, 		120, 	4, 		20.00))
-db.session.add(Product("hat",			"clothing", 	1, 		305, 	123, 	10.21))
-db.session.add(Product("shirt",			"clothing", 	1, 		991, 	10, 	2.99))
-db.session.add(Product("pants",			"clothing", 	1, 		403, 	5, 		10.50))
-db.session.add(Product("baseball bat",	"toy", 			1, 		12, 	100, 	3.56))
+items_init = [
+    # product_id, inventory_cost
+    [1, 0.75],
+    [1, 1.50],
+    [1, 1.60],
+    [2, 0.25],
+    [2, 0.50],
+    [2, 0.75],
+    [3, 0.20],
+    [3, 0.25],
+    [3, 0.30],
+    [1, 0.75],
+    [1, 1.50],
+    [1, 1.60],
+    [2, 0.25],
+    [2, 0.50],
+    [2, 0.75],
+    [3, 0.20],
+    [3, 0.25],
+    [3, 0.30],
+]
 
-# ITEMS				p_id	exp. date			cost	a_id
-db.session.add(Item(1, 		date(2016, 5, 4), 	0.50, 	1))
-db.session.add(Item(2, 		date(2011, 9, 5), 	0.35, 	1))
-db.session.add(Item(3, 		date(2020, 10, 4), 	2.00, 	1))
-db.session.add(Item(1, 		date(2017, 5, 9), 	1.98, 	1))
-db.session.add(Item(4, 		date(2009, 1, 1), 	60.00, 	1))
-db.session.add(Item(2, 		date(2001, 5, 4), 	4.09, 	1))
-db.session.add(Item(9, 		date(2019, 4, 6), 	5.04, 	1))
+itemsSold_init = [
+    # item_id, price_sold, transaction_id
+    [1, 1.50, 1],
+    [2, 1.50, 1],
+    [3, 1.50, 1],
+    [4, 0.50, 1],
+    [5, 0.50, 2],
+    [6, 0.50, 2],
+    [7, 0.25, 2],
+    [8, 0.25, 2],
+    [9, 0.25, 2],
+]
 
-# Commit changes #
+discounts_init = [
+    # TODO Add discount inits
+    # product_id, start_date, end_date, discount
+    [],
+    []
+]
+
+transactions_init = [
+    # cust_name, cust_contact, payment_type
+    ["Bob", "never!", 1],
+    ["Tom", "Gah!", 2]
+]
+
+# Probably useless, but doesn't hurt to have them all right?
+all_inits = [users_init, suppliers_init, products_init, items_init, itemsSold_init, discounts_init, transactions_init]
+
+for i in transactions_init:
+    db.session.add(Transactions(i[0], i[1], i[2]))
+    db.session.commit()
+
+for i in suppliers_init:
+    db.session.add(Suppliers(i[0], i[1]))
+    db.session.commit()
+
+for i in products_init:
+    db.session.add(Products(i[0], i[1], i[2], i[3], i[4]))
+    db.session.commit()
+
+for i in users_init:
+    db.session.add(Users(i[0], i[1], i[2]))
+    db.session.commit()
+
+for i in items_init:
+    db.session.add(Items(i[0], i[1]))
+    db.session.commit()
+
+# for i in itemsSold_init:
+#     db.session.add(ItemsSold(i[0], i[1], i[2]))
+#     db.session.commit()
+
+#   for i in discounts_init:
+#       db.session.add(Users(i[0], i[1], i[2], i[3]))
+#       db.session.commit()
+
+# Commit changes
 db.session.commit()

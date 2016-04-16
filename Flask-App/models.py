@@ -18,15 +18,15 @@ class Items(db.Model):
     def __init__(self, product_id, inventory_cost):
         self.product_id = product_id
         self.inventory_cost = inventory_cost
-        shelf_life = None # get shelflife from products table
+        shelf_life = 1  # TODO get shelflife from products table
         self.expiration_date = datetime.date.today() + datetime.timedelta(days=shelf_life)
         # TODO Increment inventory count in products table
 
     def __repr__(self):
-        return '{} {} {} {} {}'.format(self.id, self.product_id, self.inventory_cost, self.expiration_date)
+        return '{} {} {} {}'.format(self.id, self.product_id, self.inventory_cost, self.expiration_date)
 
 
-class User(db.Model):
+class Users(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -60,6 +60,7 @@ class Products(db.Model):
     __tablename__ = "products"
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
     supplier_id = db.Column(db.Integer, ForeignKey('suppliers.id'))
     inventory_count = db.Column(db.Integer, nullable=False)
     min_inventory = db.Column(db.Integer, nullable=False)
@@ -67,7 +68,8 @@ class Products(db.Model):
     standard_price = db.Column(db.Float, nullable=False)
     sale_price = db.Column(db.Float, nullable=False)
 
-    def __init__(self, supplier_id, min_inventory, shelf_life, standard_price):
+    def __init__(self, name, supplier_id, min_inventory, shelf_life, standard_price):
+        self.name = name
         self.supplier_id = supplier_id
         self.inventory_count = 0
         self.min_inventory = min_inventory
@@ -80,8 +82,8 @@ class Products(db.Model):
         return self.sale_price
 
     def __repr__(self):
-        return '{} {} {} {} {} {} {}'.format(self.id, self.supplier_id, self.inventory_count, self.min_inventory,
-                                             self.shelf_life, self.standard_price, self.sale_price)
+        return '{} {} {} {} {} {} {} {}'.format(self.id, self. name, self.supplier_id, self.inventory_count,
+                                             self.min_inventory, self.shelf_life, self.standard_price, self.sale_price)
 
 
 class ItemsSold(db.Model):
@@ -120,12 +122,12 @@ class Suppliers(db.Model):
         return '{} {} {}'.format(self.id, self.name, self.email)
 
 
-class Transaction(db.Model):
+class Transactions(db.Model):
     __tablename__ = "transactions"
 
     id = db.Column(db.Integer, primary_key=True)
-    cust_name = db.Column(db.String, nullable=False)
-    cust_contact = db.Column(db.String, nullable=False)
+    cust_name = db.Column(db.String(20), nullable=False)
+    cust_contact = db.Column(db.String(40), nullable=False)
     payment_type = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DATE, nullable=False)
 
