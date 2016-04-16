@@ -1,6 +1,5 @@
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
-
 from app import app, db
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
