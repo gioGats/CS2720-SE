@@ -72,7 +72,6 @@ class Product(db.Model):
     min_inventory = db.Column(db.Integer, nullable=False)
     shelf_life = db.Column(db.Integer, nullable=False)
     standard_price = db.Column(db.Float, nullable=False)
-    sale_price = db.Column(db.Float, nullable=False)
 
     def __init__(self, name, supplier_id, min_inventory, shelf_life, standard_price):
         self.name = name
@@ -81,7 +80,6 @@ class Product(db.Model):
         self.min_inventory = min_inventory
         self.shelf_life = shelf_life
         self.standard_price = standard_price
-        self.sale_price = standard_price
 
     '''
     def get_price(self, product_id):
@@ -162,11 +160,11 @@ class Transaction(db.Model):
     payment_type = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DATE, nullable=False)
 
-    def __init__(self, cust_name, cust_contact, payment_type):
+    def __init__(self, cust_name, cust_contact, payment_type, date=datetime.date.today()):
         self.cust_name = cust_name
         self.cust_contact = cust_contact
         self.payment_type = payment_type
-        self.date = datetime.date.today()
+        self.date = date
 
     def __repr__(self):
         return '{} {} {} {} {}'.format(self.id, self.cust_name, self.cust_contact, self.payment_type, self.date)

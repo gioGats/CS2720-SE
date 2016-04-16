@@ -199,7 +199,7 @@ def finishTransaction():
     # TODO send all information from the local receipt table to the database for storage
     
     # clear the local receipt table out
-    POS_logic.transactionTable.clearTable()
+    POS_logic.transactionTable.clear_table()
     return redirect(url_for('transactions'))
 
 # -------------------------------------------------- #
@@ -233,7 +233,7 @@ def updateInventory():
     # send all information from the local stocking table to the database for storage
 	POS_database.updateItemTable(db, POS_logic.inventoryTable.rowsList)
     # clear the local stocking table out
-	POS_logic.inventoryTable.clearTable()
+	POS_logic.inventoryTable.clear_table()
 	return redirect(url_for('inventory'))
 # -------------------------------------------------- #
 
