@@ -6,7 +6,7 @@ import datetime
 # TODO Adjust so that foreign keys auto-assign
 
 
-class Items(db.Model):
+class Item(db.Model):
     __tablename__ = "items"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -26,14 +26,14 @@ class Items(db.Model):
         return '{} {} {} {}'.format(self.id, self.product_id, self.inventory_cost, self.expiration_date)
 
 
-class Users(db.Model):
+class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(400), nullable=False)
     permissions = db.Column(db.Integer, nullable=False)
-    posts = relationship("Items", backref="author")
+    posts = relationship("Item", backref="author")
 
     def __init__(self, name, password, permissions):
         self.name = name
@@ -56,7 +56,7 @@ class Users(db.Model):
         return '<name {}'.format(self.name)
 
 
-class Products(db.Model):
+class Product(db.Model):
     __tablename__ = "products"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -86,7 +86,7 @@ class Products(db.Model):
                                              self.min_inventory, self.shelf_life, self.standard_price, self.sale_price)
 
 
-class ItemsSold(db.Model):
+class ItemSold(db.Model):
     __tablename__ = "items_sold"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -107,7 +107,7 @@ class ItemsSold(db.Model):
                                           self.inventory_cost, self.transaction_id)
 
 
-class Suppliers(db.Model):
+class Supplier(db.Model):
     __tablename__ = "suppliers"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -122,7 +122,7 @@ class Suppliers(db.Model):
         return '{} {} {}'.format(self.id, self.name, self.email)
 
 
-class Transactions(db.Model):
+class Transaction(db.Model):
     __tablename__ = "transactions"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -141,7 +141,7 @@ class Transactions(db.Model):
         return '{} {} {} {} {}'.format(self.id, self.cust_name, self.cust_contact, self.payment_type, self.date)
 
 
-class Discounts(db.Model):
+class Discount(db.Model):
     __tablename__ = "discounts"
 
     id = db.Column(db.Integer, primary_key=True)

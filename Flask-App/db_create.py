@@ -81,31 +81,31 @@ transactions_init = [
 all_inits = [users_init, suppliers_init, products_init, items_init, itemsSold_init, discounts_init, transactions_init]
 
 for i in transactions_init:
-    db.session.add(Transactions(i[0], i[1], i[2]))
+    db.session.add(Transaction(i[0], i[1], i[2]))
     db.session.commit()
 
 for i in suppliers_init:
-    db.session.add(Suppliers(i[0], i[1]))
+    db.session.add(Supplier(i[0], i[1]))
     db.session.commit()
 
 for i in products_init:
-    db.session.add(Products(i[0], i[1], i[2], i[3], i[4]))
+    db.session.add(Product(i[0], i[1], i[2], i[3], i[4]))
     db.session.commit()
 
 for i in users_init:
-    db.session.add(Users(i[0], i[1], i[2]))
+    db.session.add(User(i[0], i[1], i[2]))
     db.session.commit()
 
 for i in items_init:
-    db.session.add(Items(i[0], i[1]))
+    db.session.add(Item(i[0], i[1]))
     db.session.commit()
 
 # for i in itemsSold_init:
-#     db.session.add(ItemsSold(i[0], i[1], i[2]))
+#     db.session.add(ItemSold(i[0], i[1], i[2]))
 #     db.session.commit()
 
 #   for i in discounts_init:
-#       db.session.add(Users(i[0], i[1], i[2], i[3]))
+#       db.session.add(Discount(i[0], i[1], i[2], i[3]))
 #       db.session.commit()
 
 # Commit changes
