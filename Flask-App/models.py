@@ -3,7 +3,6 @@ from app import bcrypt
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 import datetime
-# TODO Adjust so that foreign keys auto-assign
 
 
 class Item(db.Model):
@@ -18,9 +17,12 @@ class Item(db.Model):
     def __init__(self, product_id, inventory_cost):
         self.product_id = product_id
         self.inventory_cost = inventory_cost
-        shelf_life = 1  # TODO get shelflife from products table
+        shelf_life = self.get_product(product_id).shelf_life
         self.expiration_date = datetime.date.today() + datetime.timedelta(days=shelf_life)
-        # TODO Increment inventory count in products table
+        self.get_product(product_id).inventory_count += 1
+
+    def get_product(self, product_id):
+        return Product.query.filter_by(id=product_id).first()
 
     def __repr__(self):
         return '{} {} {} {}'.format(self.id, self.product_id, self.inventory_cost, self.expiration_date)
@@ -77,10 +79,6 @@ class Product(db.Model):
         self.standard_price = standard_price
         self.sale_price = standard_price
 
-    def get_price(self, product_id):
-        # TODO get sale_price of this product
-        return self.sale_price
-
     def __repr__(self):
         return '{} {} {} {} {} {} {} {}'.format(self.id, self. name, self.supplier_id, self.inventory_count,
                                              self.min_inventory, self.shelf_life, self.standard_price, self.sale_price)
@@ -99,8 +97,12 @@ class ItemSold(db.Model):
     def __init__(self, item_id, price_sold, transaction_id):
         self.item_id = item_id
         self.price_sold = price_sold
-        self.inventory_cost = None  # TODO Get inventory_cost from Inventory table
+        self.inventory_cost = self.get_cost(item_id)
         self.transaction_id = transaction_id
+
+    def get_cost(self, item_id):
+        item = Item.query.filter_by(id=item_id).first()
+        return item.inventory_cost
 
     def __repr__(self):
         return '{} {} {} {} {} {}'.format(self.id, self.item_id, self.product_id, self.price_sold,
