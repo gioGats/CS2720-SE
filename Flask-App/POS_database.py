@@ -25,14 +25,14 @@ def getfromDB_Error(func):
         try:
             func(db, *args, **kwargs)
         except SQLAlchemy.SQLAlchemyError as e:
-            # TODO Error handle here!
-            pass
+            db.session.rollback()
+            return -1 #!!
     #Hand back the function for future usage.
     return wrapperFunction
 
 
-#Defined: Products (Access)
-#         Transaction (Access)
+#Defined: Products (FULL)
+#         Transaction (Access/Destruction)
 #         Supplier (FULL)
 #
 
@@ -46,7 +46,6 @@ def getfromDB_Error(func):
 # Notes:
 @getfromDB_Error
 def getProductName(db, productID):
-    # TODO add error handling
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product.name).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
@@ -60,12 +59,15 @@ def getProductName(db, productID):
 # Notes:
 @getfromDB_Error
 def getProductPrice(db, productID):
-    # TODO check if there is a sale price and if there is use that instead
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product.standard_price).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     price = result.standard_price
-    return price  # PRICE (FLOAT)
+    # get the product from the discounts db
+    discount = getDiscountFor(db, productID)
+    #Get the total price!
+    newPrice = price * (1-discount)
+    return newPrice  # PRICE (FLOAT)
 
 
 @getfromDB_Error
@@ -112,13 +114,25 @@ def getProductSupplierID(db, productID):
     supplierID = result.supplier_id
     return supplierID  # product's supplier's ID
 
+@getfromDB_Error
+def destroyProduct(db, productID):
+    #Kill it!
+    db.session.query(Product).filter(Product.id == productID).delete()
+    #Commit
+    db.session.commit()
+
+@getfromDB_Error
+def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, standard_price):
+    #Build one
+    db.session.add(Product(supplier_id, inventory_count, min_inventory, shelf_life, standard_price))
+    #commit our addition!
+    db.session.commit()
 
 # In: 		db (pointer to a database), rowsList (a list of stockRow objects)
 # Out:		none
 # Purpose:	to commit a batch of data held in the current user's session
 # Notes:	this is intended to take all of the rows we add locally and commit them together to the DB; 
 #			"Update Stock" and "Finish Transaction" buttons will use this procedure
-
 @getfromDB_Error
 def updateItemTable(db, rowsList):
     for row in rowsList:
@@ -184,8 +198,19 @@ def getDiscountFor(db, productID):
     else:
         return currentDiscount.discount
 
-def addDiscount(db, productID, discPercent, startDate, endDate)
+@getfromDB_Error
+def addDiscount(db, productID, discPercent, startDate, endDate):
+    #Create the discount portion
+    db.session.add(Discount(productID, startDate, endDate, discPercent))
+    #Save it to the database
+    db.session.commit()
 
+@getfromDB_Error
+def destroyDiscount(db, discountID):
+    #Kill it!
+    db.session.query(Discounts).filter(Discounts.id == discountID).delete()
+    #Commit our changes
+    db.session.commit()
 
 @getfromDB_Error
 def getTransaction(db, transactionID):
