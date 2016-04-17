@@ -251,14 +251,15 @@ class CashierTable(Table):
 
 class StockerTable(Table):
 
-    def add_row(self, product_id, inventory_cost):
+    def add_row(self, product_id, name, inventory_cost):
         """
         Adds a stocker row to the stocker table.
         :param product_id: int
+        :param name: string
         :param inventory_cost: float
         :return: None
         """
-        new_row = StockerRow(product_id, inventory_cost)
+        new_row = StockerRow(product_id, name, inventory_cost)
         self.rowsList.append(new_row)
         self.rowCount += 1
         self.mostRecentRow = new_row

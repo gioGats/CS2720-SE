@@ -225,6 +225,11 @@ def finishTransaction():
     POS_logic.cashier_table.clear_table()
     return redirect(url_for('transactions'))
 
+@app.route('/cashiercancel', methods=["POST"])
+def cashierCancel():
+    POS_logic.cashier_table.clear_table()
+    return redirect(url_for('transactions'))
+
 
 # -------------------------------------------------- #
 
@@ -234,34 +239,40 @@ def finishTransaction():
 @app.route('/inventory')
 @login_required
 def inventory():
-    inventoryTable = []
     if is_manager(current_user) or is_stocker(current_user):
         items = db.session.query(Item).all()
-        return render_template("inventory.html", items=items, inventoryTable=inventoryTable)
+        return render_template("inventory.html", items=items, inventoryTable=POS_logic.stocker_table)
     else:
         return redirect('/')
 
 
-@app.route('/inventoryadd', methods=["POST"])
+@app.route('/stockeradd', methods=["POST"])
 def stockerAddRow():
     # get the information from the user
-    inputDict = POS_display.getInventoryRow(request)
+    inputDict = POS_display.get_stocker_row(request)
     # get the product name from the database
-    productName = POS_database.getProductName(db, inputDict['productID'])
-    # get the product price from the database
-    productPrice = float(POS_database.getProductPrice(db, inputDict['productID']))
+    productName = POS_database.getProductName(db, inputDict['product_id'])
     # add all of the information received to the local stocking table
-    POS_logic.addInventoryRow(productName, inputDict['productID'], int(inputDict['quantity']), inputDict['exp-date'],
-                              float(inputDict['item-cost']), productPrice)
+    POS_logic.stocker_table.add_row(inputDict['product_id'], productName, inputDict['inventory_cost'])
     return redirect(url_for('inventory'))
 
+@app.route('/stockerdelete', methods=["POST"])
+def stockerDeleteRow():
+    inputDict = POS_display.get_stocker_row(request)
+    POS_logic.stocker_table.delete_row(int(inputDict["row_number"]))
+    return redirect(url_for('inventory'))
 
 @app.route('/inventorycommit', methods=["POST"])
 def updateInventory():
     # send all information from the local stocking table to the database for storage
-    POS_database.updateItemTable(db, POS_logic.inventoryTable.rowsList)
+    POS_database.updateItemTable(db, POS_logic.stocker_table.rowsList)
     # clear the local stocking table out
-    POS_logic.inventoryTable.clear_table()
+    POS_logic.stocker_table.clear_table()
+    return redirect(url_for('inventory'))
+
+@app.route('/stockercancel', methods=["POST"])
+def stockerCancel():
+    POS_logic.stocker_table.clear_table()
     return redirect(url_for('inventory'))
 
 

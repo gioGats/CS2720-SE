@@ -46,12 +46,13 @@
 
 {% block sidePanelContent %}
     <div class="side-panel-top">
-        <form action="{{ url_for('stockerAddRow') }}" method=post>
+        <form id="stocker-form">
             <input type="text" name="row_number" placeholder="Row Number">
+            <button type="submit" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post">Delete</button>
             <input type="text" name="product_id" placeholder="Product ID">
             <input type="text" name="inventory_cost" placeholder="Inventory Cost">
-            <input type="submit" value="Update">
-            <input type="submit" value="Cancel">
+            <button type="submit" formid="stocker-form" formaction="{{ url_for('stockerAddRow') }}" formmethod="post">Update</button>
+            <button type="submit" formid="stocker-form" formaction="{{ url_for('stockerCancel') }}" formmethod="post">Cancel</button>
         </form>
         <form action="{{ url_for('updateInventory') }}" method=post>
             <input type="submit" value="Update Inventory">
@@ -70,13 +71,14 @@
     </thead>
 
     <tbody>
-        {% for inventoryRow in inventoryTable.rowsList %}
+        {% set myNum = 0 %}
+        {% for row in inventoryTable.rowsList %}
+            {% set myNum = myNum + 1 %}
             <tr>
-                <td> {{ inventoryRow.productName }} </td>
-                <td> {{ inventoryRow.productID }} </td>
-                <td> {{ inventoryRow.quantity }} </td>
-                <td> {{ inventoryRow.expDate }} </td>
-                <td> {{ inventoryRow.itemCost }} </td>
+                <td> {{ myNum }} </td>
+                <td> {{ row.name }} </td>
+                <td> {{ row.product_id }} </td>
+                <td> {{ row.inventory_cost }} </td>
             </tr>
         {% endfor %}
     </tbody>

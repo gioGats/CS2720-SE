@@ -60,17 +60,16 @@ def get_cashier_row(request):
     return input_dict
 
 
-def get_inventory_row(request):
+def get_stocker_row(request):
     """
     Purpose: 	to get user input from the GUI and pass it into the system
     :param request: request (request object)
     :return: a list of entries
     """
     input_dict = dict()
-    input_dict["productID"] = request.form["productID"]
-    input_dict["quantity"] = request.form["quantity"]
-    input_dict["exp-date"] = convert_string_to_date(request.form["exp-date"])
-    input_dict["item-cost"] = request.form["item-cost"]
+    input_dict["row_number"] = request.form["row_number"]
+    input_dict["product_id"] = request.form["product_id"]
+    input_dict["inventory_cost"] = request.form["inventory_cost"]
     return input_dict
 
 
