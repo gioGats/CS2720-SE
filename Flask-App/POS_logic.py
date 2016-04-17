@@ -194,6 +194,26 @@ class Table:
         self.rowCount = 0  # integer
         self.mostRecentRow = None  # row object (receiptRow, stockRow, or saleRow)
 
+    def clear_table(self):
+        """
+        Clear all contents of a display table. Intended for use after a batch of data is committed to the database.
+        :return: None
+        """
+        self.rowsList.clear()
+        self.rowCount = 0
+        self.mostRecentRow = None
+
+    def delete_row(self, row_number):
+        """
+        Deletes the row at index row_number-1
+        :param row_number: int
+        :return: None
+        """
+        if self.mostRecentRow == self.rowsList[row_number-1]:
+            self.mostRecentRow = self.rowsList[row_number-2]
+        self.rowsList.pop(row_number-1)
+        self.rowCount -= 1
+
 
 class CashierTable(Table):
 
@@ -228,23 +248,6 @@ class CashierTable(Table):
             price = self.rowsList[row_number-1].price
         self.rowsList[row_number-1] = CashierRow(item_id, product_name, price)
 
-    def clear_table(self):
-        """
-        Clear all contents of a display table. Intended for use after a batch of data is committed to the database.
-        :return: None
-        """
-        self.rowsList.clear()
-        self.rowCount = 0
-        self.mostRecentRow = None
-
-    def delete_row(self, row_number):
-        """
-        Deletes the row at index row_number-1
-        :param row_number: int
-        :return: None
-        """
-        self.rowsList.pop(row_number-1)
-
 
 class StockerTable(Table):
 
@@ -275,28 +278,10 @@ class StockerTable(Table):
             inventory_cost = self.rowsList[row_number-1].product_name
         self.rowsList[row_number-1] = StockerRow(product_id, inventory_cost)
 
-    def clear_table(self):
-        """
-        Clear all contents of a display table. Intended for use after a batch of data is committed to the database.
-        :return: None
-        """
-        self.rowsList.clear()
-        self.rowCount = 0
-        self.mostRecentRow = None
-
-    def delete_row(self, row_number):
-        """
-        Deletes the row at index row_number-1
-        :param row_number: int
-        :return: None
-        """
-        self.rowsList.pop(row_number-1)
-
-
 #######################################################################################################################
 # GLOBAL VARIABLES
 #######################################################################################################################
-
+# TODO Stage for delete
 """
 # Tables for editors
 users_table = Table()
@@ -315,3 +300,4 @@ stocker_table = StockerTable()
 ######################################################################################################################
 # FUNCTION DEFINITIONS
 ######################################################################################################################
+# TODO more functions needed?

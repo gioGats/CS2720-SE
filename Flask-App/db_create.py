@@ -1,3 +1,9 @@
+"""
+Author: Jacob Campbell; Ryan Giarusso
+Created: 3/1/2016
+Purpose: Test database creation file.  Generates sample entries in all database tables.
+"""
+
 from app import db
 from models import *
 import datetime
