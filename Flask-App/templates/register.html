@@ -28,6 +28,14 @@
                 <li class="active"><a href="/stocker">Stocker</a></li>
             {% endif %}
 
+             {% if current_user.is_authenticated %}
+                <li>
+                {% block dropdown %}
+                 {{ super() }}
+                {% endblock %}
+                </li>
+            {% endif %}
+
             <li><a href="/">Home</a> </li>
             <li><a href="/logout">Logout</a></li>
         </ul>
