@@ -8,7 +8,6 @@
 ########################################################################################################################
 from flask.ext.sqlalchemy import SQLAlchemy
 from models import *
-from models_new import *
 from datetime import datetime
 
 
@@ -31,9 +30,9 @@ def getfromDB_Error(func):
     return wrapperFunction
 
 
-#Defined: Products (FULL)
-#         Transaction (Access/Destruction)
-#         Supplier (FULL)
+#Defined: Products      (FULL)
+#         Transaction   (Access/Destruction)
+#         Supplier      (FULL)
 #
 
 ########################################################################################################################
