@@ -193,25 +193,6 @@ class Table:
         self.rowCount = 0  # integer
         self.mostRecentRow = None  # row object (receiptRow, stockRow, or saleRow)
 
-    def first_page(self, no_entries):
-        """
-        Returns a list of the first i entries in the table, where i = no_entries
-        :param no_entries: int
-        :return: list
-        """
-        return_list = []
-        for i in range(0,no_entries):
-            return_list.append(self.rowsList[i])
-        return return_list
-
-    def next_page(self, no_entries):
-        """
-
-        :param no_entries:
-        :return:
-        """
-
-
 
 class CashierTable(Table):
 
