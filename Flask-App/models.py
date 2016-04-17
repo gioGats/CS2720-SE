@@ -16,6 +16,12 @@ class Item(db.Model):
     author_id = db.Column(db.Integer, ForeignKey('users.id'))
 
     def __init__(self, product_id, inventory_cost):
+        """
+        Database table stores individual items in store inventory.
+        :param product_id: int
+        :param inventory_cost: float
+        :return: None
+        """
         self.product_id = product_id
         self.inventory_cost = inventory_cost
         shelf_life = self.get_product(product_id).shelf_life
@@ -23,6 +29,11 @@ class Item(db.Model):
         self.get_product(product_id).inventory_count += 1
 
     def get_product(self, product_id):
+        """
+        Gets the entry with the input product_id from products table.
+        :param product_id: int
+        :return: Product entry from products table
+        """
         try:
             return Product.query.filter_by(id=product_id).first()
         except SQLAlchemyError:
@@ -42,6 +53,13 @@ class User(db.Model):
     posts = relationship("Item", backref="author")
 
     def __init__(self, name, password, permissions):
+        """
+        Database table stores individual users.
+        :param name: str
+        :param password: str
+        :param permissions: int
+        :return: None
+        """
         self.name = name
         self.password = bcrypt.generate_password_hash(password)
         self.permissions = permissions
@@ -74,6 +92,15 @@ class Product(db.Model):
     standard_price = db.Column(db.Float, nullable=False)
 
     def __init__(self, name, supplier_id, min_inventory, shelf_life, standard_price):
+        """
+        Database table stores products (types of items) in store inventory.
+        :param name: str
+        :param supplier_id: int
+        :param min_inventory: int
+        :param shelf_life: int (days)
+        :param standard_price: float
+        :return: None
+        """
         self.name = name
         self.supplier_id = supplier_id
         self.inventory_count = 0
@@ -81,23 +108,9 @@ class Product(db.Model):
         self.shelf_life = shelf_life
         self.standard_price = standard_price
 
-    '''
-    def get_price(self, product_id):
-        today = datetime.date.today()
-        try:
-            discount = Discount.query.filter_by(product_id=product_id).first()
-            if (today <= discount.end_date) and (today >= discount.start_date):
-                sale_price = self.standard_price * discount.discount
-                return sale_price
-            else:
-                return self.standard_price
-        except SQLAlchemyError:
-            return self.standard_price
-
     def __repr__(self):
         return '{} {} {} {} {} {} {} {}'.format(self.id, self. name, self.supplier_id, self.inventory_count,
                                              self.min_inventory, self.shelf_life, self.standard_price, self.sale_price)
-    '''
 
 
 class ItemSold(db.Model):
@@ -111,25 +124,46 @@ class ItemSold(db.Model):
     transaction_id = db.Column(db.Float, nullable=False)
 
     def __init__(self, item_id, price_sold, transaction_id):
+        """
+        Database table stores records of individual items sold.
+        :param item_id: int
+        :param price_sold: float
+        :param transaction_id: int
+        :return: None
+        """
         self.item_id = item_id
         self.product_id = self.get_product_id(item_id)
         self.price_sold = price_sold
         self.inventory_cost = self.get_cost(item_id)
         self.transaction_id = transaction_id
 
-    def get_product_id(self, item_id):
+    @staticmethod
+    def get_product_id(item_id):
+        """
+        Given an item_id, returns the product_id associated with that item.
+        Raises SQLAlchemyError if the query fails for any reason.
+        :param item_id: int
+        :return: product_id (int)
+        """
         try:
             item = Item.query.filter_by(id=item_id).first()
             return item.product_id
-        except Exception:
-            return None  # TODO Exception
+        except SQLAlchemyError:
+            raise SQLAlchemyError("get_product_id failed. You suck.")
 
-    def get_cost(self, item_id):
+    @staticmethod
+    def get_cost(item_id):
+        """
+        Given an item_id, returns the inventory cost associated with that item.
+        Raises SQLAlchemyError if the query fails for any reason.
+        :param item_id:
+        :return:
+        """
         try:
             item = Item.query.filter_by(id=item_id).first()
             return item.inventory_cost
         except SQLAlchemyError:
-            raise Exception("get_cost failed.  You suck.")
+            raise SQLAlchemyError("get_cost failed.  You suck.")
 
     def __repr__(self):
         return '{} {} {} {} {} {}'.format(self.id, self.item_id, self.product_id, self.price_sold,
@@ -144,6 +178,12 @@ class Supplier(db.Model):
     email = db.Column(db.String, nullable=False)
 
     def __init__(self, name, email):
+        """
+        Database table stores suppliers and their contact information.
+        :param name: str
+        :param email: str
+        :return: None
+        """
         self.name = name
         self.email = email
 
@@ -161,6 +201,14 @@ class Transaction(db.Model):
     date = db.Column(db.DATE, nullable=False)
 
     def __init__(self, cust_name, cust_contact, payment_type, date=datetime.date.today()):
+        """
+        Database table stores records of transactions.
+        :param cust_name: str
+        :param cust_contact: str
+        :param payment_type: int
+        :param date: datetime.date (defaults to today)
+        :return: None
+        """
         self.cust_name = cust_name
         self.cust_contact = cust_contact
         self.payment_type = payment_type
@@ -180,21 +228,18 @@ class Discount(db.Model):
     discount = db.Column(db.Float, nullable=False)
 
     def __init__(self, product_id, start_date, end_date, discount):
+        """
+        Database table stores discounts for product types past, present, and future.
+        :param product_id: int
+        :param start_date: datetime.date
+        :param end_date: datetime.date
+        :param discount: float
+        :return: None
+        """
         self.product_id = product_id
         self.start_date = start_date
         self.end_date = end_date
         self.discount = discount
-
-    # TODO Find the appropriate place for this function:
-    """
-    def update_prices():
-        for row in discounts:
-            get corresponding row in products table where discounts.product_id = products.id
-            if (datetime.date.today() >= start_date) and (datetime.date.today() <= end_date):
-                set this row's products.sale_price to products.standard_price * discounts.discount
-            else:
-                set this row's products.sale_price to products.standard_price
-    """
 
     def __repr__(self):
         return '{} {} {} {} {}'.format(self.id, self.product_id, self.start_date, self.end_date, self.discount)
