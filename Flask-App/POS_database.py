@@ -7,7 +7,7 @@
 # IMPORTS																											   #
 ########################################################################################################################
 
-#from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import *
 from models import *
 from datetime import datetime
 
@@ -15,7 +15,7 @@ from datetime import datetime
 ########################################################################################################################
 # WRAPPER FUNCTION      																					           #
 ########################################################################################################################
-def getfromDB_Error(func):
+def commitDB_Errorcatch(func):
     """
     Does error-checking on get functions
         ErrorCodes: -1 : failed and rolled back
@@ -24,11 +24,20 @@ def getfromDB_Error(func):
     def wrapperFunction(db, *args, **kwargs):
         try:
             func(db, *args, **kwargs)
+            return 0
         except SQLAlchemyError as e:
             db.session.rollback()
             return -1 # !!
     #Hand back the function for future usage.
     return wrapperFunction
+
+def getfromDB_Error(func):
+    def wrapperFunction(db, *args, **kwargs):
+        try:
+            v = func(db, *args, **kwargs)
+            return v
+        except SQLAlchemyError as e:
+            return -1
 
 
 #Defined: Products      (FULL)
@@ -36,6 +45,7 @@ def getfromDB_Error(func):
 #         Items/Sold    (FULL)
 #         Supplier      (FULL)
 #         Discounts     (FULL)
+#         Users         (FULL)
 #
 #
 # Product access: getProduct{}(db, productID)
@@ -74,8 +84,8 @@ def getProductName(db, productID):
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product.name).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
-    name = result.name
-    return name
+    return result.name
+
 
 @getfromDB_Error
 def getProductPrice(db, productID):
@@ -95,6 +105,7 @@ def getProductPrice(db, productID):
     newPrice = price * (1-discount)
     return newPrice  # PRICE (FLOAT)
 
+
 @getfromDB_Error
 def getProductShelfLife(db, productID):
     """
@@ -106,8 +117,8 @@ def getProductShelfLife(db, productID):
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product.shelf_life).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
-    shelfLife = result.shelf_life
-    return shelfLife  # product's shelf life (INT)
+    return result.shelf_life  # product's shelf life (INT)
+
 
 @getfromDB_Error
 def getProductMinInventory(db, productID):
@@ -120,8 +131,7 @@ def getProductMinInventory(db, productID):
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product.min_inventory).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
-    mInventory = result.min_inventory
-    return mInventory  # product's min inventory (INT)
+    return result.min_inventory  # product's min inventory (INT)
 
 
 @getfromDB_Error
@@ -135,8 +145,7 @@ def getProductInventoryCount(db, productID):
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product.inventory_count).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
-    currInventory = result.inventory_count
-    return currInventory  # product's current inventory count
+    return result.inventory_count  # product's current inventory count
 
 
 @getfromDB_Error
@@ -150,10 +159,10 @@ def getProductSupplierID(db, productID):
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product.supplier_id).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
-    supplierID = result.supplier_id
-    return supplierID  # product's supplier's ID
+    return result.supplier_id  # product's supplier's ID
 
-@getfromDB_Error
+
+@commitDB_Errorcatch
 def destroyProduct(db, productID):
     """
     Destroys a productID from the database
@@ -166,7 +175,8 @@ def destroyProduct(db, productID):
     #Commit
     db.session.commit()
 
-@getfromDB_Error
+
+@commitDB_Errorcatch
 def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, standard_price):
     """
     Builds and creates a product given all the info about it.
@@ -183,12 +193,13 @@ def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, stan
     #commit our addition!
     db.session.commit()
 
+
 #########################################################################
 # Items/ItemSold database Access                                        #
 #########################################################################
 # Notes:	this is intended to take all of the rows we add locally and commit them together to the DB; 
 #			"Update Stock" and "Finish Transaction" buttons will use this procedure
-@getfromDB_Error
+@commitDB_Errorcatch
 def updateItemTable(db, rowsList):
     """
     Update the table given a list of rows
@@ -200,7 +211,8 @@ def updateItemTable(db, rowsList):
         db.session.add(Item(row.productID, row.itemCost))
     db.session.commit()
 
-@getfromDB_Error
+
+@commitDB_Errorcatch
 def popItemToItemSold(db, itemID, priceSoldAt, transactionID):
     """
     Given an item, price, and a transactionID, moves an item from Items to ItemSold
@@ -214,6 +226,8 @@ def popItemToItemSold(db, itemID, priceSoldAt, transactionID):
     db.session.add(ItemSold(itemID, priceSoldAt, transactionID))
     #Get and destroy the old Item out of the database
     db.session.query(Item).filter(Item.id == itemID).delete()
+    db.session.commit()
+
 
 @getfromDB_Error
 def getItemProduct(db, itemID):
@@ -228,6 +242,7 @@ def getItemProduct(db, itemID):
     #Filter the thing;
     return item.product_id
 
+
 @getfromDB_Error
 def getItemCost(db, itemID):
     """
@@ -240,6 +255,7 @@ def getItemCost(db, itemID):
     item = db.session.query(Item).filter(Item.id == itemID).first()
     #Filter the thing;
     return item.inventory_cost
+
 
 @getfromDB_Error
 def getItemExpirationDate(db, itemID):
@@ -254,6 +270,7 @@ def getItemExpirationDate(db, itemID):
     #Filter the thing;
     return item.expiration_date
 
+
 @getfromDB_Error
 def getItemAuthor(db, itemID):
     """
@@ -266,6 +283,7 @@ def getItemAuthor(db, itemID):
     item = db.session.query(Item).filter(Item.id == itemID).first()
     #Filter the thing;
     return item.author_id
+
 
 @getfromDB_Error
 def getItemData(db, itemID):
@@ -284,6 +302,7 @@ def getItemData(db, itemID):
                      item.author_id])
     return itemTup
 
+
 #########################################################################
 # Supplier database Access                                              #
 #########################################################################
@@ -301,6 +320,28 @@ def getSupplier(db, supplierID):
     retTuple = tuple([result.name, result.email])
     return retTuple
 
+
+@getfromDB_Error
+def getSupplierName(db, supplierID):
+    """
+    Get supplier's name
+    :param db: database pointer
+    :param supplierID: int
+    :return: str (name)
+    """
+    return getSupplier(db, supplierID)[0]
+
+
+@getfromDB_Error
+def getSupplierEmail(db, supplierID):
+    """
+    Get supplier's name
+    :param db: database pointer
+    :param supplierID: int
+    :return: str (email)
+    """
+    return getSupplier(db, supplierID)[1]
+
 @getfromDB_Error
 def getSupplierID(db, supplierString):
     """
@@ -314,7 +355,7 @@ def getSupplierID(db, supplierString):
     # just hand back the ID
     return result.id
 
-@getfromDB_Error
+@commitDB_Errorcatch
 def addSupplier(db, supplierName, supplierEmail):
     """
     add a supplier to the database.
@@ -330,7 +371,7 @@ def addSupplier(db, supplierName, supplierEmail):
     # Return
     return retID
 
-@getfromDB_Error
+@commitDB_Errorcatch
 def destroySupplier(db, supplierID):
     """
     Destroys a supplier from the db
@@ -356,20 +397,17 @@ def getDiscountFor(db, productID):
     :param productID: int
     :return: float (between 0.0-1.0; a percentage)
     """
-    # Get the discount tuple if it satisfies conditionals
-    currentDiscount = db.session.query(Discount).filter(Discount.product_id == productID,  # Is the right product
-                                                        # Verify the discount has started
-                                                        Discount.start_date <= datetime.date(datetime.today()),
-                                                        # Verify the discount has NOT ended
-                                                        Discount.end_date > datetime.date(datetime.today())
-                                                        ).first() # Pick the first one.
+    # Get the discount tuple if it satisfies conditionals                   ::Correct product, correct date.
+    currentDiscount = db.session.query(Discount).filter(Discount.product_id == productID)\
+            .filter(Discount.start_date <= datetime.date(datetime.today()))\
+            .filter(Discount.end_date > datetime.date(datetime.today())).first() # Pick the first one.
     # Filter the price out; or 0 for no matches
     if currentDiscount is None:
         return 0
     else:
         return currentDiscount.discount
 
-@getfromDB_Error
+@commitDB_Errorcatch
 def addDiscount(db, productID, discPercent, startDate, endDate):
     """
     Add a discount to the table
@@ -385,7 +423,7 @@ def addDiscount(db, productID, discPercent, startDate, endDate):
     #Save it to the database
     db.session.commit()
 
-@getfromDB_Error
+@commitDB_Errorcatch
 def destroyDiscount(db, discountID):
     """
     Destroy a discount out of the db
@@ -417,7 +455,7 @@ def getTransaction(db, transactionID):
     # Return that.
     return retT
 
-@getfromDB_Error
+@commitDB_Errorcatch
 def destroyTransaction(db, transactionID):
     """
     Destroy a transaction given the ID
@@ -430,7 +468,7 @@ def destroyTransaction(db, transactionID):
     #Commit this obliteration
     db.session.commit()
 
-@getfromDB_Error
+@commitDB_Errorcatch
 def addTransaction(db, cust_name, cust_contact, payment_type):
     """
     Add a transaction
@@ -445,3 +483,163 @@ def addTransaction(db, cust_name, cust_contact, payment_type):
     # Commit that
     db.session.commit()
 
+
+#########################################################################
+# User database Access                                                  #
+#########################################################################
+@getfromDB_Error
+def getUser(db, id):
+    """
+    Gets a user's info
+    :param db: database pointer
+    :param id: int
+    :return:
+    """
+    #Find our user!
+    userInfo = db.session.query(User).filter(User.id == id).first()
+    #Build a tuple
+    retTup = tuple([userInfo.name,
+                    userInfo.password,
+                    userInfo.permissions])
+    return retTup
+
+
+def getUserName(db, id):
+    """
+    Gets the user's name
+    :param db: database pointer
+    :param id: int
+    :return: str (user's name)
+    """
+    return getUser(db, id)[0]
+
+
+def getUserPassword(db, id):
+    """
+    Get the user's password (HASHED)
+    :param db: database pointer
+    :param id: int
+    :return: str (hashed password)
+    """
+    return getUser(db, id)[1]
+
+
+def getUserPermissions(db, id):
+    """
+    Get the user's permissions
+    :param db: database pointer
+    :param id: int
+    :return: int (user's permission level)
+    """
+    return getUser(db, id)[2]
+
+
+@commitDB_Errorcatch
+def addUser(db, name, password, permissions):
+    """
+    Creates and adds to a database a user
+    :param db: database pointer
+    :param name: str
+    :param password: str (unhashed!)
+    :param permissions: int (1-3)
+    :return: -
+    """
+    # Create the thing!
+    db.session.add(User(name, password, permissions))
+    # Commit our change!
+    db.session.commit()
+
+
+@commitDB_Errorcatch
+def destroyUser(db, id):
+    """
+    destructify a user and all their data!!!
+    :param db: database pointer
+    :param id: int
+    :return: -
+    """
+    # Kill it!
+    db.session.query(User).filter(User.id == id).delete()
+    # Commit the change!
+    db.session.commit()
+
+
+#########################################################################
+#########################################################################
+# Editing Databases                                                     #
+#########################################################################
+#########################################################################
+@getfromDB_Error
+def editProduct(db, productID, name, supplier_id, inv_count, min_inventory, standard_price):
+    """
+    Give me all the things, I'll edit the ones you change.
+        IF any of the fields are empty, don't change them!
+    :param db: database pointer
+    :param productID: int
+    :param name: str (new name)
+    :param supplier_id: int (new)
+    :param inv_count: int (new)
+    :param min_inventory: int (new)
+    ##?##:param shelf_life: int (new)
+    :param standard_price: float (new)
+    :return: -
+    """
+
+
+@getfromDB_Error
+def editSupplier(db, id, name, email):
+    """
+    Give me the things, I'll edit the changed thigns.
+        Any empty fields will be unchanged
+    :param db: database pointer
+    :param id: int
+    :param name: str (name)
+    :param email: str (email)
+    :return: -
+    """
+    pass
+
+@getfromDB_Error
+def editUser(db, id, name, password, permissions):
+    """
+    Give me all the things, I'll edit changed things
+    :param db: database pointer
+    :param id: int
+    :param name: str (username)
+    :param password: str (unhashed password)
+    :param permissions: int
+    :return: -
+    """
+    pass
+
+@getfromDB_Error
+def editDiscount(db, id, start_date, end_date, percent):
+    """
+    Give it all the things, it'll edit the non-empty ones
+    :param db: database pointer
+    :param id: int
+    :param start_date: datetime
+    :param end_date: datetime
+    :param percent: float (0.0-1.0)
+    :return: -
+    """
+    pass
+
+@getfromDB_Error
+def editItem(db, id, derp):
+    """
+    Give it all the things, it'll fix them up real good.
+    :param db: database pointer
+    :param id:
+    :param derp:
+    :return:
+    """
+    pass
+
+
+#########################################################################
+# Reporting Databases                                                   #
+#########################################################################
+@commitDB_Errorcatch
+def toCSV(theRedPill): #Should ask for a string and properly give back the right database's setup
+    pass
