@@ -120,7 +120,7 @@ class DiscountRow(Row):
         :param product_id: int
         :param start_date: datetime.date
         :param end_date: datetime.date
-        :param discount: float
+        :param discount: float (percentage off)
         :return: None
         """
         Row.__init__(self)
