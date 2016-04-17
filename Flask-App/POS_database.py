@@ -34,6 +34,13 @@ def getfromDB_Error(func):
 #         Transaction   (Access/Destruction)
 #         Supplier      (FULL)
 #
+#
+# Product access: getProduct{}(db, productID)
+#                   Viable {}'s: Name, Price, Type, ShelfLife, MinInventory, InventoryCount, SupplierID
+# Products also have: destroyProduct(db, id), which removes that id from the db
+#                     addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, standard_price) (creative)
+# Transaction Access
+
 
 ########################################################################################################################
 # FUNCTION DEFINITIONS																								   #
@@ -50,7 +57,6 @@ def getProductName(db, productID):
     # grab the name in the keyed tuple received
     name = result.name
     return name
-
 
 # In: 		db (pointer to a database), productID (integer)
 # Out: 		productPrice (float)
@@ -169,7 +175,7 @@ def getSupplierID(db, supplierString):
 # Purpose:	inserts a supplier into the supplier db
 # Notes:
 @getfromDB_Error
-def insertSupplier(db, supplierName, supplierEmail):
+def addSupplier(db, supplierName, supplierEmail):
     # Add and construct the supplier
     db.session.add(Supplier(supplierName, supplierEmail))
     # Extract the ID from the database (since it gens on-the-spot)
@@ -211,6 +217,10 @@ def destroyDiscount(db, discountID):
     #Commit our changes
     db.session.commit()
 
+#
+#
+#
+#
 @getfromDB_Error
 def getTransaction(db, transactionID):
     # Get the transaction
@@ -220,3 +230,18 @@ def getTransaction(db, transactionID):
                   transaction.payment_type, transaction.date])
     # Return that.
     return retT
+
+@getfromDB_Error
+def destroyTransaction(db, transactionID):
+    #Kill it!
+    db.session.query(Transaction).filter(Transaction.id == transactionID).delete()
+    #Commit this obliteration
+    db.session.commit()
+
+@getfromDB_Error
+def addTransaction(db, cust_name, cust_contact, payment_type):
+    # Create the transaction
+    db.session.add(Transaction(cust_name, cust_contact, payment_type))
+    # Commit that
+    db.session.commit()
+
