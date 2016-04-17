@@ -12,7 +12,7 @@
             {% endif %}
 
 
-            {%  if current_user.permissions == 1 %}                                       <!-- where does this get passed in? -->
+            {%  if current_user.permissions == 1 %}                                       
                   <li><a href="/discounts">Discounts</a></li>
                   <li><a href="/reports">Reports</a></li>
             {% endif %}
@@ -44,4 +44,21 @@
   <input type="text" placeholder="start date">
   <input type="text" placeholder="end date">
   <input type="text" placeholder="discount price">  
+{% endblock %}
+
+{% block table %}
+    <thead class="table-header">
+        <tr>
+            <td>Product Name</td>
+            <td>Product ID</td>
+            <td>Quantity</td>
+            <td>Exp. Date</td>
+            <td>Item Cost</td>
+        </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+      </tr>
+    </tbody>
 {% endblock %}
