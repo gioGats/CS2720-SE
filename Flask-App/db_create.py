@@ -25,8 +25,8 @@ suppliers_init = [
 products_init = [
     # name, supplier_id, min_inventory, shelf_life, standard_price
     ["poop", 1, 10, 10, 1.50],
-    ["banana", 1, 20, 5, 0.50],
-    ["matches", 2, 15, 100, 0.25]
+    ["banana", 1, 20, 5, 1.00],
+    ["matches", 2, 15, 100, 1.25]
 ]
 
 items_init = [
@@ -50,6 +50,11 @@ items_init = [
     [3, 0.25],
     [3, 0.30],
 ]
+
+for i in range(1, 4):
+    for j in range(0, 100):
+        for k in range(1, 5):
+            items_init.append([i, 2-(1/k)])
 
 itemsSold_init = [
     # item_id, price_sold, transaction_id

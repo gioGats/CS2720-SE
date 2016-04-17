@@ -35,7 +35,7 @@ New Backlog!
 ------------------------------
 -Reference to Jacob for SQAlchemy tutorial (4/7/2016) (COMPLETED)
 
--Implementing tables/Database Setup -!Ryan! ( )
+-Implementing tables/Database Setup -!Ryan! (COMPLETED)
 	-Additionally, discounts table (not in old docs)
 
 -Implementing database accessing functions -!Braden!( )
