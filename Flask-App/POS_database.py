@@ -9,6 +9,8 @@
 
 from flask_sqlalchemy import *
 from models import *
+import re
+import datetime as dt
 from datetime import datetime
 
 
@@ -39,6 +41,7 @@ def getfromDB_Error(func):
             return v
         except SQLAlchemyError as e:
             return -1
+    return wrapperFunction
 
 
 # Defined: Products      (FULL)
@@ -585,8 +588,9 @@ def destroyUser(db, id):
 # Editing Databases                                                     #
 #########################################################################
 #########################################################################
-@getfromDB_Error
-def editProduct(db, productID, name, supplier_id, inv_count, min_inventory, standard_price):
+@commitDB_Errorcatch
+def editProduct(db, productID, name, supplier_id, inv_count,
+                min_inventory, shelf_life, standard_price):
     """
     Give me all the things, I'll edit the ones you change.
         IF any of the fields are empty, don't change them!
@@ -596,14 +600,27 @@ def editProduct(db, productID, name, supplier_id, inv_count, min_inventory, stan
     :param supplier_id: int (new)
     :param inv_count: int (new)
     :param min_inventory: int (new)
-    ##?##:param shelf_life: int (new)
+    :param shelf_life: int (new)
     :param standard_price: float (new)
     :return: -
     """
-    pass
+    result = db.session.query(Product).filter(Product.id == productID).first()
+    if name != '':
+        result.name = name
+    if supplier_id != '':
+        result.supplier_id = int(supplier_id)
+    if inv_count != '':
+        result.inventory_count = int(inv_count)
+    if min_inventory != '':
+        result.min_inventory = int(inv_count)
+    if shelf_life != '':
+        result.shelf_life = int(shelf_life)
+    if standard_price != '':
+        result.standard_price = float(standard_price)
+    db.session.commit()
 
 
-@getfromDB_Error
+@commitDB_Errorcatch
 def editSupplier(db, id, name, email):
     """
     Give me the things, I'll edit the changed thigns.
@@ -614,9 +631,15 @@ def editSupplier(db, id, name, email):
     :param email: str (email)
     :return: -
     """
-    pass
+    result = db.session.query(Supplier).filter(Supplier.id == id).first()
+    if name != '':
+        result.name = name
+    if email != '':
+        result.email = email
+    db.session.commit()
 
-@getfromDB_Error
+
+@commitDB_Errorcatch
 def editUser(db, id, name, password, permissions):
     """
     Give me all the things, I'll edit changed things
@@ -627,10 +650,18 @@ def editUser(db, id, name, password, permissions):
     :param permissions: int
     :return: -
     """
-    pass
+    result = db.session.query(User).filter(User.id == id).first()
+    if name != '':
+        result.name = name
+    if password != '':
+        result.password = bcrypt.generate_password_hash(password)
+    if permissions != '':
+        result.permissions = int(permissions)
+    db.session.commit()
 
-@getfromDB_Error
-def editDiscount(db, id, start_date, end_date, percent):
+
+@commitDB_Errorcatch
+def editDiscount(db, id, product_id, start_date, end_date, percent):
     """
     Give it all the things, it'll edit the non-empty ones
     :param db: database pointer
@@ -640,10 +671,22 @@ def editDiscount(db, id, start_date, end_date, percent):
     :param percent: float (0.0-1.0)
     :return: -
     """
-    pass
+    result = db.session.query(Discount).filter(Discount.id == id).first()
+    if product_id != '':
+        result.product_id = int(product_id)
+    if start_date != '':
+        match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', start_date)
+        result.start_date = dt.datetime(match.groups('year'), match.groups('month'), match.groups('day'))
+    if end_date != '':
+        match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', end_date)
+        result.end_date = dt.datetime(match.groups('year'), match.groups('month'), match.groups('day'))
+    if percent != '':
+        result.discount = float(percent)
+    db.session.commit()
 
-@getfromDB_Error
-def editItem(db, id, derp):
+
+@commitDB_Errorcatch
+def editItem(db, id, product_id, inventory_cost):
     """
     Give it all the things, it'll fix them up real good.
     :param db: database pointer
@@ -651,7 +694,12 @@ def editItem(db, id, derp):
     :param derp:
     :return:
     """
-    pass
+    result = db.session.query(Item).filter(Item.id == id).first()
+    if product_id != '':
+        result.product_id = int(product_id)
+    if inventory_cost != '':
+        result.inventory_count = int(inventory_cost)
+    db.session.commit()
 
 
 #########################################################################
