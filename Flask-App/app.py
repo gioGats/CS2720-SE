@@ -313,7 +313,7 @@ def register():
 #############################
 
 
-# SupplierDB
+# itemsDB
 # Requires: Login, Manager/Admin/Stocker permission #
 @app.route('/itemsDB', methods=['GET', 'POST'])
 @login_required
@@ -321,11 +321,39 @@ def itemsDB():
     result = db.session.query(Item).all()
     return render_template("itemsDB.html", itemsDBTable=result)
 
+@app.route('/itemdb-delete', methods=["POST"])
+@login_required
+def itemDBDeleteItem():
+    # get the user input from the form submit
+    inputDict = POS_display.get_item_row(request)
+
+    # delete the item  
+    POS_database.destroyItem(db, inputDict["item-id"])
+
+    # reload the page
+    return redirect(url_for('itemsDB'))
+
+@app.route('/itemdb-add', methods=["POST"])
+def itemDBUpdateItem():
+    # get the user input from the form submit
+    inputDict = POS_display.get_item_row(request)
+
+    #  if the user did enter an id number, check if its valid and modify item if it is
+    #TODO check if the entered id number is valid
+    if (inputDict["item-id"]):
+        POS_database.editItem(db, inputDict["item-id"], inputDict["product-id"], inputDict["inventory-cost"])
+
+    # else if the user did not enter an id, add a new item
+    else:
+        POS_database.addItem(db, inputDict["product-id"], inputDict["inventory-cost"])
+
+    # reload the page
+    return redirect(url_for('itemsDB'))
 
 # -------------------------------------------------- #
 
 
-# SupplierDB
+# productsDB
 # Requires: Login, Manager/Admin/Stocker permission #
 @app.route('/productsDB', methods=['GET', 'POST'])
 @login_required
@@ -333,11 +361,41 @@ def productsDB():
     result = db.session.query(Product).all()
     return render_template("productsDB.html", productsDBTable=result)
 
+@app.route('/productdb-delete', methods=["POST"])
+@login_required
+def productDBDeleteProduct():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    # delete the user  
+    POS_database.destroyUser(db, inputDict["user_id"])
+
+    # reload the page
+    return redirect(url_for('userDB'))
+
+@app.route('/productdb-add', methods=["POST"])
+def productDBUpdateProduct():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    #  if the user did enter an id number, check if its valid and modify user if it is
+    #TODO check if the entered id number is valid
+    if (inputDict["user_id"]):
+        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    # else if the user did not enter an id, add a new user
+    else:
+        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    
+
+    # reload the page
+    return redirect(url_for('userDB'))
 
 # -------------------------------------------------- #
 
 
-# SupplierDB
+# transactionsDB
 # Requires: Login, Manager/Admin/Cashier permission #
 @app.route('/transactionsDB', methods=['GET', 'POST'])
 @login_required
@@ -345,6 +403,36 @@ def transactionsDB():
     result = db.session.query(Transaction).all()
     return render_template("transactionsDB.html", transactionsDBTable=result)
 
+@app.route('/transactiondb-delete', methods=["POST"])
+@login_required
+def transactionDBDeleteTransaction():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    # delete the user  
+    POS_database.destroyUser(db, inputDict["user_id"])
+
+    # reload the page
+    return redirect(url_for('userDB'))
+
+@app.route('/transactiondb-add', methods=["POST"])
+def transactionDBUpdateTransaction():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    #  if the user did enter an id number, check if its valid and modify user if it is
+    #TODO check if the entered id number is valid
+    if (inputDict["user_id"]):
+        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    # else if the user did not enter an id, add a new user
+    else:
+        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    
+
+    # reload the page
+    return redirect(url_for('userDB'))
 
 # -------------------------------------------------- #
 
@@ -357,6 +445,36 @@ def itemssoldDB():
     result = db.session.query(ItemSold).all()
     return render_template("itemssoldDB.html", itemsSoldDBTable=result)
 
+@app.route('/itemsolddb-delete', methods=["POST"])
+@login_required
+def itemsoldDBDeleteItemsold():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    # delete the user  
+    POS_database.destroyUser(db, inputDict["user_id"])
+
+    # reload the page
+    return redirect(url_for('userDB'))
+
+@app.route('/itemsolddb-add', methods=["POST"])
+def itemsoldDBUpdateItemsold():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    #  if the user did enter an id number, check if its valid and modify user if it is
+    #TODO check if the entered id number is valid
+    if (inputDict["user_id"]):
+        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    # else if the user did not enter an id, add a new user
+    else:
+        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    
+
+    # reload the page
+    return redirect(url_for('itemssoldDB'))
 
 # -------------------------------------------------- #
 
@@ -369,6 +487,36 @@ def discountsDB():
     result = db.session.query(Discount).all()
     return render_template("discountsDB.html", discountsDBTable=result)
 
+@app.route('/discountdb-delete', methods=["POST"])
+@login_required
+def discountDBDeleteDiscount():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    # delete the user  
+    POS_database.destroyUser(db, inputDict["user_id"])
+
+    # reload the page
+    return redirect(url_for('userDB'))
+
+@app.route('/discountdb-add', methods=["POST"])
+def discountDBUpdateDiscount():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    #  if the user did enter an id number, check if its valid and modify user if it is
+    #TODO check if the entered id number is valid
+    if (inputDict["user_id"]):
+        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    # else if the user did not enter an id, add a new user
+    else:
+        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    
+
+    # reload the page
+    return redirect(url_for('userDB'))
 
 # -------------------------------------------------- #
 
@@ -381,6 +529,36 @@ def supplierDB():
     result = db.session.query(Supplier).all()
     return render_template("suppliersDB.html", suppliersDBTable=result)
 
+@app.route('/supplierdb-delete', methods=["POST"])
+@login_required
+def supplierDBDeleteSupplier():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    # delete the user  
+    POS_database.destroyUser(db, inputDict["user_id"])
+
+    # reload the page
+    return redirect(url_for('userDB'))
+
+@app.route('/supplierdb-add', methods=["POST"])
+def supplierDBUpdateSupplier():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    #  if the user did enter an id number, check if its valid and modify user if it is
+    #TODO check if the entered id number is valid
+    if (inputDict["user_id"]):
+        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    # else if the user did not enter an id, add a new user
+    else:
+        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    
+
+    # reload the page
+    return redirect(url_for('userDB'))
 
 # -------------------------------------------------- #
 

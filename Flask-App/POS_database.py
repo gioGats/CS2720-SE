@@ -312,7 +312,7 @@ def addItem(db, product_id, inventory_cost):
     db.session.add(Item(product_id, inventory_cost))
     incProduct(db, product_id)
     # Commit it
-    db.commit()
+    db.session.commit()
 
 
 @commitDB_Errorcatch
@@ -324,7 +324,7 @@ def destroyItem(db, itemID):    #TODO : actually document this
     :return:
     """
     # Decrement the product
-    decProduct(db, getItemProduct(itemID))
+    decProduct(db, getItemProduct(db, itemID))
     # Find and destroy the thingie
     db.session.query(Item).filter(Item.id == itemID).delete()
     # Commit the changes
@@ -796,7 +796,7 @@ def editItem(db, id, product_id, inventory_cost):
     if product_id != '':
         result.product_id = int(product_id)
     if inventory_cost != '':
-        result.inventory_count = float(inventory_cost)
+        result.inventory_cost = float(inventory_cost)
     db.session.commit()
 
 
