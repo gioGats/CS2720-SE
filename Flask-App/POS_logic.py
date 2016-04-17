@@ -1,7 +1,9 @@
-# Author: Ethan Morisette
-# Created: 4/1/2016
-# Purpose: module that holds all class definitions, function definitions, and variables for displaying information
-# to the WEBSITE tables (not to be confused with our db tables)
+"""
+Author: Ethan Morisette; Ryan Giarusso
+Created: 3/1/2016
+Purpose: module that holds all class definitions, function definitions, and variables for displaying information
+to the WEBSITE tables (not to be confused with our db tables)
+"""
 
 #######################################################################################################################
 #  IMPORTS
@@ -13,6 +15,9 @@ from flask import *
 #  CLASS DEFINITIONS
 #######################################################################################################################
 class Row:
+    """
+    Parent class for specialized rows.
+    """
     def __init__(self):
         self.data = ""
 
@@ -188,6 +193,25 @@ class Table:
         self.rowCount = 0  # integer
         self.mostRecentRow = None  # row object (receiptRow, stockRow, or saleRow)
 
+    def first_page(self, no_entries):
+        """
+        Returns a list of the first i entries in the table, where i = no_entries
+        :param no_entries: int
+        :return: list
+        """
+        return_list = []
+        for i in range(0,no_entries):
+            return_list.append(self.rowsList[i])
+        return return_list
+
+    def next_page(self, no_entries):
+        """
+
+        :param no_entries:
+        :return:
+        """
+
+
 
 class CashierTable(Table):
 
@@ -303,63 +327,9 @@ transactions_table = Table()
 """
 
 # Tables for cashier/stocker
-cashier_table = Table()
-stocker_table = Table()
+cashier_table = CashierTable()
+stocker_table = StockerTable()
 
 ######################################################################################################################
 # FUNCTION DEFINITIONS
 ######################################################################################################################
-
-
-
-
-# In: 		productName (string), productID (integer), quantity (integer), pricePerUnit(float)
-# Out: 		none
-# Purpose: 	
-# Note: 	the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
-def addTransactionRow(productName, productID, quantity, pricePerUnit):
-    new_row = CashierRow(item_id, productName, pricePerUnit)
-    # newRow = transactionRow(productName, productID, quantity, pricePerUnit)
-    cashier_table.add_row(new_row)
-
-
-# In:		productID (integer), quantity (integer), expDate (POS_display.formattedDate), itemCost (float), productPrice (float)
-# Out:		none
-# Purpose:	
-# Note:		the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
-def addInventoryRow(productName, productID, quantity, expDate, itemCost, productPrice):
-    newRow = inventoryRow(productName, productID, quantity, expDate, itemCost)
-    inventoryTable.add_row(newRow)
-    inventoryTable.addProfitPotential(itemCost, productPrice, quantity)
-
-
-# In:		productID (integer), saleStart (date), saleEnd (date), salePrice (float)
-# Out:		none
-# Purpose:	
-# Note:		the inputs are strings that correspond to the name of the <input>
-# html element (i.e. <input name="cashierBarcode">)
-def addDiscountRow(productName, productID, saleStart, saleEnd, salePrice):
-    newRow = discountRow(productName, productID, saleStart, saleEnd, salePrice)
-    discountTable.add_row(newRow)
-
-
-#######################################################################################################################
-# TEST FUNCTION DEFINITIONS
-#######################################################################################################################
-
-# In:		tableName (table object)
-# Out:		none
-# Purpose:	to populate the GUI tables for testing purposes
-def fillTable(tableName):
-    if (tableName == "transactionTable"):
-        for x in range(100):
-            newRow = transactionRow("bananas", 12345, "N/A", 0.57)
-            receiptTable.rowsList.append(newRow)
-    elif (tableName == "inventoryTable"):
-        for x in range(100):
-            newRow = inventoryRow("matches", 13200, "N/A")
-            stockingTable.rowsList.append(newRow)
-    elif (tableName == "discountTable"):
-        for x in range(100):
-            newRow = discountRow("shoes", 13402, "07/23/2016", "07/25/2016", 0.02)
-            saleTable.rowsList.append(newRow)

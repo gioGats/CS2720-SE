@@ -1,5 +1,5 @@
 # File : POS_helpers.py
-# Date : 3/26/2016 (creation)
+# Date : 3/15/2016 (creation)
 # Desc : This is the file with helper functions for the POS Application.
 
 
@@ -37,3 +37,4 @@ def redirect_after_login(current_user):
     else:
         return redirect('/')
 # -------------------------------------------------- #
+

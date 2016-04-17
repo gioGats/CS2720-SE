@@ -1,13 +1,13 @@
 # Author: Ethan Morisette; Braden Menke
 # Created: 04/09/2016
-# Last Modified: 4/16/2016
+# Last Modified: 3/20/2016
 # Purpose: to hold all of our database interactions in a single module 
 
 ########################################################################################################################
 # IMPORTS																											   #
 ########################################################################################################################
 
-#from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from models import *
 from datetime import datetime
 
@@ -26,12 +26,13 @@ def getfromDB_Error(func):
             func(db, *args, **kwargs)
         except SQLAlchemyError as e:
             db.session.rollback()
-            return -1 # !!
-    #Hand back the function for future usage.
+            return -1  # !!
+
+    # Hand back the function for future usage.
     return wrapperFunction
 
 
-#Defined: Products      (FULL)
+# Defined: Products      (FULL)
 #         Transaction   (FULL)
 #         Items/Sold    (FULL)
 #         Supplier      (FULL)
@@ -77,6 +78,7 @@ def getProductName(db, productID):
     name = result.name
     return name
 
+
 @getfromDB_Error
 def getProductPrice(db, productID):
     """
@@ -91,9 +93,10 @@ def getProductPrice(db, productID):
     price = result.standard_price
     # get the product from the discounts db
     discount = getDiscountFor(db, productID)
-    #Get the total price!
-    newPrice = price * (1-discount)
+    # Get the total price!
+    newPrice = price * (1 - discount)
     return newPrice  # PRICE (FLOAT)
+
 
 @getfromDB_Error
 def getProductShelfLife(db, productID):
@@ -108,6 +111,7 @@ def getProductShelfLife(db, productID):
     # grab the name in the keyed tuple received
     shelfLife = result.shelf_life
     return shelfLife  # product's shelf life (INT)
+
 
 @getfromDB_Error
 def getProductMinInventory(db, productID):
@@ -153,6 +157,7 @@ def getProductSupplierID(db, productID):
     supplierID = result.supplier_id
     return supplierID  # product's supplier's ID
 
+
 @getfromDB_Error
 def destroyProduct(db, productID):
     """
@@ -161,10 +166,11 @@ def destroyProduct(db, productID):
     :param productID: int
     :return: -
     """
-    #Kill it!
+    # Kill it!
     db.session.query(Product).filter(Product.id == productID).delete()
-    #Commit
+    # Commit
     db.session.commit()
+
 
 @getfromDB_Error
 def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, standard_price):
@@ -178,10 +184,11 @@ def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, stan
     :param standard_price: float
     :return: -
     """
-    #Build one
+    # Build one
     db.session.add(Product(supplier_id, inventory_count, min_inventory, shelf_life, standard_price))
-    #commit our addition!
+    # commit our addition!
     db.session.commit()
+
 
 #########################################################################
 # Items/ItemSold database Access                                        #
@@ -200,6 +207,7 @@ def updateItemTable(db, rowsList):
         db.session.add(Item(row.productID, row.itemCost))
     db.session.commit()
 
+
 @getfromDB_Error
 def popItemToItemSold(db, itemID, priceSoldAt, transactionID):
     """
@@ -210,10 +218,11 @@ def popItemToItemSold(db, itemID, priceSoldAt, transactionID):
     :param transactionID: int
     :return: -
     """
-    #Add the new thing into the ItemSold portion
+    # Add the new thing into the ItemSold portion
     db.session.add(ItemSold(itemID, priceSoldAt, transactionID))
-    #Get and destroy the old Item out of the database
+    # Get and destroy the old Item out of the database
     db.session.query(Item).filter(Item.id == itemID).delete()
+
 
 @getfromDB_Error
 def getItemProduct(db, itemID):
@@ -223,10 +232,11 @@ def getItemProduct(db, itemID):
     :param itemID: int
     :return: int
     """
-    #get the one we want
+    # get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #Filter the thing;
+    # Filter the thing;
     return item.product_id
+
 
 @getfromDB_Error
 def getItemCost(db, itemID):
@@ -236,10 +246,11 @@ def getItemCost(db, itemID):
     :param itemID: int
     :return: float (cost)
     """
-    #get the one we want
+    # get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #Filter the thing;
+    # Filter the thing;
     return item.inventory_cost
+
 
 @getfromDB_Error
 def getItemExpirationDate(db, itemID):
@@ -249,10 +260,11 @@ def getItemExpirationDate(db, itemID):
     :param itemID: int
     :return: datetime object (of expiration)
     """
-    #get the one we want
+    # get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #Filter the thing;
+    # Filter the thing;
     return item.expiration_date
+
 
 @getfromDB_Error
 def getItemAuthor(db, itemID):
@@ -262,10 +274,11 @@ def getItemAuthor(db, itemID):
     :param itemID: int
     :return: int (the author's id)
     """
-    #get the one we want
+    # get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #Filter the thing;
+    # Filter the thing;
     return item.author_id
+
 
 @getfromDB_Error
 def getItemData(db, itemID):
@@ -275,14 +288,15 @@ def getItemData(db, itemID):
     :param itemID: int
     :return: Tuple, containing: product_id, inventory_cost, expiration_date, author_id
     """
-    #Get ALL THE DATA
+    # Get ALL THE DATA
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #construct a tuple
+    # construct a tuple
     itemTup = tuple([item.product_id,
                      item.inventory_cost,
                      item.expiration_date,
                      item.author_id])
     return itemTup
+
 
 #########################################################################
 # Supplier database Access                                              #
@@ -301,6 +315,7 @@ def getSupplier(db, supplierID):
     retTuple = tuple([result.name, result.email])
     return retTuple
 
+
 @getfromDB_Error
 def getSupplierID(db, supplierString):
     """
@@ -313,6 +328,7 @@ def getSupplierID(db, supplierString):
     result = db.session.query(Supplier).filter(Supplier.name == supplierString).first()
     # just hand back the ID
     return result.id
+
 
 @getfromDB_Error
 def addSupplier(db, supplierName, supplierEmail):
@@ -330,6 +346,7 @@ def addSupplier(db, supplierName, supplierEmail):
     # Return
     return retID
 
+
 @getfromDB_Error
 def destroySupplier(db, supplierID):
     """
@@ -338,11 +355,10 @@ def destroySupplier(db, supplierID):
     :param supplierID: int
     :return: -
     """
-    #Kill it!
+    # Kill it!
     db.session.query(Supplier).filter(Supplier.id == supplierID).delete()
-    #Commit our changes
+    # Commit our changes
     db.session.commit()
-
 
 
 #########################################################################
@@ -362,12 +378,13 @@ def getDiscountFor(db, productID):
                                                         Discount.start_date <= datetime.date(datetime.today()),
                                                         # Verify the discount has NOT ended
                                                         Discount.end_date > datetime.date(datetime.today())
-                                                        ).first() # Pick the first one.
+                                                        ).first()  # Pick the first one.
     # Filter the price out; or 0 for no matches
     if currentDiscount is None:
         return 0
     else:
         return currentDiscount.discount
+
 
 @getfromDB_Error
 def addDiscount(db, productID, discPercent, startDate, endDate):
@@ -380,10 +397,11 @@ def addDiscount(db, productID, discPercent, startDate, endDate):
     :param endDate: datetime object
     :return: -
     """
-    #Create the discount portion
+    # Create the discount portion
     db.session.add(Discount(productID, startDate, endDate, discPercent))
-    #Save it to the database
+    # Save it to the database
     db.session.commit()
+
 
 @getfromDB_Error
 def destroyDiscount(db, discountID):
@@ -393,10 +411,11 @@ def destroyDiscount(db, discountID):
     :param discountID: int
     :return: -
     """
-    #Kill it!
+    # Kill it!
     db.session.query(Discount).filter(Discount.id == discountID).delete()
-    #Commit our changes
+    # Commit our changes
     db.session.commit()
+
 
 #########################################################################
 # Transaction database Access                                           #
@@ -417,6 +436,7 @@ def getTransaction(db, transactionID):
     # Return that.
     return retT
 
+
 @getfromDB_Error
 def destroyTransaction(db, transactionID):
     """
@@ -425,10 +445,11 @@ def destroyTransaction(db, transactionID):
     :param transactionID: int
     :return: -
     """
-    #Kill it!
+    # Kill it!
     db.session.query(Transaction).filter(Transaction.id == transactionID).delete()
-    #Commit this obliteration
+    # Commit this obliteration
     db.session.commit()
+
 
 @getfromDB_Error
 def addTransaction(db, cust_name, cust_contact, payment_type):
@@ -444,4 +465,3 @@ def addTransaction(db, cust_name, cust_contact, payment_type):
     db.session.add(Transaction(cust_name, cust_contact, payment_type))
     # Commit that
     db.session.commit()
-
