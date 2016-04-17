@@ -10,6 +10,7 @@
 from flask_sqlalchemy import *
 from models import *
 import re
+import csv
 import datetime as dt
 from datetime import datetime
 
@@ -19,11 +20,18 @@ from datetime import datetime
 ########################################################################################################################
 def commitDB_Errorcatch(func):
     """
-    Does error-checking on get functions
-        ErrorCodes: -1 : failed and rolled back
+    Decorator to wrap a function in errorchecking
+    :param func: decorates a function
+    :return: the decorated function
     """
-
     def wrapperFunction(db, *args, **kwargs):
+        """
+        Wrapper function to error-check
+        :param db: database pointer
+        :param args: Whatever the wrapped function needs
+        :param kwargs: Whatever the wrapped function needs
+        :return: 0 if no issues, -1 if failure
+        """
         try:
             func(db, *args, **kwargs)
             return 0
@@ -35,7 +43,19 @@ def commitDB_Errorcatch(func):
     return wrapperFunction
 
 def getfromDB_Error(func):
+    """
+    Decorator to wrap a function in error-checking
+    :param func: decorates a function
+    :return: the decorated function
+    """
     def wrapperFunction(db, *args, **kwargs):
+        """
+        Wrapper function to error-check
+        :param db: database pointer
+        :param args: As needed by the function
+        :param kwargs: As needed by the function
+        :return: the function's return value, or -1 if the operation fails.
+        """
         try:
             v = func(db, *args, **kwargs)
             return v
@@ -86,7 +106,7 @@ def getProductName(db, productID):
     :return: str (name)
     """
     # make the query and receive a single tuple (first() allows us to do this)
-    result = db.session.query(Product.name).filter(Product.id == productID).first()
+    result = db.session.query(Product).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     return result.name
 
@@ -101,7 +121,7 @@ def getProductPrice(db, productID):
     :return: float (discounted price)
     """
     # make the query and receive a single tuple (first() allows us to do this)
-    result = db.session.query(Product.standard_price).filter(Product.id == productID).first()
+    result = db.session.query(Product).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     price = result.standard_price
     # get the product from the discounts db
@@ -120,7 +140,7 @@ def getProductShelfLife(db, productID):
     :return: int (days)
     """
     # make the query and receive a single tuple (first() allows us to do this)
-    result = db.session.query(Product.shelf_life).filter(Product.id == productID).first()
+    result = db.session.query(Product).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     return result.shelf_life  # product's shelf life (INT)
 
@@ -135,7 +155,7 @@ def getProductMinInventory(db, productID):
     :return: int
     """
     # make the query and receive a single tuple (first() allows us to do this)
-    result = db.session.query(Product.min_inventory).filter(Product.id == productID).first()
+    result = db.session.query(Product).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     return result.min_inventory  # product's min inventory (INT)
 
@@ -149,7 +169,7 @@ def getProductInventoryCount(db, productID):
     :return: int (current inventory)
     """
     # make the query and receive a single tuple (first() allows us to do this)
-    result = db.session.query(Product.inventory_count).filter(Product.id == productID).first()
+    result = db.session.query(Product).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     return result.inventory_count  # product's current inventory count
 
@@ -163,7 +183,7 @@ def getProductSupplierID(db, productID):
     :return: int (supplier ID)
     """
     # make the query and receive a single tuple (first() allows us to do this)
-    result = db.session.query(Product.supplier_id).filter(Product.id == productID).first()
+    result = db.session.query(Product).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     return result.supplier_id  # product's supplier's ID
 
@@ -691,14 +711,15 @@ def editItem(db, id, product_id, inventory_cost):
     Give it all the things, it'll fix them up real good.
     :param db: database pointer
     :param id:
-    :param derp:
-    :return:
+    :param product_id: int
+    :param inventory_cost: float
+    :return: -
     """
     result = db.session.query(Item).filter(Item.id == id).first()
     if product_id != '':
         result.product_id = int(product_id)
     if inventory_cost != '':
-        result.inventory_count = int(inventory_cost)
+        result.inventory_count = float(inventory_cost)
     db.session.commit()
 
 
@@ -706,5 +727,33 @@ def editItem(db, id, product_id, inventory_cost):
 # Reporting Databases                                                   #
 #########################################################################
 @commitDB_Errorcatch
-def toCSV(theRedPill): #Should ask for a string and properly give back the right database's setup
-    pass
+def toCSV(db, theRedPill): # Should ask for a string and properly give back the right database's setup
+    if theRedPill == 'Users':
+        typeStr  = 'users'
+        typeType =  User
+    elif theRedPill == 'Discounts':
+        typeStr  = 'discounts'
+        typeType =  Discount
+    elif theRedPill == 'Items Sold':
+        typeStr  = 'items_sold'
+        typeType =  ItemSold
+    elif theRedPill == 'Items in Inventory':
+        typeStr  = 'inventory'
+        typeType =  Item
+    elif theRedPill == 'Suppliers':
+        typeStr  = 'supplier'
+        typeType =  Supplier
+    elif theRedPill == 'Transactions':
+        typeStr  = 'transactions'
+        typeType =  Transaction
+    elif theRedPill == 'Products':
+        typeStr  = 'products'
+        typeType =  Product
+    else:
+        typeStr  = 'Corrupt'
+
+    outfile = open('{}.csv'.format(typeStr), 'wb')
+    outcsv = csv.writer(outfile)
+    records = db.session.query(typeType).all()
+    [outcsv.writerow([getattr(curr, column.name) for column in typeType.__mapper__.columns]) for curr in records]
+    outfile.close()
