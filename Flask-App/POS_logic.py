@@ -171,7 +171,7 @@ class CashierRow(Row):
 
 
 class StockerRow(ItemRow):
-    def __init__(self, product_id, inventory_cost):
+    def __init__(self, product_id, name, inventory_cost):
         """
         Holds data for the display of an item currently being added to inventory.
         :param product_id: int
@@ -180,6 +180,7 @@ class StockerRow(ItemRow):
         """
         Row.__init__(self)
         self.product_id = product_id
+        self.name = name
         self.inventory_cost = inventory_cost
 
 
