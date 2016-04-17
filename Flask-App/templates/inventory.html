@@ -47,7 +47,7 @@
 
 {% block sidePanelContent %}
     <div class="side-panel-top">
-        <form action="{{ url_for('inventoryAddRow') }}" method=post>
+        <form action="{{ url_for('stockerAddRow') }}" method=post>
             <input type="text" name="row_number" placeholder="Row Number">
             <input type="text" name="product_id" placeholder="Product ID">
             <input type="text" name="inventory_cost" placeholder="Inventory Cost">

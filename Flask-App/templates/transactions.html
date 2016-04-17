@@ -1,7 +1,7 @@
 {% extends "contenttemplate.html" %}
 
 {% block title %}
-	Transactions Menu
+	Cashier Menu
 {% endblock %}
 
 
@@ -47,11 +47,13 @@
 {% block sidePanelContent %}
 	<div class="side-panel-top">
 		<h2>Cashier Menu</h1>
-		<form action="{{ url_for('transactionsAddRow') }}" method=post>
+		<form id="formshit" method=post>
 			<input type="text" name="row_number" placeholder="Row Number">
+			<button type="submit" formid="formshit" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post">Delete</button>
+			<input type="text" name="item_id" placeholder="Item ID">
 			<input type="text" name="price_per_unit" placeholder="Price Per Unit">
-			<input type="submit" value="Update">
-			<input type="submit" value="Cancel">
+			<button type="submit" formid="formshit" formaction="{{ url_for('cashierAddRow') }}" formmethod="post">Update</button>
+			<button type="submit" formid="formshit" formmethod="post">Cancel</button>
     	</form>
 		<form action="{{ url_for('finishTransaction') }}" method=post>
 			<input type="submit" value="Finish Transaction">
@@ -70,12 +72,14 @@
 	</thead>
 
 	<tbody>
+		{% set myNum = 0 %}
 		{% for transactionRow in transactionTable.rowsList %}
+			{% set myNum = myNum + 1 %}
 			<tr>
-				<td> {{ transactionRow.productName }} </td>
-				<td> {{ transactionRow.productID }} </td>
-				<td> {{ transactionRow.quantity }} </td>
-				<td> {{ transactionRow.pricePerUnit }} </td>
+				<td> {{ myNum }} </td>
+				<td> {{ transactionRow.item_id }} </td>
+				<td> {{ transactionRow.product_name }} </td>
+				<td> {{ transactionRow.price }} </td>
 			</tr>
 		{% endfor %}
 	</tbody>

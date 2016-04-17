@@ -47,15 +47,16 @@ def convert_string_to_date(dateString):
     return date_result
 
 
-def get_transaction_row(request):
+def get_cashier_row(request):
     """
     Purpose: 	to get user input from the GUI and pass it into the system
     :param request: request (request object)
     :return: dictionary
     """
     input_dict = dict()
-    input_dict["productID"] = request.form["productID"]
-    input_dict["quantity"] = request.form["quantity"]
+    input_dict["row_number"] = request.form["row_number"]
+    input_dict["item_id"] = request.form["item_id"]
+    input_dict["price_per_unit"] = request.form["price_per_unit"]
     return input_dict
 
 

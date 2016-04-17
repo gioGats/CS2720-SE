@@ -194,29 +194,35 @@ def transactions():
     transactionTable = []
     if is_manager(current_user) or is_cashier(current_user):
         items = db.session.query(Item).all()
-        return render_template("transactions.html", items=items, transactionTable=transactionTable)
+        return render_template("transactions.html", items=items, transactionTable=POS_logic.cashier_table)
     else:
         return redirect('/')
 
 
 @app.route('/transactionadd', methods=["POST"])
-def transactionsAddRow():
+def cashierAddRow():
     # get the information from the user
-    inputDict = POS_display.getTransactionRow(request)
+    inputDict = POS_display.get_cashier_row(request)
     # get the product name and price from the database
-    productName = POS_database.getProductName(db, inputDict["productID"])
-    pricePerUnit = POS_database.getProductPrice(db, inputDict["productID"])
+    productID = POS_database.getItemProduct(db, inputDict["item_id"])
+    productName = POS_database.getProductName(db, productID)
+    pricePerUnit = POS_database.getProductPrice(db, productID)
     # add the received information to the local receipt table
-    POS_logic.addTransactionRow(productName, inputDict["productID"], inputDict["quantity"], pricePerUnit)
+    POS_logic.cashier_table.add_row(inputDict["item_id"], productName, pricePerUnit)
     return redirect(url_for('transactions'))
 
+@app.route('/cashierdelete', methods=["POST"])
+def cashierDeleteRow():
+    inputDict = POS_display.get_cashier_row(request)
+    POS_logic.cashier_table.delete_row(int(inputDict["row_number"]))
+    return redirect(url_for('transactions'))
 
 @app.route('/transactioncommit', methods=["POST"])
 def finishTransaction():
     # TODO send all information from the local receipt table to the database for storage
 
     # clear the local receipt table out
-    POS_logic.transactionTable.clear_table()
+    POS_logic.cashier_table.clear_table()
     return redirect(url_for('transactions'))
 
 
@@ -237,7 +243,7 @@ def inventory():
 
 
 @app.route('/inventoryadd', methods=["POST"])
-def inventoryAddRow():
+def stockerAddRow():
     # get the information from the user
     inputDict = POS_display.getInventoryRow(request)
     # get the product name from the database
