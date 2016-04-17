@@ -8,6 +8,7 @@
 ########################################################################################################################
 
 from flask_sqlalchemy import *
+from sqlalchemy import func
 from models import *
 import re
 import csv
@@ -267,6 +268,17 @@ def updateItemTable(db, rowsList):
         db.session.add(Item(row.productID, row.itemCost))
         incProduct(db, row.productID)
     db.session.commit()
+
+def updateCashierTable(db, rowsList):
+    """
+    update the items_sold, items, and transaction tables given a list of rows
+    :param db: database pointer
+    :param rowsList: list of row objects
+    :return: -
+    """
+    for row in rowsList:
+        transactionID = addTransaction(db, "Bob", "no@no.com", 1)
+        popItemToItemSold(db, row.item_id, row.price, transactionID)
 
 
 @commitDB_Errorcatch
@@ -569,7 +581,7 @@ def destroyTransaction(db, transactionID):
     db.session.commit()
 
 
-@commitDB_Errorcatch
+@getfromDB_Error
 def addTransaction(db, cust_name, cust_contact, payment_type):
     """
     Add a transaction
@@ -581,9 +593,12 @@ def addTransaction(db, cust_name, cust_contact, payment_type):
     """
     # Create the transaction
     db.session.add(Transaction(cust_name, cust_contact, payment_type))
+    # get the transaction ID of the transaction added
+    result = db.session.query(func.max(Transaction.id)).first()
     # Commit that
     db.session.commit()
-
+    # return the transaction ID of most recent transaction add
+    return result[0]
 
 #########################################################################
 # User database Access                                                  #

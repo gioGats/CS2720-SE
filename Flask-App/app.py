@@ -220,7 +220,7 @@ def cashierDeleteRow():
 @app.route('/transactioncommit', methods=["POST"])
 def finishTransaction():
     # TODO send all information from the local receipt table to the database for storage
-
+    POS_database.updateCashierTable(db, POS_logic.cashier_table.rowsList)
     # clear the local receipt table out
     POS_logic.cashier_table.clear_table()
     return redirect(url_for('transactions'))
