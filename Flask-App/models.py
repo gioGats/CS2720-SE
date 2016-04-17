@@ -28,7 +28,8 @@ class Item(db.Model):
         self.expiration_date = datetime.date.today() + datetime.timedelta(days=shelf_life)
         self.get_product(product_id).inventory_count += 1
 
-    def get_product(self, product_id):
+    @staticmethod
+    def get_product(product_id):
         """
         Gets the entry with the input product_id from products table.
         :param product_id: int

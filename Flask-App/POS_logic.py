@@ -149,6 +149,19 @@ class TransactionRow(Row):
         self.payment_type = payment_type
         self.date = date
 
+class CashierRow(Row):
+    def __init__(self, item_id, product_name, price):
+        Row.__init__(self)
+        self.item_id = item_id
+        self.product_name = product_name
+        self.price = price
+
+class StockerRow(ItemRow):
+    def __init__(self, product_id, inventory_cost):
+        Row.__init__(self)
+        self.product_id = product_id
+        self.inventory_cost = inventory_cost
+
 
 class Table:
     """
@@ -160,6 +173,24 @@ class Table:
         self.rowCount = 0  # integer
         self.mostRecentRow = None  # row object (receiptRow, stockRow, or saleRow)
 
+
+class CashierTable(Table):
+
+    def add_row(self, item_id, product_name, price): # Depend on what type of table
+        new_row = CashierRow(item_id, product_name, price)
+        self.rowsList.append(new_row)
+        self.rowCount += 1
+        self.mostRecentRow = new_row
+
+    def edit_row(self, row_number, item_id, product_name, price): # Depend on what type of table
+        if item_id == '':
+            item_id = self.rowsList[row_number-1].item_id
+        if product_name == '':
+            product_name = self.rowsList[row_number-1].product_name
+        if price == '':
+            price = self.rowsList[row_number-1].price
+        self.rowsList[row_number-1] = CashierRow(item_id, product_name, price)
+
     def clear_table(self):
         """
         Clear all contents of a display table. Intended for use after a batch of data is committed to the database.
@@ -169,25 +200,37 @@ class Table:
         self.rowCount = 0
         self.mostRecentRow = None
 
-    def add_row(self, new_row):
+    def delete_row(self, row_number):
+        self.rowsList.pop(row_number-1)
+
+
+class StockerTable(Table):
+
+    def add_row(self, product_id, inventory_cost):
+        pass
+
+    def edit_row(self, row_number, product_id, inventory_cost):
+        pass
+
+    def clear_table(self):
         """
-        Adds a row to a table object.
-        Throws an error if new_row is not the same class as any other existing rows in the table.
-        :param new_row: An instance of the Row class or one of its sub-classes.
+        Clear all contents of a display table. Intended for use after a batch of data is committed to the database.
         :return: None
         """
-        for i in self.rowsList:
-            if not isinstance(new_row, i):
-                raise TypeError("The new row does not match the type of the other existing rows.")
-        self.rowsList.append(new_row)
-        self.rowCount += 1
-        self.mostRecentRow = new_row
+        self.rowsList.clear()
+        self.rowCount = 0
+        self.mostRecentRow = None
+
+    def delete_row(self, row_number):
+        self.rowsList.pop(row_number-1)
 
 
 #######################################################################################################################
 # GLOBAL VARIABLES
 #######################################################################################################################
 
+"""
+# Tables for editors
 users_table = Table()
 suppliers_table = Table()
 products_table = Table()
@@ -195,18 +238,27 @@ items_table = Table()
 items_sold_table = Table()
 discounts_table = Table()
 transactions_table = Table()
+"""
+
+# Tables for cashier/stocker
+cashier_table = Table()
+stocker_table = Table()
 
 ######################################################################################################################
 # FUNCTION DEFINITIONS
 ######################################################################################################################
+
+
+
 
 # In: 		productName (string), productID (integer), quantity (integer), pricePerUnit(float)
 # Out: 		none
 # Purpose: 	
 # Note: 	the inputs are strings that correspond to the name of the <input> html element (i.e. <input name="cashierBarcode">)
 def addTransactionRow(productName, productID, quantity, pricePerUnit):
-    newRow = transactionRow(productName, productID, quantity, pricePerUnit)
-    transactionTable.add_row(newRow)
+    new_row = CashierRow(item_id, productName, pricePerUnit)
+    # newRow = transactionRow(productName, productID, quantity, pricePerUnit)
+    cashier_table.add_row(new_row)
 
 
 # In:		productID (integer), quantity (integer), expDate (POS_display.formattedDate), itemCost (float), productPrice (float)
