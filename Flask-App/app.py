@@ -1,5 +1,5 @@
 # File : app.py
-# Date : 3/19/2016 (creation)
+# Date : 3/11/2016 (creation)
 # Desc : This is the master file for the Flask application.
 
 
@@ -14,7 +14,7 @@ from helper import login_user, login_required, logout_user
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.engine import Engine
-from sqlalchemy import event								
+from sqlalchemy import event
 import POS_display
 import POS_logic
 
@@ -44,22 +44,24 @@ app.secret_key = '\xb7{\xbb\x9b\x9b\x11\xa7\\Ib\xcf\xe4\x00\x99Yi\xafg\xd2\x96\x
 #    hostname="SailingSales.mysql.pythonanywhere-services.com",
 #    databasename="SailingSales$master",
 # )
-#app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-#app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+# app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+# app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 
 # For a local database, using SQLite, the settings would look like this, instead of what is above. so comment that out #
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db'
 # Where items.db is the created database locally #
 
 # Setup a global instance of the database #
 # use: 'from app import db' #
 db = SQLAlchemy(app)
 
+
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
+
 
 # Import all the database models from our 'models.py' file
 # NOTE: We import down here because we have to set up the database
@@ -73,12 +75,15 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'  # Points to our "login" function "
 
+
 # The magic that makes foreign keys activated in sqlite
 @login_manager.user_loader
 def load_user(user_id):
     global current_user
     current_user = User.query.filter(User.id == int(user_id)).first()
     return User.query.filter(User.id == int(user_id)).first()
+
+
 # -------------------------------------------------- #
 
 
@@ -106,15 +111,15 @@ def login():
             user = User.query.filter_by(name=request.form['username']).first()
 
             if user is None:
-                    error = "Invalid username. Please try again"
-                    render_template('login.html', form=form, error=error)
+                error = "Invalid username. Please try again"
+                render_template('login.html', form=form, error=error)
             else:
                 if bcrypt.check_password_hash(user.password, request.form['password']):
                     login_user(user)
                     current_user = user
                     flash('You have been successfully logged in.')
 
-                    return redirect_after_login(current_user)  #from POS_helpers #
+                    return redirect_after_login(current_user)  # from POS_helpers #
                 else:
                     error = "Username found, but invalid password. Please try again."
                     render_template('login.html', form=form, error=error)
@@ -123,6 +128,8 @@ def login():
 
     # If the form was not a submit, we just need to grab the page data (GET request) #
     return render_template('login.html', form=form, error=error)
+
+
 # -------------------------------------------------- #
 
 
@@ -137,6 +144,8 @@ def logout():
     current_user = None
     flash('You have been successfully logged out.')
     return redirect(url_for('login'))
+
+
 # -------------------------------------------------- #
 
 # Discounts Page
@@ -150,14 +159,18 @@ def discounts():
     else:
         return redirect('/')
 
+
 @app.route('/discountsadd', methods=["POST"])
 def discountsAddRow():
     # get the information from the user
     inputDict = POS_display.getDiscountRow(request)
     # get the product name from the database
     productName = POS_database.getProductName(db, inputDict["productID"])
-    POS_logic.addDiscountRow(productName, inputDict["productID"], inputDict["saleStart"], inputDict["saleEnd"], inputDict["salePrice"])
+    POS_logic.addDiscountRow(productName, inputDict["productID"], inputDict["saleStart"], inputDict["saleEnd"],
+                             inputDict["salePrice"])
     return redirect(url_for('discounts'))
+
+
 # -------------------------------------------------- #
 
 # Reports Page
@@ -185,6 +198,7 @@ def transactions():
     else:
         return redirect('/')
 
+
 @app.route('/transactionadd', methods=["POST"])
 def transactionsAddRow():
     # get the information from the user
@@ -196,13 +210,15 @@ def transactionsAddRow():
     POS_logic.addTransactionRow(productName, inputDict["productID"], inputDict["quantity"], pricePerUnit)
     return redirect(url_for('transactions'))
 
+
 @app.route('/transactioncommit', methods=["POST"])
 def finishTransaction():
     # TODO send all information from the local receipt table to the database for storage
-    
+
     # clear the local receipt table out
     POS_logic.transactionTable.clear_table()
     return redirect(url_for('transactions'))
+
 
 # -------------------------------------------------- #
 
@@ -219,25 +235,30 @@ def inventory():
     else:
         return redirect('/')
 
+
 @app.route('/inventoryadd', methods=["POST"])
 def inventoryAddRow():
     # get the information from the user
-    inputDict   = POS_display.getInventoryRow(request)
+    inputDict = POS_display.getInventoryRow(request)
     # get the product name from the database
     productName = POS_database.getProductName(db, inputDict['productID'])
     # get the product price from the database
     productPrice = float(POS_database.getProductPrice(db, inputDict['productID']))
     # add all of the information received to the local stocking table
-    POS_logic.addInventoryRow(productName, inputDict['productID'], int(inputDict['quantity']), inputDict['exp-date'], float(inputDict['item-cost']), productPrice)
+    POS_logic.addInventoryRow(productName, inputDict['productID'], int(inputDict['quantity']), inputDict['exp-date'],
+                              float(inputDict['item-cost']), productPrice)
     return redirect(url_for('inventory'))
+
 
 @app.route('/inventorycommit', methods=["POST"])
 def updateInventory():
     # send all information from the local stocking table to the database for storage
-	POS_database.updateItemTable(db, POS_logic.inventoryTable.rowsList)
+    POS_database.updateItemTable(db, POS_logic.inventoryTable.rowsList)
     # clear the local stocking table out
-	POS_logic.inventoryTable.clear_table()
-	return redirect(url_for('inventory'))
+    POS_logic.inventoryTable.clear_table()
+    return redirect(url_for('inventory'))
+
+
 # -------------------------------------------------- #
 
 
@@ -252,9 +273,9 @@ def register():
     if is_manager(current_user):
         if form.validate_on_submit():
             user = User(
-              name=form.username.data,
-              password=form.password.data,
-              permissions=form.permission.data
+                name=form.username.data,
+                password=form.password.data,
+                permissions=form.permission.data
             )
             db.session.add(user)
             db.session.commit()
@@ -266,6 +287,8 @@ def register():
             return render_template("register.html", form=form)
     else:
         return redirect('/')
+
+
 # -------------------------------------------------- #
 
 #############################
@@ -279,6 +302,8 @@ def register():
 @login_required
 def itemsDB():
     return render_template("itemsDB.html")
+
+
 # -------------------------------------------------- #
 
 
@@ -288,6 +313,8 @@ def itemsDB():
 @login_required
 def productsDB():
     return render_template("productsDB.html")
+
+
 # -------------------------------------------------- #
 
 
@@ -297,6 +324,8 @@ def productsDB():
 @login_required
 def transactionsDB():
     return render_template("transactionsDB.html")
+
+
 # -------------------------------------------------- #
 
 
@@ -306,6 +335,8 @@ def transactionsDB():
 @login_required
 def itemssoldDB():
     return render_template("itemssoldDB.html")
+
+
 # -------------------------------------------------- #
 
 
@@ -315,6 +346,8 @@ def itemssoldDB():
 @login_required
 def discountsDB():
     return render_template("discountsDB.html")
+
+
 # -------------------------------------------------- #
 
 
@@ -324,6 +357,8 @@ def discountsDB():
 @login_required
 def supplierDB():
     return render_template("suppliersDB.html")
+
+
 # -------------------------------------------------- #
 
 
@@ -333,6 +368,8 @@ def supplierDB():
 @login_required
 def userDB():
     return render_template("userDB.html")
+
+
 # -------------------------------------------------- #
 
 

@@ -12,7 +12,7 @@
             {% endif %}
 
 
-            {%  if current_user.permissions == 1 %}                                       <!-- where does this get passed in? -->
+            {%  if current_user.permissions == 1 %}                                       
                   <li><a href="/discounts">Discounts</a></li>
                   <li><a href="/reports">Reports</a></li>
             {% endif %}
@@ -37,4 +37,24 @@
             <li><a href="/logout">Logout</a></li>
         </ul>
       </div><!--/.nav-collapse -->
+{% endblock %}
+
+{% block formData %}
+  <input type="text" placeholder="supplier name">
+  <input type="text" placeholder="supplier email">
+{% endblock %}
+
+{% block table %}
+    <thead class="table-header">
+        <tr>
+            <td>Supplier ID</td>
+            <td>Supplier Name</td>
+            <td>Supplier Email</td>
+        </tr>
+    </thead>
+
+    <tbody>
+            <tr>
+            </tr>
+    </tbody>
 {% endblock %}

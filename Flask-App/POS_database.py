@@ -1,6 +1,6 @@
 # Author: Ethan Morisette; Braden Menke
 # Created: 04/09/2016
-# Last Modified: 4/16/2016
+# Last Modified: 3/20/2016
 # Purpose: to hold all of our database interactions in a single module 
 
 ########################################################################################################################
@@ -27,8 +27,9 @@ def commitDB_Errorcatch(func):
             return 0
         except SQLAlchemyError as e:
             db.session.rollback()
-            return -1 # !!
-    #Hand back the function for future usage.
+            return -1  # !!
+
+    # Hand back the function for future usage.
     return wrapperFunction
 
 def getfromDB_Error(func):
@@ -40,7 +41,7 @@ def getfromDB_Error(func):
             return -1
 
 
-#Defined: Products      (FULL)
+# Defined: Products      (FULL)
 #         Transaction   (FULL)
 #         Items/Sold    (FULL)
 #         Supplier      (FULL)
@@ -87,6 +88,7 @@ def getProductName(db, productID):
     return result.name
 
 
+
 @getfromDB_Error
 def getProductPrice(db, productID):
     """
@@ -101,8 +103,8 @@ def getProductPrice(db, productID):
     price = result.standard_price
     # get the product from the discounts db
     discount = getDiscountFor(db, productID)
-    #Get the total price!
-    newPrice = price * (1-discount)
+    # Get the total price!
+    newPrice = price * (1 - discount)
     return newPrice  # PRICE (FLOAT)
 
 
@@ -118,6 +120,7 @@ def getProductShelfLife(db, productID):
     result = db.session.query(Product.shelf_life).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     return result.shelf_life  # product's shelf life (INT)
+
 
 
 @getfromDB_Error
@@ -170,9 +173,9 @@ def destroyProduct(db, productID):
     :param productID: int
     :return: -
     """
-    #Kill it!
+    # Kill it!
     db.session.query(Product).filter(Product.id == productID).delete()
-    #Commit
+    # Commit
     db.session.commit()
 
 
@@ -188,9 +191,9 @@ def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, stan
     :param standard_price: float
     :return: -
     """
-    #Build one
+    # Build one
     db.session.add(Product(supplier_id, inventory_count, min_inventory, shelf_life, standard_price))
-    #commit our addition!
+    # commit our addition!
     db.session.commit()
 
 
@@ -222,11 +225,12 @@ def popItemToItemSold(db, itemID, priceSoldAt, transactionID):
     :param transactionID: int
     :return: -
     """
-    #Add the new thing into the ItemSold portion
+    # Add the new thing into the ItemSold portion
     db.session.add(ItemSold(itemID, priceSoldAt, transactionID))
-    #Get and destroy the old Item out of the database
+    # Get and destroy the old Item out of the database
     db.session.query(Item).filter(Item.id == itemID).delete()
     db.session.commit()
+
 
 
 @getfromDB_Error
@@ -237,9 +241,9 @@ def getItemProduct(db, itemID):
     :param itemID: int
     :return: int
     """
-    #get the one we want
+    # get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #Filter the thing;
+    # Filter the thing;
     return item.product_id
 
 
@@ -251,9 +255,9 @@ def getItemCost(db, itemID):
     :param itemID: int
     :return: float (cost)
     """
-    #get the one we want
+    # get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #Filter the thing;
+    # Filter the thing;
     return item.inventory_cost
 
 
@@ -265,9 +269,9 @@ def getItemExpirationDate(db, itemID):
     :param itemID: int
     :return: datetime object (of expiration)
     """
-    #get the one we want
+    # get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #Filter the thing;
+    # Filter the thing;
     return item.expiration_date
 
 
@@ -279,9 +283,9 @@ def getItemAuthor(db, itemID):
     :param itemID: int
     :return: int (the author's id)
     """
-    #get the one we want
+    # get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #Filter the thing;
+    # Filter the thing;
     return item.author_id
 
 
@@ -293,9 +297,9 @@ def getItemData(db, itemID):
     :param itemID: int
     :return: Tuple, containing: product_id, inventory_cost, expiration_date, author_id
     """
-    #Get ALL THE DATA
+    # Get ALL THE DATA
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    #construct a tuple
+    # construct a tuple
     itemTup = tuple([item.product_id,
                      item.inventory_cost,
                      item.expiration_date,
@@ -319,6 +323,7 @@ def getSupplier(db, supplierID):
     # filter the ID since we already have that.
     retTuple = tuple([result.name, result.email])
     return retTuple
+
 
 
 @getfromDB_Error
@@ -355,6 +360,7 @@ def getSupplierID(db, supplierString):
     # just hand back the ID
     return result.id
 
+
 @commitDB_Errorcatch
 def addSupplier(db, supplierName, supplierEmail):
     """
@@ -371,6 +377,7 @@ def addSupplier(db, supplierName, supplierEmail):
     # Return
     return retID
 
+
 @commitDB_Errorcatch
 def destroySupplier(db, supplierID):
     """
@@ -379,11 +386,10 @@ def destroySupplier(db, supplierID):
     :param supplierID: int
     :return: -
     """
-    #Kill it!
+    # Kill it!
     db.session.query(Supplier).filter(Supplier.id == supplierID).delete()
-    #Commit our changes
+    # Commit our changes
     db.session.commit()
-
 
 
 #########################################################################
@@ -401,11 +407,17 @@ def getDiscountFor(db, productID):
     currentDiscount = db.session.query(Discount).filter(Discount.product_id == productID)\
             .filter(Discount.start_date <= datetime.date(datetime.today()))\
             .filter(Discount.end_date > datetime.date(datetime.today())).first() # Pick the first one.
+    # Get the discount tuple if it satisfies conditionals
+    currentDiscount = db.session.query(Discount).filter(Discount.product_id == productID)\
+                                                .filter(Discount.start_date <= datetime.date(datetime.today()))\
+                                                .filter(Discount.end_date > datetime.date(datetime.today()))\
+                                                        .first()  # Pick the first one.
     # Filter the price out; or 0 for no matches
     if currentDiscount is None:
         return 0
     else:
         return currentDiscount.discount
+
 
 @commitDB_Errorcatch
 def addDiscount(db, productID, discPercent, startDate, endDate):
@@ -418,10 +430,11 @@ def addDiscount(db, productID, discPercent, startDate, endDate):
     :param endDate: datetime object
     :return: -
     """
-    #Create the discount portion
+    # Create the discount portion
     db.session.add(Discount(productID, startDate, endDate, discPercent))
-    #Save it to the database
+    # Save it to the database
     db.session.commit()
+
 
 @commitDB_Errorcatch
 def destroyDiscount(db, discountID):
@@ -431,10 +444,11 @@ def destroyDiscount(db, discountID):
     :param discountID: int
     :return: -
     """
-    #Kill it!
+    # Kill it!
     db.session.query(Discount).filter(Discount.id == discountID).delete()
-    #Commit our changes
+    # Commit our changes
     db.session.commit()
+
 
 #########################################################################
 # Transaction database Access                                           #
@@ -455,6 +469,7 @@ def getTransaction(db, transactionID):
     # Return that.
     return retT
 
+
 @commitDB_Errorcatch
 def destroyTransaction(db, transactionID):
     """
@@ -463,10 +478,11 @@ def destroyTransaction(db, transactionID):
     :param transactionID: int
     :return: -
     """
-    #Kill it!
+    # Kill it!
     db.session.query(Transaction).filter(Transaction.id == transactionID).delete()
-    #Commit this obliteration
+    # Commit this obliteration
     db.session.commit()
+
 
 @commitDB_Errorcatch
 def addTransaction(db, cust_name, cust_contact, payment_type):

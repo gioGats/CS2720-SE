@@ -1,3 +1,9 @@
+"""
+Author: Jacob Campbell; Ryan Giarusso
+Created: 3/10/2016
+Purpose: All the databases!
+"""
+
 from app import db
 from app import bcrypt
 from sqlalchemy import ForeignKey
