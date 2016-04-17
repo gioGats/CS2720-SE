@@ -4,22 +4,30 @@
 # to the WEBSITE tables (not to be confused with our db tables)
 
 #######################################################################################################################
-#  IMPORTS																																											  #
+#  IMPORTS
 #######################################################################################################################
 from flask import *
 
 
 #######################################################################################################################
-#  CLASS DEFINITIONS         																																						  #
+#  CLASS DEFINITIONS
 #######################################################################################################################
 class Row:
-    def __init__(self, row_id):
-        self.row_id = row_id
+    def __init__(self):
+        self.data = ""
 
 
 class UserRow(Row):
-    def __init__(self, row_id, user_id, username, password, permissions):
-        Row.__init__(self, row_id)
+    def __init__(self, user_id, username, password, permissions):
+        """
+        Holds data for the display of an entry from the users database table.
+        :param user_id: int
+        :param username: str
+        :param password: str
+        :param permissions: int
+        :return: None
+        """
+        Row.__init__(self)
         self.user_id = user_id
         self.username = username
         self.password = password
@@ -27,17 +35,36 @@ class UserRow(Row):
 
 
 class SupplierRow(Row):
-    def __init__(self, row_id, supplier_id, name, email):
-        Row.__init__(self, row_id)
+    def __init__(self, supplier_id, name, email):
+        """
+        Holds data for the display of an entry from the suppliers database table.
+        :param supplier_id: int
+        :param name: str
+        :param email: str
+        :return:
+        """
+        Row.__init__(self)
         self.supplier_id = supplier_id
         self.name = name
         self.email = email
 
 
 class ProductsRow(Row):
-    def __init__(self, row_id, product_id, name, supplier_id,
+
+    def __init__(self, product_id, name, supplier_id,
                  inventory_count, min_inventory, shelf_life, standard_price):
-        Row.__init__(self, row_id)
+        """
+        Holds data for the display of an entry from the products database table.
+        :param product_id: int
+        :param name: str
+        :param supplier_id: int
+        :param inventory_count: int
+        :param min_inventory: int
+        :param shelf_life: int
+        :param standard_price: float
+        :return: None
+        """
+        Row.__init__(self)
         self.product_id = product_id
         self.name = name
         self.supplier_id = supplier_id
@@ -48,8 +75,16 @@ class ProductsRow(Row):
 
 
 class ItemRow(Row):
-    def __init__(self, row_id, item_id, product_id, inventory_cost, expiration_date):
-        Row.__init__(self, row_id)
+    def __init__(self, item_id, product_id, inventory_cost, expiration_date):
+        """
+        Holds data for the display of an entry from the items database table.
+        :param item_id: int
+        :param product_id: int
+        :param inventory_cost: float
+        :param expiration_date: datetime.date
+        :return: None
+        """
+        Row.__init__(self)
         self.item_id = item_id
         self.product_id = product_id
         self.inventory_cost = inventory_cost
@@ -57,8 +92,18 @@ class ItemRow(Row):
 
 
 class ItemSoldRow(Row):
-    def __init__(self, row_id, item_sold_id, item_id, product_id, price_sold, inventory_cost, transaction_id):
-        Row.__init__(self, row_id)
+    def __init__(self, item_sold_id, item_id, product_id, price_sold, inventory_cost, transaction_id):
+        """
+        Holds data for the display of an entry from the items_sold database table.
+        :param item_sold_id: int
+        :param item_id: int
+        :param product_id: int
+        :param price_sold: float
+        :param inventory_cost: float
+        :param transaction_id: int
+        :return: None
+        """
+        Row.__init__(self)
         self.item_sold_id = item_sold_id
         self.item_id = item_id
         self.product_id = product_id
@@ -68,8 +113,17 @@ class ItemSoldRow(Row):
 
 
 class DiscountRow(Row):
-    def __init__(self, row_id, discount_id, product_id, start_date, end_date, discount):
-        Row.__init__(self, row_id)
+    def __init__(self, discount_id, product_id, start_date, end_date, discount):
+        """
+        Holds data for the display of an entry from the discounts database table.
+        :param discount_id: int
+        :param product_id: int
+        :param start_date: datetime.date
+        :param end_date: datetime.date
+        :param discount: float
+        :return: None
+        """
+        Row.__init__(self)
         self.discount_id = discount_id
         self.product_id = product_id
         self.start_date = start_date
@@ -78,8 +132,17 @@ class DiscountRow(Row):
 
 
 class TransactionRow(Row):
-    def __init__(self, row_id, trans_id, cust_name, cust_contact, payment_type, date):
-        Row.__init__(self, row_id)
+    def __init__(self, trans_id, cust_name, cust_contact, payment_type, date):
+        """
+        Holds data for the display of an entry from the transactions database table.
+        :param trans_id: int
+        :param cust_name: str
+        :param cust_contact: str
+        :param payment_type: int
+        :param date: datetime.date
+        :return: None
+        """
+        Row.__init__(self)
         self.trans_id = trans_id
         self.cust_name = cust_name
         self.cust_contact = cust_contact
@@ -121,18 +184,21 @@ class Table:
         self.mostRecentRow = new_row
 
 
-#######################################################################################################################################################################################
-# GLOBAL VARIABLES          																																						  #
-#######################################################################################################################################################################################
+#######################################################################################################################
+# GLOBAL VARIABLES
+#######################################################################################################################
 
-transactionTable = Table()
-inventoryTable = inventoryTable()
-discountTable = Table()
+users_table = Table()
+suppliers_table = Table()
+products_table = Table()
+items_table = Table()
+items_sold_table = Table()
+discounts_table = Table()
+transactions_table = Table()
 
-
-#######################################################################################################################################################################################
-# FUNCTION DEFINITIONS         																																						  #
-#######################################################################################################################################################################################
+######################################################################################################################
+# FUNCTION DEFINITIONS
+######################################################################################################################
 
 # In: 		productName (string), productID (integer), quantity (integer), pricePerUnit(float)
 # Out: 		none
@@ -163,9 +229,9 @@ def addDiscountRow(productName, productID, saleStart, saleEnd, salePrice):
     discountTable.add_row(newRow)
 
 
-#####################################################################################################################################################################################
-# TEST FUNCTION DEFINITIONS 																																						#
-#####################################################################################################################################################################################
+#######################################################################################################################
+# TEST FUNCTION DEFINITIONS
+#######################################################################################################################
 
 # In:		tableName (table object)
 # Out:		none
