@@ -42,11 +42,11 @@ def getfromDB_Error(func):
 
 
 # Defined: Products      (FULL)
-#         Transaction   (FULL)
-#         Items/Sold    (FULL)
-#         Supplier      (FULL)
-#         Discounts     (FULL)
-#         Users         (FULL)
+#          Transaction   (FULL)
+#          Items/Sold    (FULL)
+#          Supplier      (FULL)
+#          Discounts     (FULL)
+#          Users         (FULL)
 #
 #
 # Product access: getProduct{}(db, productID)
@@ -600,6 +600,7 @@ def editProduct(db, productID, name, supplier_id, inv_count, min_inventory, stan
     :param standard_price: float (new)
     :return: -
     """
+    pass
 
 
 @getfromDB_Error
