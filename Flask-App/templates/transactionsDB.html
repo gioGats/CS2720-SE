@@ -57,7 +57,14 @@
     </thead>
 
     <tbody>
+        {% for row in transactionsDBTable %}
             <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.cust_name }}</td>
+                <td>{{ row.cust_contact }}</td>
+                <td>{{ row.payment_type }}</td>
+                <td>{{ row.date }}</td>
             </tr>
+        {% endfor %}
     </tbody>
 {% endblock %}

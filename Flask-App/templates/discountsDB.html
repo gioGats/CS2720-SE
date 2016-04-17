@@ -57,7 +57,14 @@
     </thead>
 
     <tbody>
-      <tr>
-      </tr>
+        {% for row in discountsDBTable %}
+            <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.product_id }}</td>
+                <td>{{ row.start_date }}</td>
+                <td>{{ row.end_date }}</td>
+                <td>{{ row.discount }}</td>
+            </tr>
+        {% endfor %}
     </tbody>
 {% endblock %}

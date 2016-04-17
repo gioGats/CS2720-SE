@@ -55,7 +55,13 @@
     </thead>
 
     <tbody>
+        {% for row in usersDBTable %}
             <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.password }}</td>
+                <td>{{ row.permissions }}</td>
             </tr>
+        {% endfor %}
     </tbody>
 {% endblock %}

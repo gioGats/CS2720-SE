@@ -57,7 +57,15 @@
     </thead>
 
     <tbody>
+        {% for row in itemsSoldDBTable %}
             <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.item_id }}</td>
+                <td>{{ row.product_id }}</td>
+                <td>{{ row.price_sold }}</td>
+                <td>{{ row.inventory_cost }}</td>
+                <td>{{ row.transaction_id }}</td>
             </tr>
+        {% endfor %}
     </tbody>
 {% endblock %}

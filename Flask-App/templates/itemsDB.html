@@ -54,7 +54,13 @@
     </thead>
 
     <tbody>
+        {% for row in itemsDBTable %}
             <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.product_id }}</td>
+                <td>{{ row.inventory_cost }}</td>
+                <td>{{ row.expiration_date }}</td>
             </tr>
+        {% endfor %}
     </tbody>
 {% endblock %}

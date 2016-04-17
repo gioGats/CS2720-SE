@@ -307,7 +307,8 @@ def register():
 @app.route('/itemsDB', methods=['GET', 'POST'])
 @login_required
 def itemsDB():
-    return render_template("itemsDB.html")
+    result = db.session.query(Item).all()
+    return render_template("itemsDB.html", itemsDBTable=result)
 
 
 # -------------------------------------------------- #
@@ -318,7 +319,8 @@ def itemsDB():
 @app.route('/productsDB', methods=['GET', 'POST'])
 @login_required
 def productsDB():
-    return render_template("productsDB.html")
+    result = db.session.query(Product).all()
+    return render_template("productsDB.html", productsDBTable=result)
 
 
 # -------------------------------------------------- #
@@ -329,7 +331,8 @@ def productsDB():
 @app.route('/transactionsDB', methods=['GET', 'POST'])
 @login_required
 def transactionsDB():
-    return render_template("transactionsDB.html")
+    result = db.session.query(Transaction).all()
+    return render_template("transactionsDB.html", transactionsDBTable=result)
 
 
 # -------------------------------------------------- #
@@ -340,7 +343,8 @@ def transactionsDB():
 @app.route('/itemssoldDB', methods=['GET', 'POST'])
 @login_required
 def itemssoldDB():
-    return render_template("itemssoldDB.html")
+    result = db.session.query(ItemSold).all()
+    return render_template("itemssoldDB.html", itemsSoldDBTable=result)
 
 
 # -------------------------------------------------- #
@@ -351,7 +355,8 @@ def itemssoldDB():
 @app.route('/discountsDB', methods=['GET', 'POST'])
 @login_required
 def discountsDB():
-    return render_template("discountsDB.html")
+    result = db.session.query(Discount).all()
+    return render_template("discountsDB.html", discountsDBTable=result)
 
 
 # -------------------------------------------------- #
@@ -362,7 +367,8 @@ def discountsDB():
 @app.route('/supplierDB', methods=['GET', 'POST'])
 @login_required
 def supplierDB():
-    return render_template("suppliersDB.html")
+    result = db.session.query(Supplier).all()
+    return render_template("suppliersDB.html", suppliersDBTable=result)
 
 
 # -------------------------------------------------- #
@@ -373,7 +379,8 @@ def supplierDB():
 @app.route('/userDB', methods=['GET', 'POST'])
 @login_required
 def userDB():
-    return render_template("userDB.html")
+    result = db.session.query(User).all()
+    return render_template("userDB.html", usersDBTable=result)
 
 
 # -------------------------------------------------- #

@@ -62,7 +62,16 @@
     </thead>
 
     <tbody>
+        {% for row in productsDBTable %}
             <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.supplier_id }}</td>
+                <td>{{ row.inventory_count }}</td>
+                <td>{{ row.min_inventory }}</td>
+                <td>{{ row.shelf_life }}</td>
+                <td>{{ row.standard_price }}</td>
             </tr>
+        {% endfor %}
     </tbody>
 {% endblock %}
