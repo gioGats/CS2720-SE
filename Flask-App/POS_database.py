@@ -6,7 +6,8 @@
 ########################################################################################################################
 # IMPORTS																											   #
 ########################################################################################################################
-from flask.ext.sqlalchemy import SQLAlchemy
+
+#from flask_sqlalchemy import SQLAlchemy
 from models import *
 from datetime import datetime
 
@@ -16,23 +17,24 @@ from datetime import datetime
 ########################################################################################################################
 def getfromDB_Error(func):
     """
-    Does errorchecking on get functions
+    Does error-checking on get functions
         ErrorCodes:
     """
 
     def wrapperFunction(db, *args, **kwargs):
         try:
             func(db, *args, **kwargs)
-        except SQLAlchemy.SQLAlchemyError as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
-            return -1 #!!
+            return -1 # !!
     #Hand back the function for future usage.
     return wrapperFunction
 
 
 #Defined: Products      (FULL)
-#         Transaction   (Access/Destruction)
+#         Transaction   (FULL)
 #         Supplier      (FULL)
+#         Discounts     (FULL)
 #
 #
 # Product access: getProduct{}(db, productID)
@@ -46,6 +48,10 @@ def getfromDB_Error(func):
 # FUNCTION DEFINITIONS																								   #
 ########################################################################################################################
 
+
+#########################################################################
+# Product database Access                                               #
+#########################################################################
 # In: 		db (pointer to a database), productId (integer) 
 # Out: 		productName (string)
 # Purpose: 	to return the name of a given product ID
@@ -60,7 +66,7 @@ def getProductName(db, productID):
 
 # In: 		db (pointer to a database), productID (integer)
 # Out: 		productPrice (float)
-# Purpose:	to retun the price of a given product ID
+# Purpose:	to return the price of a given product ID
 # Notes:
 @getfromDB_Error
 def getProductPrice(db, productID):
@@ -133,6 +139,9 @@ def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, stan
     #commit our addition!
     db.session.commit()
 
+#########################################################################
+# Items database Access                                                 #
+#########################################################################
 # In: 		db (pointer to a database), rowsList (a list of stockRow objects)
 # Out:		none
 # Purpose:	to commit a batch of data held in the current user's session
@@ -141,10 +150,13 @@ def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, stan
 @getfromDB_Error
 def updateItemTable(db, rowsList):
     for row in rowsList:
-        db.session.add(Item(row.productID, row.expDate, row.itemCost, 1))
+        db.session.add(Item(row.productID, row.itemCost))
     db.session.commit()
 
 
+#########################################################################
+# Supplier database Access                                              #
+#########################################################################
 # In: 		db (pointer to a database), supplierID (integer)
 # Out:      tuple of supplier: name,email (str, str)
 # Purpose:	gives all info about a supplier
@@ -183,7 +195,9 @@ def addSupplier(db, supplierName, supplierEmail):
     # Return
     return retID
 
-
+#########################################################################
+# Discount database Access                                              #
+#########################################################################
 # In: 		db (pointer to a database), productID
 # Out:      Any sale price for the given productID
 # Purpose:	gets the sale price for an item
@@ -191,12 +205,12 @@ def addSupplier(db, supplierName, supplierEmail):
 @getfromDB_Error
 def getDiscountFor(db, productID):
     # Get the discount tuple if it satisfies conditionals
-    currentDiscount = db.session.query(Discounts).filter(Discounts.product_id == productID,  # Is the right product
-                                                         Discounts.start_date <= datetime.date(datetime.today()),
-                                                         # Discount is running
-                                                         Discounts.end_date > datetime.date(datetime.today())
-                                                         # Discount hasn't ended
-                                                         ).first()
+    currentDiscount = db.session.query(Discount).filter(Discount.product_id == productID,  # Is the right product
+                                                        # Verify the discount has started
+                                                        Discount.start_date <= datetime.date(datetime.today()),
+                                                        # Verify the discount has NOT ended
+                                                        Discount.end_date > datetime.date(datetime.today())
+                                                        ).first() # Pick the first one.
     # Filter the price out; or 0 for no matches
     if currentDiscount is None:
         return 0
@@ -213,14 +227,13 @@ def addDiscount(db, productID, discPercent, startDate, endDate):
 @getfromDB_Error
 def destroyDiscount(db, discountID):
     #Kill it!
-    db.session.query(Discounts).filter(Discounts.id == discountID).delete()
+    db.session.query(Discount).filter(Discount.id == discountID).delete()
     #Commit our changes
     db.session.commit()
 
-#
-#
-#
-#
+#########################################################################
+# Transaction database Access                                           #
+#########################################################################
 @getfromDB_Error
 def getTransaction(db, transactionID):
     # Get the transaction
