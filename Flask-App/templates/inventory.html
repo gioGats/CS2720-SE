@@ -47,9 +47,16 @@
 
 {% block sidePanelContent %}
     <div class="side-panel-top">
-        <h2>Current Stocking Information</h2>
-        <p>Items Added: {{ inventoryTable.rowCount }} </p>
-        <p>Profit Potential: {{ inventoryTable.profitPotential }}</p>
+        <form action="{{ url_for('inventoryAddRow') }}" method=post>
+            <input type="text" name="row_number" placeholder="Row Number">
+            <input type="text" name="product_id" placeholder="Product ID">
+            <input type="text" name="inventory_cost" placeholder="Inventory Cost">
+            <input type="submit" value="Update">
+            <input type="submit" value="Cancel">
+        </form>
+        <form action="{{ url_for('updateInventory') }}" method=post>
+            <input type="submit" value="Update Inventory">
+        </form>
     </div>
 {% endblock %}
 
@@ -76,17 +83,5 @@
     </tbody>
 {% endblock %}
 
-{% block tableInput %}
-    <form action="{{ url_for('inventoryAddRow') }}" method=post>
-        <input type="text" name="productID" placeholder="Enter a barcode" required>
-        <input type="text" name="quantity" placeholder="Quantity">
-        <input type="date" name="exp-date">
-        <input type="text" name="item-cost" placeholder="Item Cost (format: 0.00)">
-        <input type="submit" value="Add Item">
-    </form>
-	<form action="{{ url_for('updateInventory') }}" method=post>
-		<input type="submit" value="Update Inventory">
-	</form>
-{% endblock %}
 
 

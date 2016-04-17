@@ -46,18 +46,16 @@
 
 {% block sidePanelContent %}
 	<div class="side-panel-top">
-		<h2>Last Item Scanned</h1>
-		<p>Name: </p>
-		<p>Brand: </p>
-		<p>Product ID:  </p>
-		<p>Quantity: </p>
-		<p>Weight: </p>
-		<p>Price: </p>
-	</div>
-	<div class="side-panel-bot">
-		<h2>Other Information</h2>
-		<p>Transaction ID: </p>
-		<p>Profit Today: </p>
+		<h2>Cashier Menu</h1>
+		<form action="{{ url_for('transactionsAddRow') }}" method=post>
+			<input type="text" name="row_number" placeholder="Row Number">
+			<input type="text" name="price_per_unit" placeholder="Price Per Unit">
+			<input type="submit" value="Update">
+			<input type="submit" value="Cancel">
+    	</form>
+		<form action="{{ url_for('finishTransaction') }}" method=post>
+			<input type="submit" value="Finish Transaction">
+		</form>
 	</div>
 {% endblock %}
 
@@ -83,14 +81,3 @@
 	</tbody>
 {% endblock %}
 
-{% block tableInput %}
-	<form action="{{ url_for('transactionsAddRow') }}" method=post>
-		<input type="text" name="productID" placeholder="Enter a barcode" required>
-		<input type="text" name="quantity" placeholder="Quantity" size=4>
-		<input type="submit" value="Add Item">
-		<a class="btn btn-info" href="#">Override Price</a>
-	</form>
-	<form action="{{ url_for('finishTransaction') }}" method=post>
-		<input type="submit" value="Finish Transaction">
-	</form>
-{% endblock %}
