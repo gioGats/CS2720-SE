@@ -304,7 +304,7 @@ def addItem(db, product_id, inventory_cost):
 
 
 @commitDB_Errorcatch
-def destroyItem(db, itemID):
+def destroyItem(db, itemID):    #TODO : actually document this
     """
 
     :param db:
