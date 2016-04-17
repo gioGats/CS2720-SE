@@ -38,10 +38,22 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+{% block deleteURL %}
+    "{{ url_for('userDBDeleteUser') }}"
+{% endblock %}
+
 {% block formData %}
-  <input type="text" placeholder="username">
-  <input type="text" placeholder="password">
-  <input type="text" placeholder="permissions">  
+    <input type="text" name="username" placeholder="username">
+    <input type="text" name="password" placeholder="password">
+    <input type="text" name="permissions" placeholder="permissions">  
+{% endblock %}
+
+{% block updateURL %}
+    "{{ url_for('userDBUpdateUser') }}"
+{% endblock %}
+
+{% block cancelURL %}
+    
 {% endblock %}
 
 {% block table %}

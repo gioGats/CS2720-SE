@@ -4,14 +4,14 @@
 
 {% block sidePanelContent %}
     <div class="side-panel-top">
-    <form>
+    <form id="database-form">
         <input type="text" name="DatabaseID" placeholder="Enter an ID..." >
-        <button type="submit" formaction="#" formmethod="post" >Delete</button>
+        <button type="submit" form="database-form" formaction={% block deleteURL %}{% endblock %} formmethod="post" >Delete</button>
 
         {% block formData %}{% endblock %}
 
-        <button type="submit" formaction="#" formmethod="post" >Update</button>
-        <button type="submit">Cancel</button>
+        <button type="submit" form="database-form" formaction={% block updateURL %}{% endblock %} formmethod="post" >Update</button>
+        <button type="submit" form="database-form" formaction={% block cancelURL %}{% endblock %} formmethod="post">Cancel</button>
     </form>
     </div>
 {% endblock %}

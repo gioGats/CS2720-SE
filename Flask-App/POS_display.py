@@ -64,7 +64,7 @@ def get_stocker_row(request):
     """
     Purpose: 	to get user input from the GUI and pass it into the system
     :param request: request (request object)
-    :return: a list of entries
+    :return: a dictionary of form data
     """
     input_dict = dict()
     input_dict["row_number"] = request.form["row_number"]
@@ -77,11 +77,24 @@ def get_discount_row(request):
     """
     Purpose: 	to get user input from the GUI and pass it into the system
     :param request: request (request object)
-    :return: a list of entries
+    :return: a dictionary of form data
     """
     input_dict = dict()
     input_dict["productID"] = request.form["productID"]
     input_dict["saleStart"] = convert_string_to_date(request.form["saleStart"])
     input_dict["saleEnd"] = convert_string_to_date(request.form["saleEnd"])
     input_dict["salePrice"] = request.form["salePrice"]
+    return input_dict
+
+def get_user_row(request):
+    """
+    Purpose:    to get user input from the GUI and pass it into the system
+    :param request: request (request object)
+    :return: a dictionary of form data
+    """
+    input_dict = dict()
+    input_dict["user_id"] = request.form["DatabaseID"]
+    input_dict["username"] = request.form["username"]
+    input_dict["password"] = request.form["password"]
+    input_dict["permissions"] = request.form["permissions"]
     return input_dict

@@ -393,6 +393,37 @@ def userDB():
     result = db.session.query(User).all()
     return render_template("userDB.html", usersDBTable=result)
 
+@app.route('/userdb-delete', methods=["POST"])
+@login_required
+def userDBDeleteUser():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    # delete the user  
+    POS_database.destroyUser(db, inputDict["user_id"])
+
+    # reload the page
+    return redirect(url_for('userDB'))
+
+@app.route('/userdb-add', methods=["POST"])
+def userDBUpdateUser():
+    # get the user input from the form submit
+    inputDict = POS_display.get_user_row(request)
+
+    #  if the user did enter an id number, check if its valid and modify user if it is
+    #TODO check if the entered id number is valid
+    if (inputDict["user_id"]):
+        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    # else if the user did not enter an id, add a new user
+    else:
+        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+
+    
+
+    # reload the page
+    return redirect(url_for('userDB'))
+
 
 # -------------------------------------------------- #
 
