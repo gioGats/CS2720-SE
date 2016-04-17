@@ -1,6 +1,6 @@
 from app import db
 from models import *
-from datetime import *
+import datetime
 
 # Create the database and the db tables #
 db.create_all()
@@ -12,7 +12,7 @@ db.create_all()
 users_init = [
     # username, password, permissions
     ["admin", "admin", 1],
-    ["cashier",  "admin", 2],
+    ["cashier", "admin", 2],
     ["stocker", "admin", 3]
 ]
 
@@ -65,10 +65,9 @@ itemsSold_init = [
 ]
 
 discounts_init = [
-    # TODO Add discount inits
     # product_id, start_date, end_date, discount
-    [],
-    []
+    [1, datetime.date.today() - datetime.timedelta(days=1), datetime.date.today() + datetime.timedelta(days=1), 0.10],
+    [2, datetime.date.today() - datetime.timedelta(days=2), datetime.date.today() + datetime.timedelta(days=2), 0.20]
 ]
 
 transactions_init = [
@@ -82,31 +81,31 @@ all_inits = [users_init, suppliers_init, products_init, items_init, itemsSold_in
 
 for i in transactions_init:
     db.session.add(Transaction(i[0], i[1], i[2]))
-    db.session.commit()
+    # db.session.commit()
 
 for i in suppliers_init:
     db.session.add(Supplier(i[0], i[1]))
-    db.session.commit()
+    # db.session.commit()
 
 for i in products_init:
     db.session.add(Product(i[0], i[1], i[2], i[3], i[4]))
-    db.session.commit()
+    # db.session.commit()
 
 for i in users_init:
     db.session.add(User(i[0], i[1], i[2]))
-    db.session.commit()
+    # db.session.commit()
 
 for i in items_init:
     db.session.add(Item(i[0], i[1]))
-    db.session.commit()
+    # db.session.commit()
 
-# for i in itemsSold_init:
-#     db.session.add(ItemSold(i[0], i[1], i[2]))
-#     db.session.commit()
+for i in itemsSold_init:
+    db.session.add(ItemSold(i[0], i[1], i[2]))
+    # db.session.commit()
 
-#   for i in discounts_init:
-#       db.session.add(Discount(i[0], i[1], i[2], i[3]))
-#       db.session.commit()
+for i in discounts_init:
+    db.session.add(Discount(i[0], i[1], i[2], i[3]))
+#    db.session.commit()
 
 # Commit changes
 db.session.commit()
