@@ -11,8 +11,7 @@ Hey guys, before you forget...
 
 -- Jacob ㊣ (Just me testing GitHub, seeing how it works).
 
-###### Installation and Use
-(For running locally)
+###### Installation and Use (For running locally)
 
 All files needed to run are in the Flask-App directory.
 
