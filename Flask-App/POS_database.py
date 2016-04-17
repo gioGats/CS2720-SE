@@ -220,6 +220,36 @@ def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, stan
     db.session.commit()
 
 
+@commitDB_Errorcatch
+def incProduct(db, productID):
+    """
+    Adds one to the product's inventory_count
+    :param db: database pointer
+    :param productID: int
+    :return: -
+    """
+    # Get our row
+    result = db.session.query(Product).filter(Product.id == productID).first()
+    # Increment the row
+    result.inventory_count += 1
+    # Needs to be committed outside of here
+
+
+@commitDB_Errorcatch
+def decProduct(db, productID):
+    """
+    Adds one to the product's inventory_count
+    :param db: database pointer
+    :param productID: int
+    :return: -
+    """
+    # Get our row
+    result = db.session.query(Product).filter(Product.id == productID).first()
+    # Increment the row
+    result.inventory_count -= 1
+    # Needs to be committed outside of here
+
+
 #########################################################################
 # Items/ItemSold database Access                                        #
 #########################################################################
@@ -235,6 +265,7 @@ def updateItemTable(db, rowsList):
     """
     for row in rowsList:
         db.session.add(Item(row.productID, row.itemCost))
+        incProduct(db, row.productID)
     db.session.commit()
 
 
@@ -248,6 +279,7 @@ def popItemToItemSold(db, itemID, priceSoldAt, transactionID):
     :param transactionID: int
     :return: -
     """
+    decProduct(db, getItemProduct(db, itemID))
     # Add the new thing into the ItemSold portion
     db.session.add(ItemSold(itemID, priceSoldAt, transactionID))
     # Get and destroy the old Item out of the database
@@ -255,6 +287,36 @@ def popItemToItemSold(db, itemID, priceSoldAt, transactionID):
     db.session.commit()
 
 
+@commitDB_Errorcatch
+def addItem(db, product_id, inventory_cost):
+    """
+    Add a singular item to the items database
+    :param db: database pointer
+    :param product_id: int
+    :param inventory_cost: float
+    :return: -
+    """
+    # Build one
+    db.session.add(Item(product_id, inventory_cost))
+    incProduct(db, product_id)
+    # Commit it
+    db.commit()
+
+
+@commitDB_Errorcatch
+def destroyItem(db, itemID):    #TODO : actually document this
+    """
+
+    :param db:
+    :param itemID:
+    :return:
+    """
+    # Decrement the product
+    decProduct(db, getItemProduct(itemID))
+    # Find and destroy the thingie
+    db.session.query(Item).filter(Item.id == itemID).delete()
+    # Commit the changes
+    db.session.commit()
 
 @getfromDB_Error
 def getItemProduct(db, itemID):
@@ -264,9 +326,9 @@ def getItemProduct(db, itemID):
     :param itemID: int
     :return: int
     """
-    # get the one we want
+    # Get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    # Filter the thing;
+    # Filter the thing off
     return item.product_id
 
 
@@ -728,6 +790,12 @@ def editItem(db, id, product_id, inventory_cost):
 #########################################################################
 @commitDB_Errorcatch
 def toCSV(db, theRedPill): # Should ask for a string and properly give back the right database's setup
+    """
+    Brings in a string of the type, gives ya' a .csv for that.
+    :param db: database pointer
+    :param theRedPill: str (the string of the type)
+    :return: - , but creates a .csv file locally (?)
+    """
     if theRedPill == 'Users':
         typeStr  = 'users'
         typeType =  User
@@ -750,7 +818,8 @@ def toCSV(db, theRedPill): # Should ask for a string and properly give back the 
         typeStr  = 'products'
         typeType =  Product
     else:
-        typeStr  = 'Corrupt'
+        typeStr  = 'inventory'
+        typeType =  Item
 
     outfile = open('{}.csv'.format(typeStr), 'wb')
     outcsv = csv.writer(outfile)
