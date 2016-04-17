@@ -1,0 +1,19 @@
+<!-- Template for database pages, declaring a side panel content in a block for each database page. -->
+
+{% extends "contenttemplate.html" %}
+
+{% block sidePanelContent %}
+    <div class="side-panel-top">
+    <form xmlns="http://www.w3.org/1999/html">
+        <input type="text" name="DatabaseID" placeholder="Enter an ID..." >
+        <button type="submit" formaction="#" formmethod="post" >Delete</button>
+
+        {% block formData %}
+
+        {% endblock %}
+
+         <button type="submit" formaction="#" formmethod="post" >Update</button>
+         <button type="submit">Cancel</button>
+    </form>
+    </div>
+{% endblock %}

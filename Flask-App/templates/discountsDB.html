@@ -1,0 +1,40 @@
+{% extends "databasetemplate.html" %}
+{% block navbar %}
+      <div class="navbar-header">
+        <a class="navbar-brand" a href="/">POS Application</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+                <li><a> Hello, {{ current_user.name }} </a></li>
+            {% else %}
+                <li><a> Hello, Guest </a></li>
+            {% endif %}
+
+
+            {%  if current_user.permissions == 1 %}                                       <!-- where does this get passed in? -->
+                  <li><a href="/discounts">Discounts</a></li>
+                  <li><a href="/reports">Reports</a></li>
+            {% endif %}
+
+            {%  if current_user.permissions == 1 or current_user.permissions == 2 %}
+                  <li><a href="/transactions">Transactions</a></li>
+            {% endif %}
+
+             {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+                  <li><a href="/inventory">Inventory</a></li>
+            {% endif %}
+
+            {% if current_user.is_authenticated %}
+                <li>
+                {% block dropdown %}
+                 {{ super() }}
+                {% endblock %}
+                </li>
+            {% endif %}
+
+            <li><a href="/">Home</a> </li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+{% endblock %}
