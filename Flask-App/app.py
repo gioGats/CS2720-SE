@@ -265,6 +265,72 @@ def register():
         return redirect('/')
 # -------------------------------------------------- #
 
+#############################
+# Database Page Routes
+#############################
+
+
+# SupplierDB
+# Requires: Login, Manager/Admin/Stocker permission #
+@app.route('/itemsDB', methods=['GET', 'POST'])
+@login_required
+def itemsDB():
+    return render_template("itemsDB.html")
+# -------------------------------------------------- #
+
+
+# SupplierDB
+# Requires: Login, Manager/Admin/Stocker permission #
+@app.route('/productsDB', methods=['GET', 'POST'])
+@login_required
+def productsDB():
+    return render_template("productsDB.html")
+# -------------------------------------------------- #
+
+
+# SupplierDB
+# Requires: Login, Manager/Admin/Cashier permission #
+@app.route('/transactionsDB', methods=['GET', 'POST'])
+@login_required
+def transactionsDB():
+    return render_template("transactionsDB.html")
+# -------------------------------------------------- #
+
+
+# itemssoldDB
+# Requires: Login, Manager/Admin/Cashier permission #
+@app.route('/itemssoldDB', methods=['GET', 'POST'])
+@login_required
+def itemssoldDB():
+    return render_template("itemssoldDB.html")
+# -------------------------------------------------- #
+
+
+# discountsDB
+# Requires: Login, Manager/Admin permission #
+@app.route('/discountsDB', methods=['GET', 'POST'])
+@login_required
+def discountsDB():
+    return render_template("discountsDB.html")
+# -------------------------------------------------- #
+
+
+# supplierDB
+# Requires: Login, Manager/Admin permission #
+@app.route('/supplierDB', methods=['GET', 'POST'])
+@login_required
+def supplierDB():
+    return render_template("suppliersDB.html")
+# -------------------------------------------------- #
+
+
+# userDB
+# Requires: Login, Manager/Admin permission #
+@app.route('/userDB', methods=['GET', 'POST'])
+@login_required
+def userDB():
+    return render_template("userDB.html")
+# -------------------------------------------------- #
 
 
 # Used for local debugging

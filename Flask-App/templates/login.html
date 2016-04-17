@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Login
+   POS | Login
 {% endblock %}
 
 
@@ -32,21 +32,25 @@
                   <li><a href="/inventory">Inventory</a></li>
             {% endif %}
 
+            {% if current_user.is_authenticated %}
+                <li>
+                {% block dropdown %}
+                 {{ super() }}
+                {% endblock %}
+                </li>
+            {% endif %}
 
-            <li class="active"><a href="/">Home</a> </li>
+            <li><a href="/">Home</a> </li>
             <li><a href="/logout">Logout</a></li>
         </ul>
       </div><!--/.nav-collapse -->
 {% endblock %}
 
 {% block content %}
-  <head>
-    <title>POS | Login </title>
-  </head>
-
-  <div id="pagecontent"> 
+  <div id="pagecontent">
+    <br>
     <center>
-    <h1>Please Login</h1>
+    <h1 style="font-size: 20px;">Please Login</h1>
           <br>
     <form class="form-signin" role="form" method="post" action="">
       {{ form.csrf_token }}
