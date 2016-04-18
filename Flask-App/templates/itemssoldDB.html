@@ -38,10 +38,18 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+{% block deleteURL %}
+    "{{ url_for('itemsoldDBDeleteItemsold') }}"
+{% endblock %}
+
 {% block formData %}
   <input type="text" name="item-id" placeholder="item ID">
   <input type="text" name="price-sold" placeholder="price sold">
   <input type="text" name="transaction-id" placeholder="transaction ID">  
+{% endblock %}
+
+{% block updateURL %}
+    "{{ url_for('itemsoldDBUpdateItemsold') }}"
 {% endblock %}
 
 {% block table %}

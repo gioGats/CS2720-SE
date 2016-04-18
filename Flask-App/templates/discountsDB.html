@@ -38,11 +38,19 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+{% block deleteURL %}
+    "{{ url_for('discountDBDeleteDiscount') }}"
+{% endblock %}
+
 {% block formData %}
   <input type="text" name="product-id" placeholder="product ID">
   <input type="text" name="start-date" placeholder="start date">
   <input type="text" name="end-date" placeholder="end date">
   <input type="text" name="percent-off" placeholder="Percent Off (e.g. 10%)">  
+{% endblock %}
+
+{% block updateURL %}
+    "{{ url_for('discountDBUpdateDiscount') }}"
 {% endblock %}
 
 {% block table %}

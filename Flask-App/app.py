@@ -201,14 +201,23 @@ def transactions():
 
 @app.route('/transactionadd', methods=["POST"])
 def cashierAddRow():
+
     # get the information from the user
     inputDict = POS_display.get_cashier_row(request)
-    # get the product name and price from the database
-    productID = POS_database.getItemProduct(db, inputDict["item_id"])
-    productName = POS_database.getProductName(db, productID)
-    pricePerUnit = POS_database.getProductPrice(db, productID)
-    # add the received information to the local receipt table
-    POS_logic.cashier_table.add_row(inputDict["item_id"], productName, pricePerUnit)
+    
+    if (inputDict["row_number"]):
+        #TODO add edit functionality for cashier
+        pass
+    else:
+        #add 
+        productID = POS_database.getItemProduct(db, inputDict["item_id"])
+        productName = POS_database.getProductName(db, productID)
+        pricePerUnit = POS_database.getProductPrice(db, productID)
+        # add the received information to the local receipt table
+        POS_logic.cashier_table.add_row(inputDict["item_id"], productName, pricePerUnit)
+        # get the product name and price from the database
+
+    # reload page
     return redirect(url_for('transactions'))
 
 @app.route('/cashierdelete', methods=["POST"])
@@ -251,9 +260,15 @@ def stockerAddRow():
     # get the information from the user
     inputDict = POS_display.get_stocker_row(request)
     # get the product name from the database
-    productName = POS_database.getProductName(db, inputDict['product_id'])
-    # add all of the information received to the local stocking table
-    POS_logic.stocker_table.add_row(inputDict['product_id'], productName, inputDict['inventory_cost'])
+
+    if (inputDict["row_number"]):
+        #TODO add edit functionality for cashier
+        pass
+    else:
+        productName = POS_database.getProductName(db, inputDict['product_id'])
+        # add all of the information received to the local stocking table
+        POS_logic.stocker_table.add_row(inputDict['product_id'], productName, inputDict['inventory_cost'])
+    
     return redirect(url_for('inventory'))
 
 @app.route('/stockerdelete', methods=["POST"])
@@ -324,12 +339,8 @@ def itemsDB():
 @app.route('/itemdb-delete', methods=["POST"])
 @login_required
 def itemDBDeleteItem():
-    # get the user input from the form submit
-    inputDict = POS_display.get_item_row(request)
-
-    # delete the item  
-    POS_database.destroyItem(db, inputDict["item-id"])
-
+    # send it to the helper!
+    deleteDBRow("item")
     # reload the page
     return redirect(url_for('itemsDB'))
 
@@ -364,33 +375,29 @@ def productsDB():
 @app.route('/productdb-delete', methods=["POST"])
 @login_required
 def productDBDeleteProduct():
-    # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
-
-    # delete the user  
-    POS_database.destroyUser(db, inputDict["user_id"])
-
+    # send it to the helper!
+    deleteDBRow("product")
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('productsDB'))
 
 @app.route('/productdb-add', methods=["POST"])
 def productDBUpdateProduct():
     # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
+    inputDict = POS_display.get_product_row(request)
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
-    if (inputDict["user_id"]):
-        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+    if (inputDict["product-id"]):
+        POS_database.editProduct(db, inputDict["product-id"], inputDict["product-name"], inputDict["supplier-id"], inputDict["inventory-count"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
 
     # else if the user did not enter an id, add a new user
     else:
-        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+        POS_database.addProduct(db, inputDict["product-name"], inputDict["supplier-id"],  inputDict["inventory-count"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
 
     
 
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('productsDB'))
 
 # -------------------------------------------------- #
 
@@ -406,33 +413,30 @@ def transactionsDB():
 @app.route('/transactiondb-delete', methods=["POST"])
 @login_required
 def transactionDBDeleteTransaction():
-    # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
-
-    # delete the user  
-    POS_database.destroyUser(db, inputDict["user_id"])
-
+    # send it to the helper!
+    deleteDBRow("transaction")
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('transactionsDB'))
 
 @app.route('/transactiondb-add', methods=["POST"])
 def transactionDBUpdateTransaction():
     # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
+    inputDict = POS_display.get_transaction_row(request)
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
-    if (inputDict["user_id"]):
-        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+    #TODO add database support for editing a transaction
+    if (inputDict["transaction-id"]):
+        pass
 
     # else if the user did not enter an id, add a new user
     else:
-        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+        POS_database.addTransaction(db, inputDict["customer-name"], inputDict["customer-contact"], inputDict["payment-type"])
 
     
 
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('transactionsDB'))
 
 # -------------------------------------------------- #
 
@@ -448,31 +452,15 @@ def itemssoldDB():
 @app.route('/itemsolddb-delete', methods=["POST"])
 @login_required
 def itemsoldDBDeleteItemsold():
-    # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
-
-    # delete the user  
-    POS_database.destroyUser(db, inputDict["user_id"])
+    #TODO database support for deleting itemssold
 
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('itemssoldDB'))
 
 @app.route('/itemsolddb-add', methods=["POST"])
 def itemsoldDBUpdateItemsold():
-    # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
-
-    #  if the user did enter an id number, check if its valid and modify user if it is
-    #TODO check if the entered id number is valid
-    if (inputDict["user_id"]):
-        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
-
-    # else if the user did not enter an id, add a new user
-    else:
-        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
-
+    #TODO database support for adding and modifying items sold
     
-
     # reload the page
     return redirect(url_for('itemssoldDB'))
 
@@ -490,33 +478,32 @@ def discountsDB():
 @app.route('/discountdb-delete', methods=["POST"])
 @login_required
 def discountDBDeleteDiscount():
-    # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
-
-    # delete the user  
-    POS_database.destroyUser(db, inputDict["user_id"])
-
+    # send it to the helper!
+    deleteDBRow("discount")
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('discountsDB'))
 
 @app.route('/discountdb-add', methods=["POST"])
 def discountDBUpdateDiscount():
     # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
+    inputDict = POS_display.get_discount_row(request)
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
-    if (inputDict["user_id"]):
-        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+    if (inputDict["discount-id"]):
+        POS_database.editDiscount(db, inputDict["discount-id"], inputDict["product-id"], inputDict["start-date"], inputDict["end-date"], inputDict["percent-off"])
 
     # else if the user did not enter an id, add a new user
     else:
-        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+        POS_database.addDiscount(db, inputDict["product-id"], inputDict["percent-off"], inputDict["start-date"], inputDict["end-date"])
 
-    
+    print(inputDict["product-id"])
+    print(inputDict["percent-off"])
+    print(inputDict["start-date"])
+    print(inputDict["end-date"])
 
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('discountsDB'))
 
 # -------------------------------------------------- #
 
@@ -532,33 +519,30 @@ def supplierDB():
 @app.route('/supplierdb-delete', methods=["POST"])
 @login_required
 def supplierDBDeleteSupplier():
-    # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
-
-    # delete the user  
-    POS_database.destroyUser(db, inputDict["user_id"])
+    # send it to the helper!
+    deleteDBRow("supplier")
 
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('supplierDB'))
 
 @app.route('/supplierdb-add', methods=["POST"])
 def supplierDBUpdateSupplier():
     # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
+    inputDict = POS_display.get_supplier_row(request)
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
-    if (inputDict["user_id"]):
-        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+    if (inputDict["supplier-id"]):
+        POS_database.editSupplier(db, inputDict["supplier-id"], inputDict["supplier-name"], inputDict["supplier-email"])
 
     # else if the user did not enter an id, add a new user
     else:
-        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+        POS_database.addSupplier(db, inputDict["supplier-name"], inputDict["supplier-email"])
 
     
 
     # reload the page
-    return redirect(url_for('userDB'))
+    return redirect(url_for('supplierDB'))
 
 # -------------------------------------------------- #
 
@@ -574,11 +558,8 @@ def userDB():
 @app.route('/userdb-delete', methods=["POST"])
 @login_required
 def userDBDeleteUser():
-    # get the user input from the form submit
-    inputDict = POS_display.get_user_row(request)
-
-    # delete the user  
-    POS_database.destroyUser(db, inputDict["user_id"])
+    # send it to the helper!
+    deleteDBRow("user")
 
     # reload the page
     return redirect(url_for('userDB'))
@@ -590,8 +571,8 @@ def userDBUpdateUser():
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
-    if (inputDict["user_id"]):
-        POS_database.editUser(db, inputDict["user_id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+    if (inputDict["user-id"]):
+        POS_database.editUser(db, inputDict["user-id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
 
     # else if the user did not enter an id, add a new user
     else:
@@ -602,6 +583,38 @@ def userDBUpdateUser():
     # reload the page
     return redirect(url_for('userDB'))
 
+
+def deleteDBRow(dbTableName):
+    if (dbTableName == "user"):
+        getRowFunc = POS_display.get_user_row
+        destroyRowFunc = POS_database.destroyUser
+        idFieldName = "user-id"
+    elif (dbTableName == "supplier"):
+        getRowFunc = POS_display.get_supplier_row
+        destroyRowFunc = POS_database.destroySupplier
+        idFieldName = "supplier-id"
+    elif (dbTableName == "product"):
+        getRowFunc = POS_display.get_product_row
+        destroyRowFunc = POS_database.destroyProduct
+        idFieldName = "product-id"
+    elif (dbTableName == "item"):
+        getRowFunc = POS_display.get_item_row
+        destroyRowFunc = POS_database.destroyItem
+        idFieldName = "item-id"
+    elif (dbTableName == "discount"):
+        getRowFunc = POS_display.get_discount_row
+        destroyRowFunc = POS_database.destroyDiscount
+        idFieldName = "discount-id"
+    elif (dbTableName == "transaction"):
+        getRowFunc = POS_display.get_transaction_row
+        destroyRowFunc = POS_database.destroyTransaction
+        idFieldName = "transaction-id"
+
+    # get the user input from the form submit
+    inputDict = getRowFunc(request)
+
+    # delete the row  
+    destroyRowFunc(db, inputDict[idFieldName])
 
 # -------------------------------------------------- #
 

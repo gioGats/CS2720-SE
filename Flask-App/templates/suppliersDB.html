@@ -38,10 +38,19 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+{% block deleteURL %}
+    "{{ url_for('supplierDBDeleteSupplier') }}"
+{% endblock %}
+
 {% block formData %}
   <input type="text" name="supplier-name" placeholder="supplier name">
   <input type="text" name="supplier-email" placeholder="supplier email">
 {% endblock %}
+
+{% block updateURL %}
+    "{{ url_for('supplierDBUpdateSupplier') }}"
+{% endblock %}
+
 
 {% block table %}
     <thead class="table-header">

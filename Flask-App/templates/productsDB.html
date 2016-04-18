@@ -38,6 +38,10 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+{% block deleteURL %}
+    "{{ url_for('productDBDeleteProduct') }}"
+{% endblock %}
+
 {% block formData %}
   <input type="text" name="product-name" placeholder="name">
   <input type="text" name="supplier-id" placeholder="supplier ID">
@@ -46,6 +50,10 @@
   <input type="text" name="shelf-life" placeholder="shelf life">
   <input type="text" name="standard-price"placeholder="standard price"> 
 
+{% endblock %}
+
+{% block updateURL %}
+    "{{ url_for('productDBUpdateProduct') }}"
 {% endblock %}
 
 {% block table %}

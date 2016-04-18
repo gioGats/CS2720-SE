@@ -38,12 +38,19 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+{% block deleteURL %}
+    "{{ url_for('transactionDBDeleteTransaction') }}"
+{% endblock %}
+
 {% block formData %}
   <input type="text" name="customer-name" placeholder="customer name">
   <input type="text" name="customer-contact" placeholder="customer contact">
   <input type="text" name="payment-type" placeholder="payment type"> 
 {% endblock %}
 
+{% block updateURL %}
+    "{{ url_for('transactionDBUpdateTransaction') }}"
+{% endblock %}
 
 {% block table %}
     <thead class="table-header">

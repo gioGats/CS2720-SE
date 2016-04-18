@@ -204,7 +204,7 @@ def destroyProduct(db, productID):
 
 
 @commitDB_Errorcatch
-def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, standard_price):
+def addProduct(db, name, supplier_id, inventory_count, min_inventory, shelf_life, standard_price):
     """
     Builds and creates a product given all the info about it.
     :param db: database pointer
@@ -216,7 +216,7 @@ def addProduct(db, supplier_id, inventory_count, min_inventory, shelf_life, stan
     :return: -
     """
     # Build one
-    db.session.add(Product(supplier_id, inventory_count, min_inventory, shelf_life, standard_price))
+    db.session.add(Product(name, supplier_id, min_inventory, shelf_life, standard_price))
     # commit our addition!
     db.session.commit()
 

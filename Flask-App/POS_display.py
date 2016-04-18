@@ -82,8 +82,9 @@ def get_discount_row(request):
     input_dict = dict()
     input_dict["discount-id"] = request.form["DatabaseID"]
     input_dict["product-id"] = request.form["product-id"]
-    input_dict["start-date"] = convert_string_to_date(request.form["start-date"])
-    input_dict["end-date"] = convert_string_to_date(request.form["end-date"])
+    #TODO convert both start date and end date to formatted date
+    input_dict["start-date"] = request.form["start-date"]
+    input_dict["end-date"] = request.form["end-date"]
     input_dict["percent-off"] = request.form["percent-off"]
     return input_dict
 
@@ -94,7 +95,7 @@ def get_user_row(request):
     :return: a dictionary of form data
     """
     input_dict = dict()
-    input_dict["user_id"] = request.form["DatabaseID"]
+    input_dict["user-id"] = request.form["DatabaseID"]
     input_dict["username"] = request.form["username"]
     input_dict["password"] = request.form["password"]
     input_dict["permissions"] = request.form["permissions"]

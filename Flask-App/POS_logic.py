@@ -230,7 +230,7 @@ class CashierTable(Table):
         self.rowCount += 1
         self.mostRecentRow = new_row
 
-    def edit_row(self, row_number, item_id, product_name, price):
+    def edit_row(self, row_number, item_id, price):
         """
         Changes a current row at index row_number-1 to the parameters specified.
         If any row parameter is the empty string, it will default to its current setting.
@@ -242,11 +242,9 @@ class CashierTable(Table):
         """
         if item_id == '':
             item_id = self.rowsList[row_number-1].item_id
-        if product_name == '':
-            product_name = self.rowsList[row_number-1].product_name
         if price == '':
             price = self.rowsList[row_number-1].price
-        self.rowsList[row_number-1] = CashierRow(item_id, product_name, price)
+        self.rowsList[row_number-1] = CashierRow(item_id, price)
 
 
 class StockerTable(Table):
