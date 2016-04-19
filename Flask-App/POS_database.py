@@ -291,11 +291,13 @@ def popItemToItemSold(db, itemID, priceSoldAt, transactionID):
     :param transactionID: int
     :return: -
     """
+    # Decrement the product count for this item
     decProduct(db, getItemProduct(db, itemID))
     # Add the new thing into the ItemSold portion
     db.session.add(ItemSold(itemID, priceSoldAt, transactionID))
     # Get and destroy the old Item out of the database
     db.session.query(Item).filter(Item.id == itemID).delete()
+    # Finalize the changes.
     db.session.commit()
 
 
@@ -316,12 +318,12 @@ def addItem(db, product_id, inventory_cost):
 
 
 @commitDB_Errorcatch
-def destroyItem(db, itemID):    #TODO : actually document this
+def destroyItem(db, itemID):
     """
-
-    :param db:
-    :param itemID:
-    :return:
+    Destroys an item out of the pointed database
+    :param db: database pointer
+    :param itemID: int
+    :return: -
     """
     # Decrement the product
     decProduct(db, getItemProduct(db, itemID))
@@ -422,7 +424,6 @@ def getSupplier(db, supplierID):
     return retTuple
 
 
-
 @getfromDB_Error
 def getSupplierName(db, supplierID):
     """
@@ -443,6 +444,7 @@ def getSupplierEmail(db, supplierID):
     :return: str (email)
     """
     return getSupplier(db, supplierID)[1]
+
 
 @getfromDB_Error
 def getSupplierID(db, supplierString):
@@ -501,9 +503,6 @@ def getDiscountFor(db, productID):
     :return: float (between 0.0-1.0; a percentage)
     """
     # Get the discount tuple if it satisfies conditionals                   ::Correct product, correct date.
-    currentDiscount = db.session.query(Discount).filter(Discount.product_id == productID)\
-            .filter(Discount.start_date <= datetime.date(datetime.today()))\
-            .filter(Discount.end_date > datetime.date(datetime.today())).first() # Pick the first one.
     # Get the discount tuple if it satisfies conditionals
     currentDiscount = db.session.query(Discount).filter(Discount.product_id == productID)\
                                                 .filter(Discount.start_date <= datetime.date(datetime.today()))\
@@ -787,7 +786,7 @@ def editItem(db, id, product_id, inventory_cost):
     """
     Give it all the things, it'll fix them up real good.
     :param db: database pointer
-    :param id:
+    :param id: int
     :param product_id: int
     :param inventory_cost: float
     :return: -
@@ -799,6 +798,58 @@ def editItem(db, id, product_id, inventory_cost):
         result.inventory_cost = float(inventory_cost)
     db.session.commit()
 
+
+@commitDB_Errorcatch
+def editItemSold(db, id, item_id, sold_at, transaction_id):
+    """
+    Give it all the things, it'll fix them up real good.
+    :param db: database pointer
+    :param id: int
+    :param item_id: int
+    :param sold_at: float
+    :param transaction_id: float
+    :return: -
+    """
+    result = db.session.query(ItemSold).filter(ItemSold.id == id).first()
+    if item_id != '':
+        try:
+            result.item_id = int(item_id)
+        except ValueError:
+            raise
+    if sold_at != '':
+        try:
+            result.price_sold = float(sold_at)
+        except ValueError:
+            raise
+    if transaction_id:
+        try:
+            result.transaction_id = float(transaction_id)
+        except ValueError:
+            raise
+    db.session.commit()
+
+@commitDB_Errorcatch
+def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
+    """
+    Give this all the things, and it'll edit the database to match
+    :param db: database pointer
+    :param transactionID: int
+    :param cust_name: string
+    :param cust_contact: string
+    :param payment_type: int
+    :return: -
+    """
+    result = db.session.query(Transaction).filter(Transaction.id == transactionID).first()
+    if cust_name != '':
+        result.cust_name = cust_name
+    if cust_contact != '':
+        result.cust_contact = cust_contact
+    if payment_type != '':
+        try:
+            result.payment_type = int(payment_type)
+        except ValueError:
+            raise
+    db.session.commit()
 
 #########################################################################
 # Reporting Databases                                                   #
@@ -841,3 +892,24 @@ def toCSV(db, theRedPill): # Should ask for a string and properly give back the 
     records = db.session.query(typeType).all()
     [outcsv.writerow([getattr(curr, column.name) for column in typeType.__mapper__.columns]) for curr in records]
     outfile.close()
+
+
+#########################################################################
+# Determine Ordering                                                    #
+#########################################################################
+@getfromDB_Error
+def areWeGoingToRunOut(db, product_id):
+    """
+    Are we going to run out this week?
+    :param db: database pointer
+    :param product_id: int
+    :return: True/False, prediction
+    """
+    oneWeekAgo   = datetime.today() - dt.timedelta(weeks=1)
+    productDelta = len(db.session.query(ItemSold).filter(ItemSold.product_id == product_id)\
+                                            .filter(oneWeekAgo < getTransaction(db, ItemSold.transaction_id)[3]))
+    thisProduct = db.session.query(Product).filter(Product.product_id == product_id).first()
+    if (thisProduct.inventory_count - productDelta) < thisProduct.min_inventory:
+        return True  # We WILL run out (maybe)
+    else:
+        return False # We WONT run out (maybe)
