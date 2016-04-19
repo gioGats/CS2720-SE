@@ -128,7 +128,7 @@ class ItemSold(db.Model):
     product_id = db.Column(db.Integer, ForeignKey('products.id'))
     price_sold = db.Column(db.Float, nullable=False)
     inventory_cost = db.Column(db.Float, nullable=False)
-    transaction_id = db.Column(db.Float, nullable=False)
+    transaction_id = db.Column(db.Integer, nullable=False)
 
     def __init__(self, item_id, price_sold, transaction_id):
         """

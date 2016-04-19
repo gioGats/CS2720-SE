@@ -771,10 +771,10 @@ def editDiscount(db, id, product_id, start_date, end_date, percent):
     if product_id != '':
         result.product_id = int(product_id)
     if start_date != '':
-        match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', start_date)
+        match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', str(start_date))
         result.start_date = dt.datetime(match.groups('year'), match.groups('month'), match.groups('day'))
     if end_date != '':
-        match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', end_date)
+        match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', str(end_date))
         result.end_date = dt.datetime(match.groups('year'), match.groups('month'), match.groups('day'))
     if percent != '':
         result.discount = float(percent)
@@ -807,7 +807,7 @@ def editItemSold(db, id, item_id, sold_at, transaction_id):
     :param id: int
     :param item_id: int
     :param sold_at: float
-    :param transaction_id: float
+    :param transaction_id: int
     :return: -
     """
     result = db.session.query(ItemSold).filter(ItemSold.id == id).first()
@@ -823,7 +823,7 @@ def editItemSold(db, id, item_id, sold_at, transaction_id):
             raise
     if transaction_id:
         try:
-            result.transaction_id = float(transaction_id)
+            result.transaction_id = int(transaction_id)
         except ValueError:
             raise
     db.session.commit()
@@ -856,6 +856,8 @@ def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
 #########################################################################
 @commitDB_Errorcatch
 def toCSV(db, theRedPill): # Should ask for a string and properly give back the right database's setup
+    # TODO Date range (optional)
+    # TODO Joined tables : items_sold + transactions
     """
     Brings in a string of the type, gives ya' a .csv for that.
     :param db: database pointer
@@ -907,9 +909,13 @@ def areWeGoingToRunOut(db, product_id):
     """
     oneWeekAgo   = datetime.today() - dt.timedelta(weeks=1)
     productDelta = len(db.session.query(ItemSold).filter(ItemSold.product_id == product_id)\
-                                            .filter(oneWeekAgo < getTransaction(db, ItemSold.transaction_id)[3]))
+                                            .filter(oneWeekAgo <= getTransaction(db, ItemSold.transaction_id)[3]))
     thisProduct = db.session.query(Product).filter(Product.product_id == product_id).first()
     if (thisProduct.inventory_count - productDelta) < thisProduct.min_inventory:
         return True  # We WILL run out (maybe)
     else:
         return False # We WONT run out (maybe)
+
+
+# TODO dated gets from db's
+# TODO reportInfo for products
