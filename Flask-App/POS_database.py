@@ -619,6 +619,7 @@ def getUser(db, id):
     return retTup
 
 
+@getfromDB_Error
 def getUserName(db, id):
     """
     Gets the user's name
@@ -629,6 +630,7 @@ def getUserName(db, id):
     return getUser(db, id)[0]
 
 
+@getfromDB_Error
 def getUserPassword(db, id):
     """
     Get the user's password (HASHED)
@@ -639,6 +641,7 @@ def getUserPassword(db, id):
     return getUser(db, id)[1]
 
 
+@getfromDB_Error
 def getUserPermissions(db, id):
     """
     Get the user's permissions
@@ -855,7 +858,7 @@ def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
 # Reporting Databases                                                   #
 #########################################################################
 @commitDB_Errorcatch
-def toCSV(db, theRedPill): # Should ask for a string and properly give back the right database's setup
+def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properly give back the right database's setup
     # TODO Date range (optional)
     # TODO Joined tables : items_sold + transactions
     """
@@ -864,6 +867,9 @@ def toCSV(db, theRedPill): # Should ask for a string and properly give back the 
     :param theRedPill: str (the string of the type)
     :return: - , but creates a .csv file locally (?)
     """
+    DATED_TABLES = ["discounts", # Discount.start_date / .end_date
+                    "transactions", # Transaction.date
+                    "items_sold"] # getTransaction(db, typeType.transactionID)[3]
     if theRedPill == 'Users':
         typeStr  = 'users'
         typeType =  User
@@ -889,9 +895,25 @@ def toCSV(db, theRedPill): # Should ask for a string and properly give back the 
         typeStr  = 'inventory'
         typeType =  Item
 
+    if dateTup is not None\
+            and typeStr in DATED_TABLES:
+        start = dateTup[0]
+        end   = dateTup[1]
+        if typeStr == "items_sold":
+            # get only items sold during the date range.
+            records = db.session.query(typeType).filter(getTransaction(db, typeType.transaction_id)[3] > start)\
+                                                .filter(getTransaction(db, typeType.transaction_id)[3] < end)
+        elif typeStr == "transactions":
+            records = db.session.query(typeType).filter(typeType.date > start)\
+                                                .filter(typeType.date < end) # Transactions that occur between dates.
+        else:
+            records = db.session.query(typeType).filter(typeType.start_date > start)\
+                                                .filter(typeType.start_date < end) # give ONLY start dates within range
+    else:
+        records = db.session.query(typeType).all()
     outfile = open('{}.csv'.format(typeStr), 'wb')
     outcsv = csv.writer(outfile)
-    records = db.session.query(typeType).all()
+#    records = db.session.query(typeType).all()
     [outcsv.writerow([getattr(curr, column.name) for column in typeType.__mapper__.columns]) for curr in records]
     outfile.close()
 
@@ -907,7 +929,7 @@ def areWeGoingToRunOut(db, product_id):
     :param product_id: int
     :return: True/False, prediction
     """
-    oneWeekAgo   = datetime.today() - dt.timedelta(weeks=1)
+    oneWeekAgo   = datetime.date.today() - dt.timedelta(weeks=1)
     productDelta = len(db.session.query(ItemSold).filter(ItemSold.product_id == product_id)\
                                             .filter(oneWeekAgo <= getTransaction(db, ItemSold.transaction_id)[3]))
     thisProduct = db.session.query(Product).filter(Product.product_id == product_id).first()
