@@ -256,15 +256,21 @@ def stocker():
 def stockerAddRow():
     # get the information from the user
     inputDict = POS_display.get_stocker_row(request)
+
+    productID = inputDict['product_id']
+
+    if (productID == ''):
+        productID = POS_logic.stocker_table.rowsList[int(inputDict["row_number"])-1].product_id
+
     # get the product name from the database
+    productName = POS_database.getProductName(db, productID)
 
     if (inputDict["row_number"]):
-        #TODO add edit functionality for cashier
-        pass
+        print("I am editing!")
+        POS_logic.stocker_table.edit_row(int(inputDict["row_number"]), productID, productName, int(inputDict["quantity"]), inputDict["inventory_cost"])
     else:
-        productName = POS_database.getProductName(db, inputDict['product_id'])
         # add all of the information received to the local stocking table
-        POS_logic.stocker_table.add_row(inputDict['product_id'], productName, inputDict['inventory_cost'])
+        POS_logic.stocker_table.add_row(productID, productName, int(inputDict['quantity']), inputDict['inventory_cost'])
     
     return redirect(url_for('stocker'))
 

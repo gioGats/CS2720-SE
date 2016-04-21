@@ -60,6 +60,11 @@
             </div>
 
             <div class="form-group">
+                <label for="quantity-input">Quantity: </label>
+                <input type="number" class="form-control" name="quantity" id="quantity-input">
+            </div>
+
+            <div class="form-group">
                 <label for="inventory-cost-input">Inventory Cost: </label>
                 <input type="number" class="form-control" name="inventory_cost" id="inventory-cost-input">
             </div>
@@ -79,6 +84,7 @@
             <td>Row Number</td>
             <td>Product Name</td>
             <td>Product ID</td>
+            <td>Quantity</td>
             <td>Inventory Cost</td>
         </tr>
     </thead>
@@ -91,6 +97,7 @@
                 <td> {{ myNum }} </td>
                 <td> {{ stockerRow.name }} </td>
                 <td> {{ stockerRow.product_id }} </td>
+                <td> {{ stockerRow.quantity }} </td>
                 <td> {{ stockerRow.inventory_cost }} </td>
             </tr>
         {% endfor %}

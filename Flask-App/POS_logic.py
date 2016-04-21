@@ -171,16 +171,19 @@ class CashierRow(Row):
 
 
 class StockerRow(ItemRow):
-    def __init__(self, product_id, name, inventory_cost):
+    def __init__(self, product_id, name, inventory_cost, quantity = 1):
         """
         Holds data for the display of an item currently being added to inventory.
         :param product_id: int
+        :param name: string
+        :param quantity: int
         :param inventory_cost: float
         :return: None
         """
         Row.__init__(self)
         self.product_id = product_id
         self.name = name
+        self.quantity = quantity
         self.inventory_cost = inventory_cost
 
 
@@ -249,7 +252,7 @@ class CashierTable(Table):
 
 class StockerTable(Table):
 
-    def add_row(self, product_id, name, inventory_cost):
+    def add_row(self, product_id, name, quantity, inventory_cost):
         """
         Adds a stocker row to the stocker table.
         :param product_id: int
@@ -257,12 +260,13 @@ class StockerTable(Table):
         :param inventory_cost: float
         :return: None
         """
-        new_row = StockerRow(product_id, name, inventory_cost)
+
+        new_row = StockerRow(product_id, name, inventory_cost, quantity)
         self.rowsList.append(new_row)
         self.rowCount += 1
         self.mostRecentRow = new_row
 
-    def edit_row(self, row_number, product_id, inventory_cost):
+    def edit_row(self, row_number, product_id, name, quantity, inventory_cost):
         """
         Changes a current row at index row_number-1 to the parameters specified.
         If any row parameter is the empty string, it will default to its current setting.
@@ -272,10 +276,12 @@ class StockerTable(Table):
         :return: None
         """
         if product_id == '':
-            product_id = self.rowsList[row_number-1].item_id
+            product_id = self.rowsList[row_number-1].product_id
+        if quantity == "":
+            quantity = self.rowsList[row_number-1].quantity
         if inventory_cost == '':
-            inventory_cost = self.rowsList[row_number-1].product_name
-        self.rowsList[row_number-1] = StockerRow(product_id, inventory_cost)
+            inventory_cost = self.rowsList[row_number-1].inventory_cost
+        self.rowsList[row_number-1] = StockerRow(product_id, name, inventory_cost, quantity)
 
 #######################################################################################################################
 # GLOBAL VARIABLES

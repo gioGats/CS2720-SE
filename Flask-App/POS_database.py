@@ -265,8 +265,9 @@ def updateItemTable(db, rowsList):
     :return: -
     """
     for row in rowsList:
-        db.session.add(Item(row.product_id, row.inventory_cost))
-        incProduct(db, row.product_id)
+        for x in range(0, row.quantity): 
+            db.session.add(Item(row.product_id, row.inventory_cost))
+            incProduct(db, row.product_id)
     db.session.commit()
 
 def updateCashierTable(db, rowsList):

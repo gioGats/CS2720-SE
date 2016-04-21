@@ -69,6 +69,7 @@ def get_stocker_row(request):
     input_dict = dict()
     input_dict["row_number"] = request.form["row_number"]
     input_dict["product_id"] = request.form["product_id"]
+    input_dict["quantity"]   = request.form["quantity"]
     input_dict["inventory_cost"] = request.form["inventory_cost"]
     return input_dict
 
