@@ -6,9 +6,12 @@
     <div class="side-panel-top">
 	    <h2>{% block sidePanelHeader %}{% endblock %}</h2>
 	    <form id="database-form">
-	        <input type="text" name="DatabaseID" placeholder="Enter an ID..." >
-	        <button type="submit" form="database-form" formaction={% block deleteURL %}{% endblock %} formmethod="post" >Delete</button>
-
+	    	<div class="form-group">
+		    	<label for="idInput">ID: </label>
+		        <input type="number" name="DatabaseID" id="idInput">
+		        <button type="submit" form="database-form" formaction={% block deleteURL %}{% endblock %} formmethod="post" >Delete</button>
+	    	</div>
+	        
 	        {% block formData %}{% endblock %}
 
 	        <button type="submit" form="database-form" formaction={% block updateURL %}{% endblock %} formmethod="post" >Update</button>

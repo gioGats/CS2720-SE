@@ -55,10 +55,30 @@
 {% endblock %}
 
 {% block formData %}
-  <input type="text" name="product-id" placeholder="product ID">
-  <input type="text" name="start-date" placeholder="start date">
-  <input type="text" name="end-date" placeholder="end date">
-  <input type="text" name="percent-off" placeholder="Percent Off (e.g. 10%)">  
+    <div class="form-group">
+        <label for="product-id-input">Product ID: </label>
+        <input type="number" name="product-id" id="product-id-input">
+    </div>
+    
+    <div class="form-group">
+        <label for="start-date-input">Start Date: </label>
+        <input type="date" name="start-date" id="start-date-input">
+    </div>
+
+    <div class="form-group">
+        <label for="end-date-input">End Date: </label>
+        <input type="date" name="end-date" id="end-date-input">
+    </div>
+
+    <div class="form-group">
+        <label for="percent-off-input" data-toggle="tooltip">Percent Off: </label>
+        <input type="number" name="percent-off" id="percent-off-input" min="0.01" max="1.00">  
+    </div>
+
+  
+
+
+
 {% endblock %}
 
 {% block updateURL %}

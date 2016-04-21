@@ -55,8 +55,14 @@
 {% endblock %}
 
 {% block formData %}
-  <input type="text" name="product-id" placeholder="product ID">
-  <input type="text" name="inventory-cost" placeholder="inventory cost">
+    <div class="form-group">
+        <label for="product-id-input">Product ID: </label>
+        <input type="number" name="product-id" id="product-id-input">
+    </div>
+    <div class="form-group">
+        <label for="inventory-cost-input">Inventory Cost: </label>
+        <input type="number" name="inventory-cost" id="inventory-cost-input">
+    </div>
 {% endblock %}
 
 {% block updateURL %}

@@ -31,9 +31,9 @@ def redirect_after_login(current_user):
     if is_manager(current_user):
         return redirect('/reports')
     elif is_cashier(current_user):
-        return redirect('/transactions')
+        return redirect('/cashier')
     elif is_stocker(current_user):
-        return redirect('/inventory')
+        return redirect('/stocker')
     else:
         return redirect('/')
 # -------------------------------------------------- #
