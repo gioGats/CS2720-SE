@@ -16,6 +16,44 @@
             type="image/x-icon"
             href="http://www.free-icons-download.net/images/green-dollar-sign-button-icon-12080.png"/>
   <style>
+
+      /* Author: Ethan Morisette
+/* Purpose: to add custom styling on top of the bootstrap styling
+/* Notes: please alphabetize selector properties for enhanced readability */
+
+html						{background-color:#000000;}
+#pagecontent				{height:750px; margin-top:50px; padding:0px;}
+
+/************************************************************************************************************************************************
+	  HEADER STYLING
+************************************************************************************************************************************************/
+nav.navbar					{border-radius:0px; margin:0px;}
+
+
+/************************************************************************************************************************************************
+      SIDE PANEL STYLING
+************************************************************************************************************************************************/
+#sidepanel					{background-color:#616161; border-color:black #2e2e2e; border-style:solid ridge none none; border-width:5px 10px 0px 0px; height:100%; position:relative;}
+.side-panel-top				{position:absolute; top:10px;}
+.side-panel-bot				{bottom:10px; position:absolute;}
+
+/************************************************************************************************************************************************
+	  MAIN PANEL STYLING
+************************************************************************************************************************************************/
+#mainpanel					{background-color:#8A0651; height:100%;}
+
+/***********************************************************************************************************************************************
+	  TABLE STYLING
+************************************************************************************************************************************************/
+#tablewindow				{background-color:#FDE1F0; border:3px solid black; height:650px; margin:20px; overflow-y:scroll;}
+.table-header				{background-color:#616161; border-bottom:1px solid black;}
+
+/************************************************************************************************************************************************
+	  TABLE FORM STYLING
+************************************************************************************************************************************************/
+#tableinput					{height:200px; margin:20px;}
+
+
 .dropbtn {
     background-color: #222;
     color: #9d9d9d;
@@ -55,6 +93,22 @@
 .dropdown a:hover {background-color: #f1f1f1}
 
 .show {display:block;}
+
+      .pagination-page-info {
+    padding: .6em;
+    padding-left: 0;
+    width: 40em;
+    margin: .5em;
+    margin-left: 0;
+    font-size: 12px;
+}
+.pagination-page-info b {
+    color: black;
+    background: #6aa6ed;
+    padding-left: 2px;
+    padding: .1em .25em;
+    font-size: 150%;
+}
   </style>
   </head>
 
@@ -140,6 +194,33 @@
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
     <script src="static/dropdown.js"></script>
 
+ <script>
+     /**
+ * Created by Jacob on 4/16/2016.
+ */
+
+
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+ </script>
   </body>
 
 </html>
