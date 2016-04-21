@@ -276,8 +276,9 @@ def updateCashierTable(db, rowsList):
     :param rowsList: list of row objects
     :return: -
     """
+    
+    transactionID = addTransaction(db, "Bob", "no@no.com", 1)
     for row in rowsList:
-        transactionID = addTransaction(db, "Bob", "no@no.com", 1)
         popItemToItemSold(db, row.item_id, row.price, transactionID)
 
 
