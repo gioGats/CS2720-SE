@@ -895,6 +895,7 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
         typeStr  = 'inventory'
         typeType =  Item
 
+    # Get dated stuff if we're given a date range
     if dateTup is not None\
             and typeStr in DATED_TABLES:
         start = dateTup[0]
@@ -909,12 +910,30 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
         else:
             records = db.session.query(typeType).filter(typeType.start_date > start)\
                                                 .filter(typeType.start_date < end) # give ONLY start dates within range
+    # No dates given, get the whole table.
     else:
         records = db.session.query(typeType).all()
     outfile = open('{}.csv'.format(typeStr), 'wb')
     outcsv = csv.writer(outfile)
 #    records = db.session.query(typeType).all()
     [outcsv.writerow([getattr(curr, column.name) for column in typeType.__mapper__.columns]) for curr in records]
+    outfile.close()
+
+@getfromDB_Error
+def reportInfoCSV(db, dateTup = None):
+    """
+    Optional date range; gives a joined csv of things.
+    :param db: database pointer
+    :param dateTup: tuple; optional- should be of type (start_date,end_date,)
+    :return:
+    """
+    # SQLAlchemy is fucking magic. Look at this shit:
+    allItemInfo = db.session.query(Item).join(Product).join(Supplier).all()
+    # That's supposed to work just right; automagically joins on foreign keys without specifications. Boom.
+    outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
+    outcsv = csv.writer(outfile)
+    #[outcsv.writerow([gettattr(curr, column.name) for column in allItemInfo]) for curr in allItemInfo]
+    # TODO Write csv writing
     outfile.close()
 
 
@@ -929,15 +948,15 @@ def areWeGoingToRunOut(db, product_id):
     :param product_id: int
     :return: True/False, prediction
     """
-    oneWeekAgo   = datetime.date.today() - dt.timedelta(weeks=1)
-    productDelta = len(db.session.query(ItemSold).filter(ItemSold.product_id == product_id)\
-                                            .filter(oneWeekAgo <= getTransaction(db, ItemSold.transaction_id)[3]))
+    oneWeekAgo   = datetime.date.today() - dt.timedelta(weeks=1) # Does what it says on the box.
+    productDelta = db.session.query(ItemSold).filter(ItemSold.product_id == product_id)\
+                                            .filter(oneWeekAgo <= getTransaction(db, ItemSold.transaction_id)[3])\
+                                            .count() # Count how many we would've had.
     thisProduct = db.session.query(Product).filter(Product.product_id == product_id).first()
     if (thisProduct.inventory_count - productDelta) < thisProduct.min_inventory:
         return True  # We WILL run out (maybe)
     else:
         return False # We WONT run out (maybe)
-
 
 # TODO dated gets from db's
 # TODO reportInfo for products
