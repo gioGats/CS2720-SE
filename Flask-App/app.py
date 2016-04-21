@@ -186,20 +186,18 @@ def reports():
 
 # -------------------------------------------------- #
 
-# Transactions Page
-# Requires: Login, Manager/Admin permission #
-@app.route('/transactions')
+# Cashier Page
+# Requires: Login, Cashier/Manager permission #
+@app.route('/cashier')
 @login_required
-def transactions():
-    transactionTable = []
+def cashier():
     if is_manager(current_user) or is_cashier(current_user):
-        items = db.session.query(Item).all()
-        return render_template("transactions.html", items=items, transactionTable=POS_logic.cashier_table)
+        return render_template("cashier.html", cashierTable=POS_logic.cashier_table)
     else:
         return redirect('/')
 
 
-@app.route('/transactionadd', methods=["POST"])
+@app.route('/cashieradd', methods=["POST"])
 def cashierAddRow():
 
     # get the information from the user
@@ -218,39 +216,38 @@ def cashierAddRow():
         # get the product name and price from the database
 
     # reload page
-    return redirect(url_for('transactions'))
+    return redirect(url_for('cashier'))
 
 @app.route('/cashierdelete', methods=["POST"])
 def cashierDeleteRow():
     inputDict = POS_display.get_cashier_row(request)
     POS_logic.cashier_table.delete_row(int(inputDict["row_number"]))
-    return redirect(url_for('transactions'))
+    return redirect(url_for('cashier'))
 
-@app.route('/transactioncommit', methods=["POST"])
+@app.route('/cashiercommit', methods=["POST"])
 def finishTransaction():
     # TODO send all information from the local receipt table to the database for storage
     POS_database.updateCashierTable(db, POS_logic.cashier_table.rowsList)
     # clear the local receipt table out
     POS_logic.cashier_table.clear_table()
-    return redirect(url_for('transactions'))
+    return redirect(url_for('cashier'))
 
 @app.route('/cashiercancel', methods=["POST"])
 def cashierCancel():
     POS_logic.cashier_table.clear_table()
-    return redirect(url_for('transactions'))
+    return redirect(url_for('cashier'))
 
 
 # -------------------------------------------------- #
 
 
-# Inventory Page
-# Requires: Login, Manager/Admin permission #
-@app.route('/inventory')
+# Stocker Page
+# Requires: Login, Stocker/Manager permission #
+@app.route('/stocker')
 @login_required
-def inventory():
+def stocker():
     if is_manager(current_user) or is_stocker(current_user):
-        items = db.session.query(Item).all()
-        return render_template("inventory.html", items=items, inventoryTable=POS_logic.stocker_table)
+        return render_template("stocker.html", stockerTable=POS_logic.stocker_table)
     else:
         return redirect('/')
 
@@ -269,26 +266,26 @@ def stockerAddRow():
         # add all of the information received to the local stocking table
         POS_logic.stocker_table.add_row(inputDict['product_id'], productName, inputDict['inventory_cost'])
     
-    return redirect(url_for('inventory'))
+    return redirect(url_for('stocker'))
 
 @app.route('/stockerdelete', methods=["POST"])
 def stockerDeleteRow():
     inputDict = POS_display.get_stocker_row(request)
     POS_logic.stocker_table.delete_row(int(inputDict["row_number"]))
-    return redirect(url_for('inventory'))
+    return redirect(url_for('stocker'))
 
-@app.route('/inventorycommit', methods=["POST"])
+@app.route('/stockercommit', methods=["POST"])
 def updateInventory():
     # send all information from the local stocking table to the database for storage
     POS_database.updateItemTable(db, POS_logic.stocker_table.rowsList)
     # clear the local stocking table out
     POS_logic.stocker_table.clear_table()
-    return redirect(url_for('inventory'))
+    return redirect(url_for('stocker'))
 
 @app.route('/stockercancel', methods=["POST"])
 def stockerCancel():
     POS_logic.stocker_table.clear_table()
-    return redirect(url_for('inventory'))
+    return redirect(url_for('stocker'))
 
 
 # -------------------------------------------------- #

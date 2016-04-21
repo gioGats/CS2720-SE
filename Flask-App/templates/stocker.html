@@ -1,7 +1,7 @@
 {% extends "contenttemplate.html" %}
 
 {% block title %}
-	Inventory Menu
+	Stocker Menu
 {% endblock %}
 
 
@@ -22,11 +22,11 @@
             {% endif %}
 
             {% if current_user.permissions == 1 or current_user.permissions == 2 %}
-                <li><a href="/transactions">Transactions</a></li>
+                <li><a href="/cashier">Cashier</a></li>
             {% endif %}
 
             {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
-                <li class="active"><a href="/inventory">Inventory</a></li>
+                <li class="active"><a href="/stocker">Stocker</a></li>
             {% endif %}
 
              {% if current_user.is_authenticated %}
@@ -72,13 +72,13 @@
 
     <tbody>
         {% set myNum = 0 %}
-        {% for row in inventoryTable.rowsList %}
+        {% for stockerRow in stockerTable.rowsList %}
             {% set myNum = myNum + 1 %}
             <tr>
                 <td> {{ myNum }} </td>
-                <td> {{ row.name }} </td>
-                <td> {{ row.product_id }} </td>
-                <td> {{ row.inventory_cost }} </td>
+                <td> {{ stockerRow.name }} </td>
+                <td> {{ stockerRow.product_id }} </td>
+                <td> {{ stockerRow.inventory_cost }} </td>
             </tr>
         {% endfor %}
     </tbody>

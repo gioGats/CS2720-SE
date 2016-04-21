@@ -22,11 +22,11 @@
 	      	{% endif %}
 
 	      	{%  if current_user.permissions == 1 or current_user.permissions == 2 %}
-	            <li class="active"><a href="/transactions">Transactions</a></li>
+	            <li class="active"><a href="/cashier">Cashier</a></li>
 	      	{% endif %}
 
 	       	{%  if current_user.permissions == 1 or current_user.permissions == 3 %}
-	            <li><a href="/inventory">Inventory</a></li>
+	            <li><a href="/stocker">Stocker</a></li>
 	      	{% endif %}
 
              {% if current_user.is_authenticated %}
@@ -46,13 +46,13 @@
 {% block sidePanelContent %}
 	<div class="side-panel-top">
 		<h2>Cashier Menu</h1>
-		<form id="formshit" method=post>
+		<form id="cashierForm" method=post>
 			<input type="text" name="row_number" placeholder="Row Number">
-			<button type="submit" formid="formshit" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post">Delete</button>
+			<button type="submit" formid="cashierForm" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post">Delete</button>
 			<input type="text" name="item_id" placeholder="Item ID">
 			<input type="text" name="price_per_unit" placeholder="Price Per Unit">
-			<button type="submit" formid="formshit" formaction="{{ url_for('cashierAddRow') }}" formmethod="post">Update</button>
-			<button type="submit" formid="formshit" formaction="{{ url_for('cashierCancel') }}" formmethod="post">Cancel</button>
+			<button type="submit" formid="cashierForm" formaction="{{ url_for('cashierAddRow') }}" formmethod="post">Update</button>
+			<button type="submit" formid="cashierForm" formaction="{{ url_for('cashierCancel') }}" formmethod="post">Cancel</button>
     	</form>
 		<form action="{{ url_for('finishTransaction') }}" method=post>
 			<input type="submit" value="Finish Transaction">
@@ -72,13 +72,13 @@
 
 	<tbody>
 		{% set myNum = 0 %}
-		{% for transactionRow in transactionTable.rowsList %}
+		{% for cashierRow in cashierTable.rowsList %}
 			{% set myNum = myNum + 1 %}
 			<tr>
 				<td> {{ myNum }} </td>
-				<td> {{ transactionRow.item_id }} </td>
-				<td> {{ transactionRow.product_name }} </td>
-				<td> {{ transactionRow.price }} </td>
+				<td> {{ cashierRow.item_id }} </td>
+				<td> {{ cashierRow.product_name }} </td>
+				<td> {{ cashierRow.price }} </td>
 			</tr>
 		{% endfor %}
 	</tbody>

@@ -22,11 +22,11 @@
             {% endif %}
 
             {% if current_user.permissions == 1 or current_user.permissions == 2 %}
-                <li><a href="/transactions">Transactions</a></li>
+                <li><a href="/cashier">Cashier</a></li>
             {% endif %}
 
             {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
-                <li><a href="/inventory">Inventory</a></li>
+                <li><a href="/stocker">Stocker</a></li>
             {% endif %}
 
              {% if current_user.is_authenticated %}
