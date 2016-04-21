@@ -43,6 +43,13 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+<!-- - - - - - - - - - - - - - - - - - - - 
+    SIDE PANEL BLOCKS
+  -  - - - - - - - - - - - - - - - - - - -->     
+{% block sidePanelHeader %}
+    Items Sold Menu
+{% endblock %}
+
 {% block deleteURL %}
     "{{ url_for('itemsoldDBDeleteItemsold') }}"
 {% endblock %}

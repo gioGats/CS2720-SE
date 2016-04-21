@@ -43,6 +43,13 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+<!-- - - - - - - - - - - - - - - - - - - - 
+    SIDE PANEL BLOCKS
+  -  - - - - - - - - - - - - - - - - - - -->     
+{% block sidePanelHeader %}
+    Suppliers Menu
+{% endblock %}
+
 {% block deleteURL %}
     "{{ url_for('supplierDBDeleteSupplier') }}"
 {% endblock %}

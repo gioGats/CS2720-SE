@@ -43,6 +43,14 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+
+<!-- - - - - - - - - - - - - - - - - - - - 
+    SIDE PANEL BLOCKS
+  -  - - - - - - - - - - - - - - - - - - -->     
+{% block sidePanelHeader %}
+    User Menu
+{% endblock %}
+
 {% block deleteURL %}
     "{{ url_for('userDBDeleteUser') }}"
 {% endblock %}
