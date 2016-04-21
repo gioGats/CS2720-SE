@@ -332,12 +332,16 @@ def register():
 
 
 # itemsDB
-# Requires: Login, Manager/Stocker permission #
-@app.route('/itemsDB', methods=['GET', 'POST'])
+# Requires: Login, Manager/Admin/Stocker permission #
+@app.route('/itemsDB',defaults={'page':1}, methods=['GET', 'POST'])
+@app.route('/itemsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
-def itemsDB():
-    result = db.session.query(Item).all()
-    return render_template("itemsDB.html", itemsDBTable=result)
+def itemsDB(page):
+    if is_manager(current_user) or is_cashier(current_user):
+        pagination = Item.query.paginate(page, 16)
+        return render_template("itemsDB.html", pagination=pagination)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/itemdb-delete', methods=["POST"])
 @login_required
