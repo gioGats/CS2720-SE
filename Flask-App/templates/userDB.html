@@ -58,17 +58,17 @@
 {% block formData %}
     <div class="form-group">
         <label for="username-input">User Name: </label>
-        <input type="text" name="username" id="username-input" placeholder="ex. VoldemortSnort">
+        <input type="text" class="form-control" name="username" id="username-input" placeholder="ex. VoldemortSnort">
     </div> 
 
     <div class="form-group">
         <label for="password-input">Password: </label>
-        <input type="password" name="password" id="password-input" placeholder="ex. ihateharrypotter">
+        <input type="password" class="form-control" name="password" id="password-input" placeholder="ex. ihateharrypotter">
     </div> 
 
     <div class="form-group">
         <label for="permissionsInput">Permissions: </label>
-        <input type="number" id="permissionsInput" name="permissions" min="1" max="3"> 
+        <input type="number" class="form-control" id="permissionsInput" name="permissions" min="1" max="3"> 
     </div> 
 {% endblock %}
 

@@ -48,15 +48,27 @@
     <div class="side-panel-top">
         <h2>Stocker Menu</h2>
         <form id="stocker-form">
-            <input type="text" name="row_number" placeholder="Row Number">
-            <button type="submit" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post">Delete</button>
-            <input type="text" name="product_id" placeholder="Product ID">
-            <input type="text" name="inventory_cost" placeholder="Inventory Cost">
-            <button type="submit" formid="stocker-form" formaction="{{ url_for('stockerAddRow') }}" formmethod="post">Update</button>
-            <button type="submit" formid="stocker-form" formaction="{{ url_for('stockerCancel') }}" formmethod="post">Cancel</button>
+            <div class="form-group">
+                <label for="row-number-input">Row Number: </label>
+                <input type="number" class="form-control" name="row_number" id="row-number-input">
+                <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post">Delete</button>
+            </div>
+
+            <div class="form-group">
+                <label for="product-id-input">Product ID: </label>
+                <input type="number" class="form-control" name="product_id" id="product-id-input">
+            </div>
+
+            <div class="form-group">
+                <label for="inventory-cost-input">Inventory Cost: </label>
+                <input type="number" class="form-control" name="inventory_cost" id="inventory-cost-input">
+            </div>
+
+            <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerAddRow') }}" formmethod="post">Update</button>
+            <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerCancel') }}" formmethod="post">Cancel</button>
         </form>
         <form action="{{ url_for('updateInventory') }}" method=post>
-            <input type="submit" value="Update Inventory">
+            <button type="submit" class="btn btn-info">Update Inventory</button>
         </form>
     </div>
 {% endblock %}

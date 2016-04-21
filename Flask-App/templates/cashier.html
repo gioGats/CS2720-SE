@@ -47,15 +47,27 @@
 	<div class="side-panel-top">
 		<h2>Cashier Menu</h2>
 		<form id="cashierForm" method=post>
-			<input type="text" name="row_number" placeholder="Row Number">
-			<button type="submit" formid="cashierForm" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post">Delete</button>
-			<input type="text" name="item_id" placeholder="Item ID">
-			<input type="text" name="price_per_unit" placeholder="Price Per Unit">
-			<button type="submit" formid="cashierForm" formaction="{{ url_for('cashierAddRow') }}" formmethod="post">Update</button>
-			<button type="submit" formid="cashierForm" formaction="{{ url_for('cashierCancel') }}" formmethod="post">Cancel</button>
+			<div class="form-group">
+				<label for="row-number-input">Row Number: </label>
+				<input type="text" class="form-control" name="row_number" placeholder="Row Number">
+				<button type="submit" class="btn btn-info" formid="cashierForm" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post">Delete</button>
+			</div>
+
+			<div class="form-group">
+				<label for="item-id-input">Item ID: </label>
+				<input type="text" class="form-control" name="item_id" placeholder="Item ID">
+			</div>
+
+			<div class="form-group">
+				<label for="price-per-unit-input">Price Per Unit: </label>
+				<input type="text" class="form-control" name="price_per_unit" placeholder="Price Per Unit">
+			</div>
+
+			<button type="submit" class="btn btn-info" formid="cashierForm" formaction="{{ url_for('cashierAddRow') }}" formmethod="post">Update</button>
+			<button type="submit" class="btn btn-info" formid="cashierForm" formaction="{{ url_for('cashierCancel') }}" formmethod="post">Cancel</button>
     	</form>
 		<form action="{{ url_for('finishTransaction') }}" method=post>
-			<input type="submit" value="Finish Transaction">
+			<button type="submit" class="btn btn-info">Finish Transaction</button>
 		</form>
 	</div>
 {% endblock %}
