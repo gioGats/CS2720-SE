@@ -326,7 +326,7 @@ def register():
 
 
 # itemsDB
-# Requires: Login, Manager/Admin/Stocker permission #
+# Requires: Login, Manager/Stocker permission #
 @app.route('/itemsDB', methods=['GET', 'POST'])
 @login_required
 def itemsDB():
@@ -356,6 +356,10 @@ def itemDBUpdateItem():
         POS_database.addItem(db, inputDict["product-id"], inputDict["inventory-cost"])
 
     # reload the page
+    return redirect(url_for('itemsDB'))
+
+@app.route('/itemdbcancel', methods=["POST"])
+def itemDBCancel():
     return redirect(url_for('itemsDB'))
 
 # -------------------------------------------------- #
@@ -391,9 +395,11 @@ def productDBUpdateProduct():
     else:
         POS_database.addProduct(db, inputDict["product-name"], inputDict["supplier-id"],  inputDict["inventory-count"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
 
-    
-
     # reload the page
+    return redirect(url_for('productsDB'))
+
+@app.route('/productdbcancel', methods=["POST"])
+def productDBCancel():
     return redirect(url_for('productsDB'))
 
 # -------------------------------------------------- #
@@ -430,9 +436,11 @@ def transactionDBUpdateTransaction():
     else:
         POS_database.addTransaction(db, inputDict["customer-name"], inputDict["customer-contact"], inputDict["payment-type"])
 
-    
-
     # reload the page
+    return redirect(url_for('transactionsDB'))
+
+@app.route('/transactiondbcancel', methods=["POST"])
+def transactionDBCancel():
     return redirect(url_for('transactionsDB'))
 
 # -------------------------------------------------- #
@@ -459,6 +467,10 @@ def itemsoldDBUpdateItemsold():
     #TODO database support for adding and modifying items sold
     
     # reload the page
+    return redirect(url_for('itemssoldDB'))
+
+@app.route('/itemsolddbcancel', methods=["POST"])
+def itemsoldDBCancel():
     return redirect(url_for('itemssoldDB'))
 
 # -------------------------------------------------- #
@@ -502,6 +514,10 @@ def discountDBUpdateDiscount():
     # reload the page
     return redirect(url_for('discountsDB'))
 
+@app.route('/discountdbcancel', methods=["POST"])
+def discountDBCancel():
+    return redirect(url_for('discountsDB'))
+
 # -------------------------------------------------- #
 
 
@@ -536,9 +552,11 @@ def supplierDBUpdateSupplier():
     else:
         POS_database.addSupplier(db, inputDict["supplier-name"], inputDict["supplier-email"])
 
-    
-
     # reload the page
+    return redirect(url_for('supplierDB'))
+
+@app.route('/supplierdbcancel', methods=["POST"])
+def supplierDBCancel():
     return redirect(url_for('supplierDB'))
 
 # -------------------------------------------------- #
@@ -575,9 +593,11 @@ def userDBUpdateUser():
     else:
         POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
 
-    
-
     # reload the page
+    return redirect(url_for('userDB'))
+
+@app.route('/userdbcancel', methods=["POST"])
+def userDBCancel():
     return redirect(url_for('userDB'))
 
 

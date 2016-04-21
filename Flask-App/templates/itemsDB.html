@@ -63,6 +63,10 @@
     "{{ url_for('itemDBUpdateItem') }}"
 {% endblock %}
 
+{% block cancelURL %}
+    "{{ url_for('itemDBCancel') }}"
+{% endblock %}
+
 {% block table %}
     <thead class="table-header">
         <tr>

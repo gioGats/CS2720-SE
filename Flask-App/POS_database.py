@@ -216,7 +216,7 @@ def addProduct(db, name, supplier_id, inventory_count, min_inventory, shelf_life
     :return: -
     """
     # Build one
-    db.session.add(Product(name, supplier_id, min_inventory, shelf_life, standard_price))
+    db.session.add(Product(name, supplier_id, inventory_count, min_inventory, shelf_life, standard_price))
     # commit our addition!
     db.session.commit()
 

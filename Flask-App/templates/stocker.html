@@ -46,6 +46,7 @@
 
 {% block sidePanelContent %}
     <div class="side-panel-top">
+        <h2>Stocker Menu</h2>
         <form id="stocker-form">
             <input type="text" name="row_number" placeholder="Row Number">
             <button type="submit" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post">Delete</button>

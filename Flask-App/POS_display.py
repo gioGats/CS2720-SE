@@ -83,8 +83,8 @@ def get_discount_row(request):
     input_dict["discount-id"] = request.form["DatabaseID"]
     input_dict["product-id"] = request.form["product-id"]
     #TODO convert both start date and end date to formatted date
-    input_dict["start-date"] = request.form["start-date"]
-    input_dict["end-date"] = request.form["end-date"]
+    input_dict["start-date"] = convert_string_to_date(request.form["start-date"])
+    input_dict["end-date"] = convert_string_to_date(request.form["end-date"])
     input_dict["percent-off"] = request.form["percent-off"]
     return input_dict
 
