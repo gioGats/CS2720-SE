@@ -358,15 +358,19 @@ def itemDBUpdateItem():
 
     #  if the user did enter an id number, check if its valid and modify item if it is
     #TODO check if the entered id number is valid
-    if (inputDict["item-id"]):
+
+    if inputDict["item-id"]:
         POS_database.editItem(db, inputDict["item-id"], inputDict["product-id"], inputDict["inventory-cost"])
 
     # else if the user did not enter an id, add a new item
     else:
         POS_database.addItem(db, inputDict["product-id"], inputDict["inventory-cost"])
-
+        pagination = Item.query.paginate(1, 16)
+        page = pagination.pages
+        return redirect(url_for('itemsDB', page=page))
     # reload the page
     return redirect(url_for('itemsDB'))
+
 
 @app.route('/itemdbcancel', methods=["POST"])
 def itemDBCancel():
