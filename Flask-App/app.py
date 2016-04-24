@@ -1,8 +1,9 @@
 """
 File: app.py
 Author: Jacob Campbell; Ethan Morisette
-Created: 3/11/2016
-Purpose: This is the master file for the Flask application.
+Created: 3/11/2016 (Last Modified: 4/24/2016)
+Purpose: This is the master file for the Flask application, contains logic for generating webpages, routing
+data, and managing the flow of the entire system.
 """
 
 #############################

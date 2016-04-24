@@ -1,8 +1,9 @@
 """
 File: POS_display.py
 Author: Ethan Morisette
-Created: 3/9/2016
-Purpose: a module that holds all data specifically dealing with getting code from and to the GUI
+Created: 3/9/2016 (Last Modified: 4/24/2016)
+Purpose: Module containing functions that get data input from the user interface, process it into appropriate
+formats, and route it accordingly.
 """
 
 ######################################################################################

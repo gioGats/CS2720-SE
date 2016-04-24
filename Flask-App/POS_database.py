@@ -1,14 +1,15 @@
-# Author: Ethan Morisette; Braden Menke
-# Created: 04/09/2016
-# Last Modified: 3/20/2016
-# Purpose: to hold all of our database interactions in a single module
-
+"""
+File: models.py
+Author: Ethan Morisette; Braden Menke
+Created: 03/09/2016 (Last Modified: 4/24/2016)
+Purpose: Contains all database interaction functions for passing data between the user interface and databases.
+"""
 ########################################################################################################################
 # IMPORTS																											   #
 ########################################################################################################################
 
 from flask_sqlalchemy import *
-from flask import Flask, make_response
+from flask import Flask, make_response, send_file
 from sqlalchemy import func
 from models import *
 import re
@@ -271,15 +272,18 @@ def updateItemTable(db, rowsList):
             incProduct(db, row.product_id)
     db.session.commit()
 
-def updateCashierTable(db, rowsList):
+def updateCashierTable(db, rowsList, customerName, customerContact, paymentType):
     """
     update the items_sold, items, and transaction tables given a list of rows
     :param db: database pointer
     :param rowsList: list of row objects
-    :return: -
+    :param customerName: String
+    :param customerContact: String
+    :param paymentType: Int
+    :return:
     """
 
-    transactionID = addTransaction(db, "Bob", "no@no.com", 1)
+    transactionID = addTransaction(db, customerName, customerContact, paymentType)
     for row in rowsList:
         popItemToItemSold(db, row.item_id, row.price, transactionID)
 
@@ -919,7 +923,7 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
     else:
         records = db.session.query(typeType).all()
 
-    print(type(records))
+    #print(type(records))
     #outfile = open('{}.csv'.format(typeStr), 'wb')
     si = StringIO()
     outcsv = csv.writer(si)
@@ -929,11 +933,13 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
         for thing in row.__table__.columns._data:
             row_as_list.append(getattr(row, thing))
         outcsv.writerow(row_as_list)
-    # outcsv.writerows(records)
-    output = make_response(si.getvalue())
-    output.headers["Content-Disposition"] = "attachment; filename = export.csv"
-    output.headers["Content-type"] = "text/csv"
-    return output
+    return send_file(si,
+                     attachment_filename="TEST.csv",
+                     as_attachment=True)
+    #output = make_response(si.getvalue())
+    #output.headers["Content-Disposition"] = "attachment; filename = export.csv"
+    #output.headers["Content-type"] = "text/csv"
+    #return output
 
 
 #@app.route('/download')

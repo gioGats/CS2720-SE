@@ -1,7 +1,7 @@
 """
 File : POS_helpers.py
 Author: Ethan Morisette
-Created : 3/15/2016
+Created : 3/15/2016 (Last Modified: 4/18/2016)
 Purpose : This is the file with helper functions for the POS Application.
 """
 #############################
