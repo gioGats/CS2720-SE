@@ -306,7 +306,7 @@ class StockerTable(Table):
 
 class ReportTable(Table):
 
-    def __init__(self, revenue_list, cost_list, profit_list):
+    def make_table(self, revenue_list, cost_list, profit_list):
         """
         Holds data for the dashboard table in the reports window.
         Takes as input three lists, one for each accounting line,
@@ -316,7 +316,10 @@ class ReportTable(Table):
         :param profit_list:
         :return: None
         """
-        Table.__init__(self)
+        # if this table has rows in it, empty it!
+        if (self.rowsList):
+            self.clear_table()
+
         self.add_row("Revenue", revenue_list[0], revenue_list[1], revenue_list[2])
         self.add_row("Cost of Sale", cost_list[0], cost_list[1], cost_list[2])
         self.add_row("Profit", profit_list[0], profit_list[1], profit_list[2])
@@ -354,3 +357,4 @@ class ReportTable(Table):
 # Tables for cashier/stocker
 cashier_table = CashierTable()
 stocker_table = StockerTable()
+report_table = ReportTable()
