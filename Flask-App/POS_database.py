@@ -920,7 +920,9 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
     #outfile = open('{}.csv'.format(typeStr), 'wb')
     si = StringIO
     outcsv = csv.writer(si)
-    outcsv.writerows(records)
+    for row in records:
+        outcsv.writerow(row)
+    # outcsv.writerows(records)
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename = export.csv"
     output.headers["Content-type"] = "text/csv"
@@ -942,7 +944,9 @@ def reportInfoCSV(db, dateTup = None):
     #outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
     si = StringIO()
     outcsv = csv.writer(si, delimiter=',')
-    outcsv.writerows(allItemInfo)
+    for row in allItemInfo:
+        outcsv.writerow(row)
+    # outcsv.writerows(allItemInfo)
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename = export.csv"
     output.headers["Content-type"] = "text/csv"
@@ -1012,7 +1016,9 @@ def runOutReport(db):
             continue
     si = StringIO()
     writer = csv.writer(si)
-    writer.writerows(predictionsList)
+    for row in predictionsList:
+        writer.writerow(row)
+    # writer.writerows(predictionsList)
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename = export.csv"
     output.headers["Content-type"] = "text/csv"
