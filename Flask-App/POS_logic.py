@@ -171,7 +171,7 @@ class CashierRow(Row):
 
 
 class StockerRow(ItemRow):
-    def __init__(self, product_id, name, inventory_cost, quantity = 1):
+    def __init__(self, product_id, name, inventory_cost, quantity=1):
         """
         Holds data for the display of an item currently being added to inventory.
         :param product_id: int
@@ -185,6 +185,7 @@ class StockerRow(ItemRow):
         self.name = name
         self.quantity = quantity
         self.inventory_cost = inventory_cost
+
 
 class ReportRow(Row):
     def __init__(self, name, daily, weekly, monthly, custom=0):
@@ -202,6 +203,7 @@ class ReportRow(Row):
         self.weekly = weekly
         self.monthly = monthly
         self.custom = custom
+
 
 class Table:
     """
@@ -255,7 +257,6 @@ class CashierTable(Table):
         If any row parameter is the empty string, it will default to its current setting.
         :param row_number: int
         :param item_id: int
-        :param product_name: str
         :param price: float
         :return:
         """
@@ -273,6 +274,7 @@ class StockerTable(Table):
         Adds a stocker row to the stocker table.
         :param product_id: int
         :param name: string
+        :param quantity: int
         :param inventory_cost: float
         :return: None
         """
@@ -288,6 +290,8 @@ class StockerTable(Table):
         If any row parameter is the empty string, it will default to its current setting.
         :param row_number: int
         :param product_id: int
+        :param name: string
+        :param quantity: int
         :param inventory_cost: float
         :return: None
         """
@@ -298,6 +302,7 @@ class StockerTable(Table):
         if inventory_cost == '':
             inventory_cost = self.rowsList[row_number-1].inventory_cost
         self.rowsList[row_number-1] = StockerRow(product_id, name, inventory_cost, quantity)
+
 
 class ReportTable(Table):
 
@@ -341,9 +346,6 @@ class ReportTable(Table):
         self.rowsList[0].custom = new_revenue
         self.rowsList[1].custom = new_cost
         self.rowsList[2].custom = new_profit
-
-
-
 
 #######################################################################################################################
 # GLOBAL VARIABLES
