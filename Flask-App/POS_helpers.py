@@ -1,8 +1,9 @@
-# File : POS_helpers.py
-# Date : 3/15/2016 (creation)
-# Desc : This is the file with helper functions for the POS Application.
-
-
+"""
+File : POS_helpers.py
+Author: Ethan Morisette
+Created : 3/15/2016
+Purpose : This is the file with helper functions for the POS Application.
+"""
 #############################
 # Import Statements
 #############################
