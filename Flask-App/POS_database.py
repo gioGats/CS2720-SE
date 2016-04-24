@@ -1,9 +1,8 @@
-"""
-File: models.py
-Author: Ethan Morisette; Braden Menke
-Created: 03/09/2016 (Last Modified: 4/20/2016)
-Purpose: to hold all of our database interactions in a single module
-"""
+# Author: Ethan Morisette; Braden Menke
+# Created: 04/09/2016
+# Last Modified: 3/20/2016
+# Purpose: to hold all of our database interactions in a single module
+
 ########################################################################################################################
 # IMPORTS																											   #
 ########################################################################################################################
@@ -256,7 +255,7 @@ def decProduct(db, productID):
 #########################################################################
 # Items/ItemSold database Access                                        #
 #########################################################################
-# Notes:	this is intended to take all of the rows we add locally and commit them together to the DB; 
+# Notes:	this is intended to take all of the rows we add locally and commit them together to the DB;
 #			"Update Stock" and "Finish Transaction" buttons will use this procedure
 @commitDB_Errorcatch
 def updateItemTable(db, rowsList):
@@ -267,7 +266,7 @@ def updateItemTable(db, rowsList):
     :return: -
     """
     for row in rowsList:
-        for x in range(0, row.quantity): 
+        for x in range(0, row.quantity):
             db.session.add(Item(row.product_id, row.inventory_cost))
             incProduct(db, row.product_id)
     db.session.commit()
@@ -279,7 +278,7 @@ def updateCashierTable(db, rowsList):
     :param rowsList: list of row objects
     :return: -
     """
-    
+
     transactionID = addTransaction(db, "Bob", "no@no.com", 1)
     for row in rowsList:
         popItemToItemSold(db, row.item_id, row.price, transactionID)
@@ -907,21 +906,29 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
         if typeStr == "items_sold":
             # get only items sold during the date range.
             records = db.session.query(typeType).filter(getTransaction(db, typeType.transaction_id)[3] > start)\
-                                                .filter(getTransaction(db, typeType.transaction_id)[3] < end)
+                                                .filter(getTransaction(db, typeType.transaction_id)[3] < end).all()
         elif typeStr == "transactions":
             records = db.session.query(typeType).filter(typeType.date > start)\
-                                                .filter(typeType.date < end) # Transactions that occur between dates.
+                                                .filter(typeType.date < end).all()
+                                                # Transactions that occur between dates.
         else:
             records = db.session.query(typeType).filter(typeType.start_date > start)\
-                                                .filter(typeType.start_date < end) # give ONLY start dates within range
+                                                .filter(typeType.start_date < end).all()
+                                                # give ONLY start dates within range
     # No dates given, get the whole table.
     else:
         records = db.session.query(typeType).all()
+
+    print(type(records))
     #outfile = open('{}.csv'.format(typeStr), 'wb')
-    si = StringIO
+    si = StringIO()
     outcsv = csv.writer(si)
     for row in records:
-        outcsv.writerow(row)
+        row_as_list = []
+        #print(type(row))
+        for thing in row.__table__.columns._data:
+            row_as_list.append(getattr(row, thing))
+        outcsv.writerow(row_as_list)
     # outcsv.writerows(records)
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename = export.csv"
@@ -1036,20 +1043,30 @@ def fuckyou(db, time):
     :return: (revenue, cost, prophet,) tuple
     """
     if time == 'day':
-        timetup = (datetime.date(datetime.today()), datetime.date(datetime.today()) + dt.timedelta(days = 1),)
+        thisMorning = datetime.today()
+        thisMorning = thisMorning - dt.timedelta(hours = thisMorning.hour,
+                                                 minutes = thisMorning.minute,
+                                                 seconds = thisMorning.second)
+        timetup = (thisMorning, datetime.today(),)
     elif time == 'week':
-        timetup = (datetime.date(datetime.today()) - dt.timedelta(weeks = 1),
-                   datetime.date(datetime.today()) + dt.timedelta(days = 1))
+        aWeekAgo = datetime.today()
+        aWeekAgo = aWeekAgo - dt.timedelta(weeks = 1,
+                                           seconds = aWeekAgo.second,
+                                           minutes = aWeekAgo.minute,
+                                           hours = aWeekAgo.hour)
+        timetup = (aWeekAgo, datetime.today(),)
     elif time == 'month':
         aMonthAgo = datetime.today()
         aMonthAgo = aMonthAgo - dt.timedelta(weeks = 4,
                                              seconds = aMonthAgo.second,
                                              minutes = aMonthAgo.minute,
                                              hours = aMonthAgo.hour)
-        timetup = (aMonthAgo, datetime.today())
+        timetup = (aMonthAgo, datetime.today(),)
     elif (type(time) == tuple):
         timetup = time
     else:
         raise ValueError
+    transactions = db.session.query(Transaction).filter(Transaction.date >= timetup[0]).filter(Transaction.date <= timetup[1])
+    revenueGet = db.session.query(ItemSold).filter(ItemSold.transaction_id)
 # TODO dated gets from db's
 # TODO reportInfo for products
