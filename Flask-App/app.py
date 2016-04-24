@@ -18,6 +18,7 @@ from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
+from datetime import *
 import POS_display
 import POS_logic
 
@@ -190,6 +191,8 @@ def reports():
 @app.route('/download', methods=["POST"])
 def downloadReport():
     dropDownItem = request.form["report-dropdown"]
+    startDate = POS_display.convert_string_to_date(request.form["report-start-date"])
+    endDate = POS_display.convert_string_to_date(request.form["report-end-date"])
 
     # if the report type is inventory worth report, do special download
 
