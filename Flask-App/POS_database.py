@@ -8,7 +8,7 @@
 ########################################################################################################################
 
 from flask_sqlalchemy import *
-from flask import make_response
+from flask import Flask, make_response
 from sqlalchemy import func
 from models import *
 import re
@@ -16,6 +16,7 @@ import csv
 import datetime as dt
 from datetime import datetime
 from io import StringIO
+from app import app
 
 ########################################################################################################################
 # WRAPPER FUNCTION      																					           #
@@ -205,19 +206,18 @@ def destroyProduct(db, productID):
 
 
 @commitDB_Errorcatch
-def addProduct(db, name, supplier_id, inventory_count, min_inventory, shelf_life, standard_price):
+def addProduct(db, name, supplier_id, min_inventory, shelf_life, standard_price):
     """
     Builds and creates a product given all the info about it.
     :param db: database pointer
     :param supplier_id: int
-    :param inventory_count: int
     :param min_inventory: int
     :param shelf_life: integer
     :param standard_price: float
     :return: -
     """
     # Build one
-    db.session.add(Product(name, supplier_id, inventory_count, min_inventory, shelf_life, standard_price))
+    db.session.add(Product(name, supplier_id, min_inventory, shelf_life, standard_price))
     # commit our addition!
     db.session.commit()
 
@@ -860,9 +860,9 @@ def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
 #########################################################################
 # Reporting Databases                                                   #
 #########################################################################
+@app.route('/download')
 @commitDB_Errorcatch
 def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properly give back the right database's setup
-    # TODO Date range (optional)
     # TODO Joined tables : items_sold + transactions
     """
     Brings in a string of the type, gives ya' a .csv for that.
@@ -926,6 +926,7 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
     return output
 
 
+@app.route('/download')
 @getfromDB_Error
 def reportInfoCSV(db, dateTup = None):
     """
@@ -939,7 +940,7 @@ def reportInfoCSV(db, dateTup = None):
     # That's supposed to work just right; automagically joins on foreign keys without specifications. Boom.
     #outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
     si = StringIO()
-    outcsv = csv.writer(si, delimiter = ',')
+    outcsv = csv.writer(si, delimiter=',')
     outcsv.writerows(allItemInfo)
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename = export.csv"
@@ -958,7 +959,7 @@ def areWeGoingToRunOutOf(db, product_id):
     :param product_id: int
     :return: True/False, prediction
     """
-    oneWeekAgo   = datetime.date.today() - dt.timedelta(weeks=1) # Does what it says on the box.
+    oneWeekAgo   = datetime.date(datetime.today()) - dt.timedelta(weeks=1) # Does what it says on the box.
     productDelta = db.session.query(ItemSold).filter(ItemSold.product_id == product_id)\
                                             .filter(oneWeekAgo <= getTransaction(db, ItemSold.transaction_id)[3])\
                                             .count() # Count how many we would've had.
@@ -969,6 +970,8 @@ def areWeGoingToRunOutOf(db, product_id):
     else:
         return False # We WONT run out (maybe)
 
+
+@app.route('/download')
 @getfromDB_Error
 def runOutReport(db):
     """
