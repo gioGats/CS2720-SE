@@ -1,8 +1,8 @@
 """
 File: db_create.py
 Author: Jacob Campbell; Ryan Giarusso
-Created: 3/1/2016
-Purpose: Test database creation file.  Generates sample entries in all database tables.
+Created: 3/1/2016 (Last Modified: 4/20/2016)
+Purpose: Generates a sample database used for testing and demonstrations.
 """
 from app import db
 from models import *

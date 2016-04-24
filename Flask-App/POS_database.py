@@ -1,8 +1,8 @@
 """
 File: models.py
 Author: Ethan Morisette; Braden Menke
-Created: 03/09/2016 (Last Modified: 4/20/2016)
-Purpose: to hold all of our database interactions in a single module
+Created: 03/09/2016 (Last Modified: 4/24/2016)
+Purpose: Contains all database interaction functions for passing data between the user interface and databases.
 """
 ########################################################################################################################
 # IMPORTS																											   #
@@ -22,6 +22,7 @@ from app import app
 ########################################################################################################################
 # WRAPPER FUNCTION      																					           #
 ########################################################################################################################
+
 def commitDB_Errorcatch(func):
     """
     Decorator to wrap a function in errorchecking

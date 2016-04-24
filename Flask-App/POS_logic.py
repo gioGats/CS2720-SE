@@ -1,8 +1,8 @@
 """
 File: POS_logic.py
 Author: Ethan Morisette; Ryan Giarusso
-Created: 3/1/2016
-Purpose: module that holds all class definitions, function definitions, and variables for displaying information
+Created: 3/1/2016 (Last Modified: 4/24/2016)
+Purpose: Module that holds all class definitions, function definitions, and variables for displaying information
 to the WEBSITE tables (not to be confused with our db tables)
 """
 

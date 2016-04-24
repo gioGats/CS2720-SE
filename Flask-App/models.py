@@ -1,8 +1,9 @@
 """
 File: models.py
 Author: Jacob Campbell; Ryan Giarusso
-Created: 3/10/2016
-Purpose: All the databases!
+Created: 3/10/2016 (Last Modified: 4/20/2016)
+Purpose: Contains the SQL-Alchemy database model extension classes for each database table and the associated
+automatic functionality when working with calculated entries.
 """
 
 from app import db
