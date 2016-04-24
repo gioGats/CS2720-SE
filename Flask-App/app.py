@@ -246,10 +246,18 @@ def cashierDeleteRow():
     POS_logic.cashier_table.delete_row(int(inputDict["row_number"]))
     return redirect(url_for('cashier'))
 
+@app.route('/customerinfo', methods=["POST"])
+def enterCustomerInfo():
+    return render_template("customerinfo.html")
+
 @app.route('/cashiercommit', methods=["POST"])
 def finishTransaction():
+    customer_name = request.form["customer-name"]
+    customer_contact = request.form["customer-contact"]
+    payment_type = int(request.form["payment-type"])
+
     # TODO send all information from the local receipt table to the database for storage
-    POS_database.updateCashierTable(db, POS_logic.cashier_table.rowsList)
+    POS_database.updateCashierTable(db, POS_logic.cashier_table.rowsList, customer_name, customer_contact, payment_type)
     # clear the local receipt table out
     POS_logic.cashier_table.clear_table()
     return redirect(url_for('cashier'))
@@ -258,6 +266,7 @@ def finishTransaction():
 def cashierCancel():
     POS_logic.cashier_table.clear_table()
     return redirect(url_for('cashier'))
+
 
 
 # -------------------------------------------------- #

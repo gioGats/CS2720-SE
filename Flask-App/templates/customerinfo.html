@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+   POS | Login
+{% endblock %}
+
+{% block navbar %}
+      <div class="navbar-header">
+        <a class="navbar-brand" a href="/">POS Application</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+                <li><a> Hello, {{ current_user.name }} </a></li>
+            {% else %}
+                <li><a> Hello, Guest </a></li>
+            {% endif %}
+
+
+            {%  if current_user.permissions == 1 %}                                       <!-- where does this get passed in? -->
+                  <li><a href="/reports">Reports</a></li>
+            {% endif %}
+
+            {%  if current_user.permissions == 1 or current_user.permissions == 2 %}
+                  <li class="active"><a href="/cashier">Cashier</a></li>
+            {% endif %}
+
+             {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+                  <li><a href="/stocker">Stocker</a></li>
+            {% endif %}
+
+            {% if current_user.is_authenticated %}
+                <li>
+                {% block dropdown %}
+                 {{ super() }}
+                {% endblock %}
+                </li>
+            {% endif %}
+
+            <li><a href="/">Home</a> </li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+{% endblock %}
+
+{% block content %}
+		<div id="pagecontent">
+			<div id="mainpanel">
+				<div class="container">
+				<form action="{{ url_for('finishTransaction') }}" method=post id="customer-info-form">
+
+					<div class="form-group">
+						<label for="customer-name-input">Customer Name</label>
+						<input type="text" class="form-control" id="customer-name-input" name="customer-name" placeholder="">
+					</div>
+
+					<div class="form-group">	
+						<label for="customer-contact-input">Customer Contact</label>
+						<input type="text" class="form-control" id="customer-contact-input" name="customer-contact" placeholder="">
+					</div>
+
+					<div class="form-group">	
+						<label for="payment-type-input">Payment Type</label>
+						<select class="form-control" id="payment-type-input" name="payment-type" form="customer-info-form">
+							<option value="1">Cash</option>
+							<option value="2">Credit</option>
+							<option value="3">Debit</option>
+							<option value="4">Check</option>
+							<option value="5">Other</option>
+						</select>
+					</div>
+
+					<button type="submit" class="btn btn-info">Finish Transaction</button>
+				</form>
+				</div>
+			</div>
+		</div>
+	
+{% endblock %}
