@@ -1,7 +1,9 @@
-# File : app.py
-# Date : 3/11/2016 (creation)
-# Desc : This is the master file for the Flask application.
-
+"""
+File: app.py
+Author: Jacob Campbell; Ethan Morisette
+Created: 3/11/2016
+Purpose: This is the master file for the Flask application.
+"""
 
 #############################
 # Import Statements

@@ -1,4 +1,5 @@
 """
+File: POS_logic.py
 Author: Ethan Morisette; Ryan Giarusso
 Created: 3/1/2016
 Purpose: module that holds all class definitions, function definitions, and variables for displaying information
