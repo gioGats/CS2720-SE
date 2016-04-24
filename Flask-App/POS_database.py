@@ -860,7 +860,7 @@ def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
 #########################################################################
 # Reporting Databases                                                   #
 #########################################################################
-@app.route('/download')
+#@app.route('/download')
 @commitDB_Errorcatch
 def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properly give back the right database's setup
     # TODO Joined tables : items_sold + transactions
@@ -926,7 +926,7 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
     return output
 
 
-@app.route('/download')
+#@app.route('/download')
 @getfromDB_Error
 def reportInfoCSV(db, dateTup = None):
     """
@@ -937,6 +937,27 @@ def reportInfoCSV(db, dateTup = None):
     """
     # SQLAlchemy is fucking magic. Look at this shit:
     allItemInfo = db.session.query(Item).join(Product).join(Supplier).all()
+    # That's supposed to work just right; automagically joins on foreign keys without specifications. Boom.
+    #outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
+    si = StringIO()
+    outcsv = csv.writer(si, delimiter=',')
+    outcsv.writerows(allItemInfo)
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename = export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
+
+
+@getfromDB_Error
+def reportRevenueAudit(db, dateTup = None):
+    """
+    Optional date range; gives a joined csv of things.
+    :param db: database pointer
+    :param dateTup: tuple; optional- should be of type (start_date,end_date,)
+    :return: response to a flask app that instantiates a download
+    """
+    # SQLAlchemy is fucking magic. Look at this shit:
+    allItemInfo = db.session.query(ItemSold).join(Transaction).all()
     # That's supposed to work just right; automagically joins on foreign keys without specifications. Boom.
     #outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
     si = StringIO()
@@ -971,7 +992,7 @@ def areWeGoingToRunOutOf(db, product_id):
         return False # We WONT run out (maybe)
 
 
-@app.route('/download')
+#@app.route('/download')
 @getfromDB_Error
 def runOutReport(db):
     """
@@ -996,5 +1017,32 @@ def runOutReport(db):
     output.headers["Content-type"] = "text/csv"
     return output
 
+#########################################################################
+# On-the-fly reporting                                                  #
+#########################################################################
+@getfromDB_Error
+def fuckyou(db, time):
+    """
+    Fuck you.
+    :param db: database pointer
+    :param time: "day", "week", "month", or a tuple of (start, end)
+    :return: (revenue, cost, prophet,) tuple
+    """
+    if time == 'day':
+        timetup = (datetime.date(datetime.today()), datetime.date(datetime.today()) + dt.timedelta(days = 1),)
+    elif time == 'week':
+        timetup = (datetime.date(datetime.today()) - dt.timedelta(weeks = 1),
+                   datetime.date(datetime.today()) + dt.timedelta(days = 1))
+    elif time == 'month':
+        aMonthAgo = datetime.today()
+        aMonthAgo = aMonthAgo - dt.timedelta(weeks = 4,
+                                             seconds = aMonthAgo.second,
+                                             minutes = aMonthAgo.minute,
+                                             hours = aMonthAgo.hour)
+        timetup = (aMonthAgo, datetime.today())
+    elif (type(time) == tuple):
+        timetup = time
+    else:
+        raise ValueError
 # TODO dated gets from db's
 # TODO reportInfo for products
