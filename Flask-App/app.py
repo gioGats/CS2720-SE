@@ -179,12 +179,27 @@ def discountsAddRow():
 # Requires: Login, Manager/Admin permission #
 @app.route('/reports')
 @login_required
-def reports():
+def reports():  
+    POS_logic.report_table.make_table([1,3,4],[4,3,4],[4,4,4])
     if is_manager(current_user):
-        return render_template("reports.html")
+        return render_template("reports.html", reportTable=POS_logic.report_table)
     else:
         return redirect('/')
 
+@app.route('/download', methods=["POST"])
+def downloadReport():
+    dropDownItem = request.form["report-dropdown"]
+
+    # if the report type is inventory worth report, do special download
+
+    # if the report type is revenue audit report, do special download
+
+    # if the report type is purchase order report, do special download
+
+    # otherwise do a database table report download
+    POS_database.toCSV(db, dropDownItem)
+
+    return redirect(url_for("reports"))
 
 # -------------------------------------------------- #
 

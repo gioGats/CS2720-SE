@@ -46,17 +46,17 @@
 {% block sidePanelContent %}
     <div class="side-panel-top">
         <h2>Generate a Report</h2>
-        <form id="manager-form">
+        <form id="manager-form" action="/download" method=post>
             <div class="form-group">
                 <label for="report-dropdown-input">Pick a report: </label>
-                <select class="form-control" id="report-dropdown-input" form="manager-form">
-                    <option value="items_table_data">Items Table Data</option>
-                    <option value="products_table_data">Products Table Data</option>
-                    <option value="transactions_table_data">Transactions Table Data</option>
-                    <option value="items_sold_table_data">Items Sold Table Data</option>
-                    <option value="discounts_table_data">Discounts Table Data</option>
-                    <option value="suppliers_table_data">Suppliers Table Data</option>
-                    <option value="users_table_data">Users Table Data</option>
+                <select class="form-control" id="report-dropdown-input" name="report-dropdown" form="manager-form">
+                    <option value="Items in Inventory">Items Table Data</option>
+                    <option value="Products">Products Table Data</option>
+                    <option value="Transactions">Transactions Table Data</option>
+                    <option value="Items Sold">Items Sold Table Data</option>
+                    <option value="Discounts">Discounts Table Data</option>
+                    <option value="Suppliers">Suppliers Table Data</option>
+                    <option value="Users">Users Table Data</option>
                     <option value="inventory_worth_report">Inventory Worth Report</option>
                     <option value="revenue_audit_report">Revenue Audit Report</option>
                     <option value="purchase_order_report">Purchase Order Report</option>
@@ -65,12 +65,12 @@
             
             <div class="form-group">
                 <label for="start-date-input">Start Date </label>
-                <input class="form-control" id="start-date-input" type="date" name="managerReportStart">
+                <input class="form-control" id="start-date-input" type="date" name="report-start-date">
             </div>
 
             <div class="form-group">
                 <label for="end-date-input">End Date </label>
-                <input class="form-control" id="end-date-input" type="date" name="managerReportEnd">
+                <input class="form-control" id="end-date-input" type="date" name="report-end-date">
             </div>
 
             <button type="submit" name="managerReportDownload" class="btn btn-info">Download Report</button>
@@ -88,6 +88,17 @@
             <td>Custom</td>
         </tr>
     </thead>
+
+    <tbody>
+        {% for row in reportTable.rowsList %}
+            <tr>
+                <td>{{ row.name }}</td>
+                <td>{{ row.daily }}</td>
+                <td>{{ row.weekly }}</td>
+                <td>{{ row.monthly }}</td>
+                <td>{{ row.custom }}</td>
+            </tr>
+        {% endfor %}
 {% endblock %}
 
 {% block tableInput %}
