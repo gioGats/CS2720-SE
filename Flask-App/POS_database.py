@@ -8,13 +8,14 @@
 ########################################################################################################################
 
 from flask_sqlalchemy import *
+from flask import make_response
 from sqlalchemy import func
 from models import *
 import re
 import csv
 import datetime as dt
 from datetime import datetime
-
+from io import StringIO
 
 ########################################################################################################################
 # WRAPPER FUNCTION      																					           #
@@ -867,7 +868,7 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
     Brings in a string of the type, gives ya' a .csv for that.
     :param db: database pointer
     :param theRedPill: str (the string of the type)
-    :return: - , but creates a .csv file locally (?)
+    :return: response to a flask app that instantiates a download
     """
     DATED_TABLES = ["discounts", # Discount.start_date / .end_date
                     "transactions", # Transaction.date
@@ -915,11 +916,15 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
     # No dates given, get the whole table.
     else:
         records = db.session.query(typeType).all()
-    outfile = open('{}.csv'.format(typeStr), 'wb')
-    outcsv = csv.writer(outfile)
-#    records = db.session.query(typeType).all()
-    [outcsv.writerow([getattr(curr, column.name) for column in typeType.__mapper__.columns]) for curr in records]
-    outfile.close()
+    #outfile = open('{}.csv'.format(typeStr), 'wb')
+    si = StringIO
+    outcsv = csv.writer(si)
+    outcsv.writerows(records)
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename = export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
+
 
 @getfromDB_Error
 def reportInfoCSV(db, dateTup = None):
@@ -927,23 +932,26 @@ def reportInfoCSV(db, dateTup = None):
     Optional date range; gives a joined csv of things.
     :param db: database pointer
     :param dateTup: tuple; optional- should be of type (start_date,end_date,)
-    :return:
+    :return: response to a flask app that instantiates a download
     """
     # SQLAlchemy is fucking magic. Look at this shit:
     allItemInfo = db.session.query(Item).join(Product).join(Supplier).all()
     # That's supposed to work just right; automagically joins on foreign keys without specifications. Boom.
-    outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
-    outcsv = csv.writer(outfile)
-    #[outcsv.writerow([gettattr(curr, column.name) for column in allItemInfo]) for curr in allItemInfo]
-    # TODO Write csv writing
-    outfile.close()
+    #outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
+    si = StringIO()
+    outcsv = csv.writer(si, delimiter = ',')
+    outcsv.writerows(allItemInfo)
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename = export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
 
 
 #########################################################################
 # Determine Ordering                                                    #
 #########################################################################
 @getfromDB_Error
-def areWeGoingToRunOut(db, product_id):
+def areWeGoingToRunOutOf(db, product_id):
     """
     Are we going to run out this week?
     :param db: database pointer
@@ -956,9 +964,34 @@ def areWeGoingToRunOut(db, product_id):
                                             .count() # Count how many we would've had.
     thisProduct = db.session.query(Product).filter(Product.product_id == product_id).first()
     if (thisProduct.inventory_count - productDelta) < thisProduct.min_inventory:
-        return True  # We WILL run out (maybe)
+        return thisProduct.join(Supplier)
+        # return True  # We WILL run out (maybe)
     else:
         return False # We WONT run out (maybe)
+
+@getfromDB_Error
+def runOutReport(db):
+    """
+    What things will we run out of this week
+    :param db: database pointer
+    :return: response to a flask app that instantiates a download
+    """
+    fullTable = db.session.query(Product).all()
+    predictionsList = []
+    for line in fullTable:
+        thisPrediction = areWeGoingToRunOutOf(db, line.id)
+        if thisPrediction != False:
+            thisPrediction = thisPrediction.join(Supplier)
+            predictionsList.append(thisPrediction)
+        else:
+            continue
+    si = StringIO()
+    writer = csv.writer(si)
+    writer.writerows(predictionsList)
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename = export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
 
 # TODO dated gets from db's
 # TODO reportInfo for products
