@@ -47,20 +47,47 @@
     <div class="side-panel-top">
         <h2>Generate a Report</h2>
         <form id="manager-form">
-            <select class="form-control" form="manager-form">
-                <option value="earnings_report">Earnings Report</option>
-                <option value="item_inventory_report">Item Inventory Report</option>
-                <option value="product_inventory_report">Product Inventory Report</option>
-                <option value="transaction_report">Transaction Report</option>
-            </select>
-            <input type="date" name="managerReportStart">
-            <input type="date" name="managerReportEnd">
+            <div class="form-group">
+                <label for="report-dropdown-input">Pick a report: </label>
+                <select class="form-control" id="report-dropdown-input" form="manager-form">
+                    <option value="items_table_data">Items Table Data</option>
+                    <option value="products_table_data">Products Table Data</option>
+                    <option value="transactions_table_data">Transactions Table Data</option>
+                    <option value="items_sold_table_data">Items Sold Table Data</option>
+                    <option value="discounts_table_data">Discounts Table Data</option>
+                    <option value="suppliers_table_data">Suppliers Table Data</option>
+                    <option value="users_table_data">Users Table Data</option>
+                    <option value="inventory_worth_report">Inventory Worth Report</option>
+                    <option value="revenue_audit_report">Revenue Audit Report</option>
+                    <option value="purchase_order_report">Purchase Order Report</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="start-date-input">Start Date </label>
+                <input class="form-control" id="start-date-input" type="date" name="managerReportStart">
+            </div>
+
+            <div class="form-group">
+                <label for="end-date-input">End Date </label>
+                <input class="form-control" id="end-date-input" type="date" name="managerReportEnd">
+            </div>
+
             <button type="submit" name="managerReportDownload" class="btn btn-info">Download Report</button>
         </form>
     </div>
 {% endblock %}
 
 {% block table %}
+    <thead class="table-header">
+        <tr>
+            <td></td>
+            <td>Daily</td>
+            <td>Weekly</td>
+            <td>Monthly</td>
+            <td>Custom</td>
+        </tr>
+    </thead>
 {% endblock %}
 
 {% block tableInput %}
