@@ -186,6 +186,22 @@ class StockerRow(ItemRow):
         self.quantity = quantity
         self.inventory_cost = inventory_cost
 
+class ReportRow(Row):
+    def __init__(self, name, daily, weekly, monthly, custom=0):
+        """
+        Holds data for the display of accounting information.
+        :param name: string; Title of row
+        :param daily: float; Value of this row for the past day
+        :param weekly: float; Value of this row for the past week
+        :param custom: float; Value of this row for a user defined date range
+        :return: None
+        """
+        Row.__init__(self)
+        self.name = name
+        self.daily = daily
+        self.weekly = weekly
+        self.monthly = monthly
+        self.custom = custom
 
 class Table:
     """
@@ -283,26 +299,56 @@ class StockerTable(Table):
             inventory_cost = self.rowsList[row_number-1].inventory_cost
         self.rowsList[row_number-1] = StockerRow(product_id, name, inventory_cost, quantity)
 
+class ReportTable(Table):
+
+    def __init__(self, revenue_list, cost_list, profit_list):
+        """
+        Holds data for the dashboard table in the reports window.
+        Takes as input three lists, one for each accounting line,
+        in the form: [daily, weekly, monthly]
+        :param revenue_list:
+        :param cost_list:
+        :param profit_list:
+        :return: None
+        """
+        Table.__init__(self)
+        self.add_row("Revenue", revenue_list[0], revenue_list[1], revenue_list[2])
+        self.add_row("Cost of Sale", cost_list[0], cost_list[1], cost_list[2])
+        self.add_row("Profit", profit_list[0], profit_list[1], profit_list[2])
+
+    def add_row(self, name, daily, weekly, monthly):
+        """
+        Adds a new row to the table.
+        :param name: Accounting line title {Revenue, Cost of Sale, Profit}
+        :param daily: float value for today
+        :param weekly: float value for this week
+        :param monthly: float value for this month
+        :return: None
+        """
+        new_row = ReportRow(name, daily, weekly, monthly)
+        self.rowsList.append(new_row)
+        self.rowCount += 1
+        self.mostRecentRow = new_row
+
+    def update_custom_column(self, new_revenue, new_cost, new_profit):
+        """
+        Updates all rows in the table with appropriate values for a new custom date range.
+        :param new_revenue: float
+        :param new_cost: float
+        :param new_profit: float
+        :return: None
+        """
+        self.rowsList[0].custom = new_revenue
+        self.rowsList[1].custom = new_cost
+        self.rowsList[2].custom = new_profit
+
+
+
+
 #######################################################################################################################
 # GLOBAL VARIABLES
 #######################################################################################################################
-# TODO Stage for delete
-"""
-# Tables for editors
-users_table = Table()
-suppliers_table = Table()
-products_table = Table()
-items_table = Table()
-items_sold_table = Table()
-discounts_table = Table()
-transactions_table = Table()
-"""
 
 # Tables for cashier/stocker
 cashier_table = CashierTable()
 stocker_table = StockerTable()
-
-######################################################################################################################
-# FUNCTION DEFINITIONS
-######################################################################################################################
-# TODO more functions needed?

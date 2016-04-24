@@ -122,6 +122,7 @@ class Product(db.Model):
 
 class ItemSold(db.Model):
     __tablename__ = "items_sold"
+    # TODO Correct foriegn key from product_id to transaction_id
 
     id = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer, nullable=False)
@@ -181,8 +182,8 @@ class Supplier(db.Model):
     __tablename__ = "suppliers"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(40), nullable=False)
 
     def __init__(self, name, email):
         """
