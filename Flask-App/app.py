@@ -191,8 +191,10 @@ def reports():
 @app.route('/download', methods=["POST"])
 def downloadReport():
     dropDownItem = request.form["report-dropdown"]
-    startDate = POS_display.convert_string_to_date(request.form["report-start-date"])
-    endDate = POS_display.convert_string_to_date(request.form["report-end-date"])
+    if request.form["report-start-date"]:
+        startDate = POS_display.convert_string_to_date(request.form["report-start-date"])
+    if request.form["report-end-date"]:
+        endDate = POS_display.convert_string_to_date(request.form["report-end-date"])
 
     # if the report type is inventory worth report, do special download
 
