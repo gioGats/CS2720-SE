@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module flask_bcrypt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>flask_bcrypt</strong></big></big> (version 0.7.1)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/flask_bcrypt.py">/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/flask_bcrypt.py</a></font></td></tr></table>
+    <p><tt>flaskext.bcrypt<br>
+---------------<br>
+&nbsp;<br>
+A&nbsp;Flask&nbsp;extension&nbsp;providing&nbsp;bcrypt&nbsp;hasing&nbsp;and&nbsp;comparison&nbsp;facilities.<br>
+&nbsp;<br>
+:copyright:&nbsp;(c)&nbsp;2011&nbsp;by&nbsp;Max&nbsp;Countryman.<br>
+:license:&nbsp;BSD,&nbsp;see&nbsp;LICENSE&nbsp;for&nbsp;more&nbsp;details.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="bcrypt.html">bcrypt</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="flask_bcrypt.html#Bcrypt">Bcrypt</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Bcrypt">class <strong>Bcrypt</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Bcrypt">Bcrypt</a>&nbsp;class&nbsp;container&nbsp;for&nbsp;password&nbsp;hashing&nbsp;and&nbsp;checking&nbsp;logic&nbsp;using&nbsp;<br>
+bcrypt,&nbsp;of&nbsp;course.&nbsp;This&nbsp;class&nbsp;may&nbsp;be&nbsp;used&nbsp;to&nbsp;intialize&nbsp;your&nbsp;Flask&nbsp;app&nbsp;<br>
+<a href="builtins.html#object">object</a>.&nbsp;The&nbsp;purpose&nbsp;is&nbsp;to&nbsp;provide&nbsp;a&nbsp;simple&nbsp;interface&nbsp;for&nbsp;overriding&nbsp;<br>
+Werkzeug's&nbsp;built-in&nbsp;password&nbsp;hashing&nbsp;utilities.<br>
+&nbsp;<br>
+Although&nbsp;such&nbsp;methods&nbsp;are&nbsp;not&nbsp;actually&nbsp;overriden,&nbsp;the&nbsp;API&nbsp;is&nbsp;intentionally&nbsp;<br>
+made&nbsp;similar&nbsp;so&nbsp;that&nbsp;existing&nbsp;applications&nbsp;which&nbsp;make&nbsp;use&nbsp;of&nbsp;the&nbsp;previous&nbsp;<br>
+hashing&nbsp;functions&nbsp;might&nbsp;be&nbsp;easily&nbsp;adapted&nbsp;to&nbsp;the&nbsp;stronger&nbsp;facility&nbsp;of&nbsp;<br>
+bcrypt.<br>
+&nbsp;<br>
+To&nbsp;get&nbsp;started&nbsp;you&nbsp;will&nbsp;wrap&nbsp;your&nbsp;application's&nbsp;app&nbsp;<a href="builtins.html#object">object</a>&nbsp;something&nbsp;like&nbsp;<br>
+this::<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;app&nbsp;=&nbsp;Flask(__name__)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bcrypt&nbsp;=&nbsp;<a href="#Bcrypt">Bcrypt</a>(app)<br>
+&nbsp;<br>
+Now&nbsp;the&nbsp;two&nbsp;primary&nbsp;utility&nbsp;methods&nbsp;are&nbsp;exposed&nbsp;via&nbsp;this&nbsp;<a href="builtins.html#object">object</a>,&nbsp;`bcrypt`.<br>
+So&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;the&nbsp;application,&nbsp;important&nbsp;data,&nbsp;such&nbsp;as&nbsp;passwords,&nbsp;<br>
+could&nbsp;be&nbsp;hashed&nbsp;using&nbsp;this&nbsp;syntax::<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;password&nbsp;=&nbsp;'hunter2'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pw_hash&nbsp;=&nbsp;bcrypt.<a href="#Bcrypt-generate_password_hash">generate_password_hash</a>(password)<br>
+&nbsp;<br>
+Once&nbsp;hashed,&nbsp;the&nbsp;value&nbsp;is&nbsp;irreversible.&nbsp;However&nbsp;in&nbsp;the&nbsp;case&nbsp;of&nbsp;validating&nbsp;<br>
+logins&nbsp;a&nbsp;simple&nbsp;hashing&nbsp;of&nbsp;candidate&nbsp;password&nbsp;and&nbsp;subsequent&nbsp;comparison.&nbsp;<br>
+Importantly&nbsp;a&nbsp;comparison&nbsp;should&nbsp;be&nbsp;done&nbsp;in&nbsp;constant&nbsp;time.&nbsp;This&nbsp;helps&nbsp;<br>
+prevent&nbsp;timing&nbsp;attacks.&nbsp;A&nbsp;simple&nbsp;utility&nbsp;method&nbsp;is&nbsp;provided&nbsp;for&nbsp;this::<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;candidate&nbsp;=&nbsp;'secret'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bcrypt.<a href="#Bcrypt-check_password_hash">check_password_hash</a>(pw_hash,&nbsp;candidate)<br>
+&nbsp;<br>
+If&nbsp;both&nbsp;the&nbsp;candidate&nbsp;and&nbsp;the&nbsp;existing&nbsp;password&nbsp;hash&nbsp;are&nbsp;a&nbsp;match&nbsp;<br>
+`check_password_hash`&nbsp;returns&nbsp;True.&nbsp;Otherwise,&nbsp;it&nbsp;returns&nbsp;False.<br>
+&nbsp;<br>
+..&nbsp;admonition::&nbsp;Namespacing&nbsp;Issues&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;It's&nbsp;worth&nbsp;noting&nbsp;that&nbsp;if&nbsp;you&nbsp;use&nbsp;the&nbsp;format,&nbsp;`bcrypt&nbsp;=&nbsp;<a href="#Bcrypt">Bcrypt</a>(app)`&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;you&nbsp;are&nbsp;effectively&nbsp;overriding&nbsp;the&nbsp;bcrypt&nbsp;module.&nbsp;Though&nbsp;it's&nbsp;unlikely&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;you&nbsp;would&nbsp;need&nbsp;to&nbsp;access&nbsp;the&nbsp;module&nbsp;outside&nbsp;of&nbsp;the&nbsp;scope&nbsp;of&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;extension&nbsp;be&nbsp;aware&nbsp;that&nbsp;it's&nbsp;overriden.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Alternatively&nbsp;consider&nbsp;using&nbsp;a&nbsp;different&nbsp;name,&nbsp;such&nbsp;as&nbsp;`flask_bcrypt&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<a href="#Bcrypt">Bcrypt</a>(app)`&nbsp;to&nbsp;prevent&nbsp;naming&nbsp;collisions.<br>
+&nbsp;<br>
+Additionally&nbsp;a&nbsp;configuration&nbsp;value&nbsp;for&nbsp;`BCRYPT_LOG_ROUNDS`&nbsp;may&nbsp;be&nbsp;set&nbsp;in&nbsp;<br>
+the&nbsp;configuration&nbsp;of&nbsp;the&nbsp;Flask&nbsp;app.&nbsp;If&nbsp;none&nbsp;is&nbsp;provided&nbsp;this&nbsp;will&nbsp;<br>
+internally&nbsp;be&nbsp;assigned&nbsp;to&nbsp;12.&nbsp;(This&nbsp;value&nbsp;is&nbsp;used&nbsp;in&nbsp;determining&nbsp;the&nbsp;<br>
+complexity&nbsp;of&nbsp;the&nbsp;encryption,&nbsp;see&nbsp;bcrypt&nbsp;for&nbsp;more&nbsp;details.)<br>
+&nbsp;<br>
+:param&nbsp;app:&nbsp;The&nbsp;Flask&nbsp;application&nbsp;<a href="builtins.html#object">object</a>.&nbsp;Defaults&nbsp;to&nbsp;None.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Bcrypt-__init__"><strong>__init__</strong></a>(self, app=None)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Bcrypt-check_password_hash"><strong>check_password_hash</strong></a>(self, pw_hash, password)</dt><dd><tt>Tests&nbsp;a&nbsp;password&nbsp;hash&nbsp;against&nbsp;a&nbsp;candidate&nbsp;password.&nbsp;The&nbsp;candidate&nbsp;<br>
+password&nbsp;is&nbsp;first&nbsp;hashed&nbsp;and&nbsp;then&nbsp;subsequently&nbsp;compared&nbsp;in&nbsp;constant&nbsp;<br>
+time&nbsp;to&nbsp;the&nbsp;existing&nbsp;hash.&nbsp;This&nbsp;will&nbsp;either&nbsp;return&nbsp;`True`&nbsp;or&nbsp;`False`.<br>
+&nbsp;<br>
+Example&nbsp;usage&nbsp;of&nbsp;:class:`check_password_hash`&nbsp;would&nbsp;look&nbsp;something&nbsp;<br>
+like&nbsp;this::<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pw_hash&nbsp;=&nbsp;bcrypt.<a href="#Bcrypt-generate_password_hash">generate_password_hash</a>('secret',&nbsp;10)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bcrypt.<a href="#Bcrypt-check_password_hash">check_password_hash</a>(pw_hash,&nbsp;'secret')&nbsp;#&nbsp;returns&nbsp;True<br>
+&nbsp;<br>
+:param&nbsp;pw_hash:&nbsp;The&nbsp;hash&nbsp;to&nbsp;be&nbsp;compared&nbsp;against.<br>
+:param&nbsp;password:&nbsp;The&nbsp;password&nbsp;to&nbsp;compare.</tt></dd></dl>
+
+<dl><dt><a name="Bcrypt-generate_password_hash"><strong>generate_password_hash</strong></a>(self, password, rounds=None)</dt><dd><tt>Generates&nbsp;a&nbsp;password&nbsp;hash&nbsp;using&nbsp;bcrypt.&nbsp;Specifying&nbsp;`rounds`&nbsp;<br>
+sets&nbsp;the&nbsp;log_rounds&nbsp;parameter&nbsp;of&nbsp;`bcrypt.gensalt()`&nbsp;which&nbsp;determines&nbsp;<br>
+the&nbsp;complexity&nbsp;of&nbsp;the&nbsp;salt.&nbsp;12&nbsp;is&nbsp;the&nbsp;default&nbsp;value.<br>
+&nbsp;<br>
+Example&nbsp;usage&nbsp;of&nbsp;:class:`generate_password_hash`&nbsp;might&nbsp;look&nbsp;something&nbsp;<br>
+like&nbsp;this::<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pw_hash&nbsp;=&nbsp;bcrypt.<a href="#Bcrypt-generate_password_hash">generate_password_hash</a>('secret',&nbsp;10)<br>
+&nbsp;<br>
+:param&nbsp;password:&nbsp;The&nbsp;password&nbsp;to&nbsp;be&nbsp;hashed.<br>
+:param&nbsp;rounds:&nbsp;The&nbsp;optional&nbsp;number&nbsp;of&nbsp;rounds.</tt></dd></dl>
+
+<dl><dt><a name="Bcrypt-init_app"><strong>init_app</strong></a>(self, app)</dt><dd><tt>Initalizes&nbsp;the&nbsp;application&nbsp;with&nbsp;the&nbsp;extension.<br>
+&nbsp;<br>
+:param&nbsp;app:&nbsp;The&nbsp;Flask&nbsp;application&nbsp;<a href="builtins.html#object">object</a>.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-check_password_hash"><strong>check_password_hash</strong></a>(pw_hash, password)</dt><dd><tt>This&nbsp;helper&nbsp;function&nbsp;wraps&nbsp;the&nbsp;eponymous&nbsp;method&nbsp;of&nbsp;:class:`<a href="#Bcrypt">Bcrypt</a>.`&nbsp;It&nbsp;<br>
+is&nbsp;intended&nbsp;to&nbsp;be&nbsp;used&nbsp;as&nbsp;a&nbsp;helper&nbsp;function&nbsp;at&nbsp;the&nbsp;expense&nbsp;of&nbsp;the&nbsp;<br>
+configuration&nbsp;variable&nbsp;provided&nbsp;when&nbsp;passing&nbsp;back&nbsp;the&nbsp;app&nbsp;<a href="builtins.html#object">object</a>.&nbsp;In&nbsp;other&nbsp;<br>
+words&nbsp;this&nbsp;shortcut&nbsp;does&nbsp;not&nbsp;make&nbsp;use&nbsp;of&nbsp;the&nbsp;app&nbsp;<a href="builtins.html#object">object</a>&nbsp;at&nbsp;all.<br>
+&nbsp;<br>
+To&nbsp;this&nbsp;this&nbsp;function,&nbsp;simple&nbsp;import&nbsp;it&nbsp;from&nbsp;the&nbsp;module&nbsp;and&nbsp;use&nbsp;it&nbsp;in&nbsp;a&nbsp;<br>
+similar&nbsp;fashion&nbsp;as&nbsp;the&nbsp;method&nbsp;would&nbsp;be&nbsp;used.&nbsp;Here&nbsp;is&nbsp;a&nbsp;quick&nbsp;example::<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;flask.ext.bcrypt&nbsp;import&nbsp;check_password_hash<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#-check_password_hash">check_password_hash</a>(pw_hash,&nbsp;'hunter2')&nbsp;#&nbsp;returns&nbsp;True<br>
+&nbsp;<br>
+:param&nbsp;pw_hash:&nbsp;The&nbsp;hash&nbsp;to&nbsp;be&nbsp;compared&nbsp;against.<br>
+:param&nbsp;password:&nbsp;The&nbsp;password&nbsp;to&nbsp;compare.</tt></dd></dl>
+ <dl><dt><a name="-generate_password_hash"><strong>generate_password_hash</strong></a>(password, rounds=None)</dt><dd><tt>This&nbsp;helper&nbsp;function&nbsp;wraps&nbsp;the&nbsp;eponymous&nbsp;method&nbsp;of&nbsp;:class:`<a href="#Bcrypt">Bcrypt</a>`.&nbsp;It&nbsp;<br>
+is&nbsp;intended&nbsp;to&nbsp;be&nbsp;used&nbsp;as&nbsp;a&nbsp;helper&nbsp;function&nbsp;at&nbsp;the&nbsp;expense&nbsp;of&nbsp;the&nbsp;<br>
+configuration&nbsp;variable&nbsp;provided&nbsp;when&nbsp;passing&nbsp;back&nbsp;the&nbsp;app&nbsp;<a href="builtins.html#object">object</a>.&nbsp;In&nbsp;other&nbsp;<br>
+words&nbsp;this&nbsp;shortcut&nbsp;does&nbsp;not&nbsp;make&nbsp;use&nbsp;of&nbsp;the&nbsp;app&nbsp;<a href="builtins.html#object">object</a>&nbsp;at&nbsp;all.<br>
+&nbsp;<br>
+To&nbsp;this&nbsp;this&nbsp;function,&nbsp;simple&nbsp;import&nbsp;it&nbsp;from&nbsp;the&nbsp;module&nbsp;and&nbsp;use&nbsp;it&nbsp;in&nbsp;a&nbsp;<br>
+similar&nbsp;fashion&nbsp;as&nbsp;the&nbsp;method&nbsp;would&nbsp;be&nbsp;used.&nbsp;Here&nbsp;is&nbsp;a&nbsp;quick&nbsp;example::<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;flask.ext.bcrypt&nbsp;import&nbsp;generate_password_hash<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pw_hash&nbsp;=&nbsp;<a href="#-generate_password_hash">generate_password_hash</a>('hunter2',&nbsp;10)<br>
+&nbsp;<br>
+:param&nbsp;password:&nbsp;The&nbsp;password&nbsp;to&nbsp;be&nbsp;hashed.<br>
+:param&nbsp;rounds:&nbsp;The&nbsp;optional&nbsp;number&nbsp;of&nbsp;rounds.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['Bcrypt', 'check_password_hash', 'generate_password_hash']<br>
+<strong>__copyright__</strong> = '(c) 2011 by Max Countryman'<br>
+<strong>__license__</strong> = 'BSD'<br>
+<strong>__version_info__</strong> = ('0', '7', '1')</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Max&nbsp;Countryman</td></tr></table>
+</body></html>

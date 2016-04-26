@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module app</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>app</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/app.py">/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/app.py</a></font></td></tr></table>
+    <p><tt>File:&nbsp;app.py<br>
+Author:&nbsp;Jacob&nbsp;Campbell;&nbsp;Ethan&nbsp;Morisette<br>
+Created:&nbsp;3/11/2016<br>
+Purpose:&nbsp;This&nbsp;is&nbsp;the&nbsp;master&nbsp;file&nbsp;for&nbsp;the&nbsp;Flask&nbsp;application.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="POS_database.html">POS_database</a><br>
+<a href="POS_display.html">POS_display</a><br>
+<a href="POS_logic.html">POS_logic</a><br>
+<a href="flask.blueprints.html">flask.blueprints</a><br>
+<a href="flask.config.html">flask.config</a><br>
+</td><td width="25%" valign=top><a href="flask.ctx.html">flask.ctx</a><br>
+<a href="datetime.html">datetime</a><br>
+<a href="flask.debughelpers.html">flask.debughelpers</a><br>
+<a href="sqlalchemy.event.html">sqlalchemy.event</a><br>
+<a href="flask.globals.html">flask.globals</a><br>
+</td><td width="25%" valign=top><a href="flask.helpers.html">flask.helpers</a><br>
+<a href="flask.json.html">flask.json</a><br>
+<a href="flask.module.html">flask.module</a><br>
+<a href="flask.sessions.html">flask.sessions</a><br>
+<a href="flask.signals.html">flask.signals</a><br>
+</td><td width="25%" valign=top><a href="flask.templating.html">flask.templating</a><br>
+<a href="flask.wrappers.html">flask.wrappers</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-cashier"><strong>cashier</strong></a>()</dt></dl>
+ <dl><dt><a name="-cashierAddRow"><strong>cashierAddRow</strong></a>()</dt></dl>
+ <dl><dt><a name="-cashierCancel"><strong>cashierCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-cashierDeleteRow"><strong>cashierDeleteRow</strong></a>()</dt></dl>
+ <dl><dt><a name="-deleteDBRow"><strong>deleteDBRow</strong></a>(dbTableName)</dt></dl>
+ <dl><dt><a name="-discountDBCancel"><strong>discountDBCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-discountDBDeleteDiscount"><strong>discountDBDeleteDiscount</strong></a>()</dt></dl>
+ <dl><dt><a name="-discountDBUpdateDiscount"><strong>discountDBUpdateDiscount</strong></a>()</dt></dl>
+ <dl><dt><a name="-discounts"><strong>discounts</strong></a>()</dt></dl>
+ <dl><dt><a name="-discountsAddRow"><strong>discountsAddRow</strong></a>()</dt></dl>
+ <dl><dt><a name="-discountsDB"><strong>discountsDB</strong></a>()</dt></dl>
+ <dl><dt><a name="-downloadReport"><strong>downloadReport</strong></a>()</dt></dl>
+ <dl><dt><a name="-escape"><strong>escape</strong></a>(...)</dt><dd><tt><a href="#-escape">escape</a>(s)&nbsp;-&gt;&nbsp;markup<br>
+&nbsp;<br>
+Convert&nbsp;the&nbsp;characters&nbsp;&amp;,&nbsp;&lt;,&nbsp;&gt;,&nbsp;',&nbsp;and&nbsp;"&nbsp;in&nbsp;string&nbsp;s&nbsp;to&nbsp;HTML-safe<br>
+sequences.&nbsp;&nbsp;Use&nbsp;this&nbsp;if&nbsp;you&nbsp;need&nbsp;to&nbsp;display&nbsp;text&nbsp;that&nbsp;might&nbsp;contain<br>
+such&nbsp;characters&nbsp;in&nbsp;HTML.&nbsp;&nbsp;Marks&nbsp;return&nbsp;value&nbsp;as&nbsp;markup&nbsp;string.</tt></dd></dl>
+ <dl><dt><a name="-finishTransaction"><strong>finishTransaction</strong></a>()</dt></dl>
+ <dl><dt><a name="-itemDBCancel"><strong>itemDBCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-itemDBDeleteItem"><strong>itemDBDeleteItem</strong></a>()</dt></dl>
+ <dl><dt><a name="-itemDBUpdateItem"><strong>itemDBUpdateItem</strong></a>()</dt></dl>
+ <dl><dt><a name="-itemsDB"><strong>itemsDB</strong></a>(page)</dt></dl>
+ <dl><dt><a name="-itemsoldDBCancel"><strong>itemsoldDBCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-itemsoldDBDeleteItemsold"><strong>itemsoldDBDeleteItemsold</strong></a>()</dt></dl>
+ <dl><dt><a name="-itemsoldDBUpdateItemsold"><strong>itemsoldDBUpdateItemsold</strong></a>()</dt></dl>
+ <dl><dt><a name="-itemssoldDB"><strong>itemssoldDB</strong></a>()</dt></dl>
+ <dl><dt><a name="-load_user"><strong>load_user</strong></a>(user_id)</dt><dd><tt>#&nbsp;The&nbsp;magic&nbsp;that&nbsp;makes&nbsp;foreign&nbsp;keys&nbsp;activated&nbsp;in&nbsp;sqlite</tt></dd></dl>
+ <dl><dt><a name="-login"><strong>login</strong></a>()</dt><dd><tt>#&nbsp;Home&nbsp;Route&nbsp;(login&nbsp;page)&nbsp;#</tt></dd></dl>
+ <dl><dt><a name="-logout"><strong>logout</strong></a>()</dt><dd><tt>#&nbsp;Logout&nbsp;Route(has&nbsp;no&nbsp;page,&nbsp;merely&nbsp;a&nbsp;function)&nbsp;#</tt></dd></dl>
+ <dl><dt><a name="-productDBCancel"><strong>productDBCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-productDBDeleteProduct"><strong>productDBDeleteProduct</strong></a>()</dt></dl>
+ <dl><dt><a name="-productDBUpdateProduct"><strong>productDBUpdateProduct</strong></a>()</dt></dl>
+ <dl><dt><a name="-productsDB"><strong>productsDB</strong></a>()</dt></dl>
+ <dl><dt><a name="-register"><strong>register</strong></a>()</dt></dl>
+ <dl><dt><a name="-reports"><strong>reports</strong></a>()</dt></dl>
+ <dl><dt><a name="-set_sqlite_pragma"><strong>set_sqlite_pragma</strong></a>(dbapi_connection, connection_record)</dt></dl>
+ <dl><dt><a name="-stocker"><strong>stocker</strong></a>()</dt></dl>
+ <dl><dt><a name="-stockerAddRow"><strong>stockerAddRow</strong></a>()</dt></dl>
+ <dl><dt><a name="-stockerCancel"><strong>stockerCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-stockerDeleteRow"><strong>stockerDeleteRow</strong></a>()</dt></dl>
+ <dl><dt><a name="-supplierDB"><strong>supplierDB</strong></a>()</dt></dl>
+ <dl><dt><a name="-supplierDBCancel"><strong>supplierDBCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-supplierDBDeleteSupplier"><strong>supplierDBDeleteSupplier</strong></a>()</dt></dl>
+ <dl><dt><a name="-supplierDBUpdateSupplier"><strong>supplierDBUpdateSupplier</strong></a>()</dt></dl>
+ <dl><dt><a name="-transactionDBCancel"><strong>transactionDBCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-transactionDBDeleteTransaction"><strong>transactionDBDeleteTransaction</strong></a>()</dt></dl>
+ <dl><dt><a name="-transactionDBUpdateTransaction"><strong>transactionDBUpdateTransaction</strong></a>()</dt></dl>
+ <dl><dt><a name="-transactionsDB"><strong>transactionsDB</strong></a>()</dt></dl>
+ <dl><dt><a name="-updateInventory"><strong>updateInventory</strong></a>()</dt></dl>
+ <dl><dt><a name="-userDB"><strong>userDB</strong></a>()</dt></dl>
+ <dl><dt><a name="-userDBCancel"><strong>userDBCancel</strong></a>()</dt></dl>
+ <dl><dt><a name="-userDBDeleteUser"><strong>userDBDeleteUser</strong></a>()</dt></dl>
+ <dl><dt><a name="-userDBUpdateUser"><strong>userDBUpdateUser</strong></a>()</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
+<strong>app</strong> = &lt;Flask 'app'&gt;<br>
+<strong>appcontext_popped</strong> = &lt;blinker.base.NamedSignal object at 0x1036ade80; 'appcontext-popped'&gt;<br>
+<strong>appcontext_pushed</strong> = &lt;blinker.base.NamedSignal object at 0x1036adcc0; 'appcontext-pushed'&gt;<br>
+<strong>appcontext_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1036adc88; 'appcontext-tearing-down'&gt;<br>
+<strong>bcrypt</strong> = &lt;flask_bcrypt.Bcrypt object&gt;<br>
+<strong>current_app</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>current_user</strong> = None<br>
+<strong>db</strong> = &lt;SQLAlchemy engine='sqlite:///items.db'&gt;<br>
+<strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>got_request_exception</strong> = &lt;blinker.base.NamedSignal object at 0x1036adc50; 'got-request-exception'&gt;<br>
+<strong>json_available</strong> = True<br>
+<strong>login_manager</strong> = &lt;helper.LoginManager object&gt;<br>
+<strong>message_flashed</strong> = &lt;blinker.base.NamedSignal object at 0x1036b5860; 'message-flashed'&gt;<br>
+<strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>request_finished</strong> = &lt;blinker.base.NamedSignal object at 0x1036adb00; 'request-finished'&gt;<br>
+<strong>request_started</strong> = &lt;blinker.base.NamedSignal object at 0x1036ada90; 'request-started'&gt;<br>
+<strong>request_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1036adc18; 'request-tearing-down'&gt;<br>
+<strong>session</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>signals_available</strong> = True<br>
+<strong>template_rendered</strong> = &lt;blinker.base.NamedSignal object at 0x1036ada20; 'template-rendered'&gt;</td></tr></table>
+</body></html>

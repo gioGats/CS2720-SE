@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module POS_helpers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>POS_helpers</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/POS_helpers.py">/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/POS_helpers.py</a></font></td></tr></table>
+    <p><tt>File&nbsp;:&nbsp;POS_helpers.py<br>
+Author:&nbsp;Ethan&nbsp;Morisette<br>
+Created&nbsp;:&nbsp;3/15/2016<br>
+Purpose&nbsp;:&nbsp;This&nbsp;is&nbsp;the&nbsp;file&nbsp;with&nbsp;helper&nbsp;functions&nbsp;for&nbsp;the&nbsp;POS&nbsp;Application.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="POS_database.html">POS_database</a><br>
+<a href="POS_display.html">POS_display</a><br>
+<a href="POS_logic.html">POS_logic</a><br>
+<a href="flask.blueprints.html">flask.blueprints</a><br>
+<a href="flask.config.html">flask.config</a><br>
+</td><td width="25%" valign=top><a href="flask.ctx.html">flask.ctx</a><br>
+<a href="datetime.html">datetime</a><br>
+<a href="flask.debughelpers.html">flask.debughelpers</a><br>
+<a href="sqlalchemy.event.html">sqlalchemy.event</a><br>
+<a href="flask.globals.html">flask.globals</a><br>
+</td><td width="25%" valign=top><a href="flask.helpers.html">flask.helpers</a><br>
+<a href="flask.json.html">flask.json</a><br>
+<a href="flask.module.html">flask.module</a><br>
+<a href="flask.sessions.html">flask.sessions</a><br>
+<a href="flask.signals.html">flask.signals</a><br>
+</td><td width="25%" valign=top><a href="flask.templating.html">flask.templating</a><br>
+<a href="flask.wrappers.html">flask.wrappers</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-escape"><strong>escape</strong></a>(...)</dt><dd><tt><a href="#-escape">escape</a>(s)&nbsp;-&gt;&nbsp;markup<br>
+&nbsp;<br>
+Convert&nbsp;the&nbsp;characters&nbsp;&amp;,&nbsp;&lt;,&nbsp;&gt;,&nbsp;',&nbsp;and&nbsp;"&nbsp;in&nbsp;string&nbsp;s&nbsp;to&nbsp;HTML-safe<br>
+sequences.&nbsp;&nbsp;Use&nbsp;this&nbsp;if&nbsp;you&nbsp;need&nbsp;to&nbsp;display&nbsp;text&nbsp;that&nbsp;might&nbsp;contain<br>
+such&nbsp;characters&nbsp;in&nbsp;HTML.&nbsp;&nbsp;Marks&nbsp;return&nbsp;value&nbsp;as&nbsp;markup&nbsp;string.</tt></dd></dl>
+ <dl><dt><a name="-is_cashier"><strong>is_cashier</strong></a>(current_user)</dt></dl>
+ <dl><dt><a name="-is_manager"><strong>is_manager</strong></a>(current_user)</dt><dd><tt>#&nbsp;Functions&nbsp;to&nbsp;help&nbsp;manage&nbsp;user&nbsp;login&nbsp;and&nbsp;permissions&nbsp;#</tt></dd></dl>
+ <dl><dt><a name="-is_stocker"><strong>is_stocker</strong></a>(current_user)</dt></dl>
+ <dl><dt><a name="-redirect_after_login"><strong>redirect_after_login</strong></a>(current_user)</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
+<strong>app</strong> = &lt;Flask 'app'&gt;<br>
+<strong>appcontext_popped</strong> = &lt;blinker.base.NamedSignal object at 0x1036beb38; 'appcontext-popped'&gt;<br>
+<strong>appcontext_pushed</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8f98; 'appcontext-pushed'&gt;<br>
+<strong>appcontext_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8f60; 'appcontext-tearing-down'&gt;<br>
+<strong>bcrypt</strong> = &lt;flask_bcrypt.Bcrypt object&gt;<br>
+<strong>current_app</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>current_user</strong> = None<br>
+<strong>db</strong> = &lt;SQLAlchemy engine='sqlite:///items.db'&gt;<br>
+<strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>got_request_exception</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8f28; 'got-request-exception'&gt;<br>
+<strong>json_available</strong> = True<br>
+<strong>login_manager</strong> = &lt;helper.LoginManager object&gt;<br>
+<strong>message_flashed</strong> = &lt;blinker.base.NamedSignal object at 0x1036be198; 'message-flashed'&gt;<br>
+<strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>request_finished</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8dd8; 'request-finished'&gt;<br>
+<strong>request_started</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8d68; 'request-started'&gt;<br>
+<strong>request_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8ef0; 'request-tearing-down'&gt;<br>
+<strong>session</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>signals_available</strong> = True<br>
+<strong>template_rendered</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8cf8; 'template-rendered'&gt;</td></tr></table>
+</body></html>
