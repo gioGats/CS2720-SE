@@ -435,11 +435,11 @@ def productDBUpdateProduct():
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
     if (inputDict["product-id"]):
-        POS_database.editProduct(db, inputDict["product-id"], inputDict["product-name"], inputDict["supplier-id"], inputDict["inventory-count"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
+        POS_database.editProduct(db, inputDict["product-id"], inputDict["product-name"], inputDict["supplier-id"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
 
     # else if the user did not enter an id, add a new user
     else:
-        POS_database.addProduct(db, inputDict["product-name"], inputDict["supplier-id"],  inputDict["inventory-count"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
+        POS_database.addProduct(db, inputDict["product-name"], inputDict["supplier-id"],  inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
 
     # reload the page
     return redirect(url_for('productsDB'))
@@ -457,7 +457,8 @@ def productDBCancel():
 @login_required
 def transactionsDB():
     result = db.session.query(Transaction).all()
-    return render_template("transactionsDB.html", transactionsDBTable=result)
+    error = "You Suck"
+    return render_template("transactionsDB.html", transactionsDBTable=result, error=error)
 
 @app.route('/transactiondb-delete', methods=["POST"])
 @login_required
