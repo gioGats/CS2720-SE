@@ -1,7 +1,7 @@
 {% extends "contenttemplate.html" %}
 
 {% block title %}
-	Stocker Menu
+	POS | Stocker
 {% endblock %}
 
 
@@ -72,7 +72,9 @@
             <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerAddRow') }}" formmethod="post">Update</button>
             <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerCancel') }}" formmethod="post">Cancel</button>
         </form>
-        <form action="{{ url_for('updateInventory') }}" method=post>
+        <div style="padding-top: 10px;">
+            <form action="{{ url_for('updateInventory') }}" method=post>
+                </div>
             <button type="submit" class="btn btn-info">Update Inventory</button>
         </form>
     </div>
