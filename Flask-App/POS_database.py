@@ -252,6 +252,17 @@ def decProduct(db, productID):
     result.inventory_count -= 1
     # Needs to be committed outside of here
 
+@getfromDB_Error
+def getMaxProductID(db):
+    """
+    Gets the max product id in the products table
+    :param db: database pointer
+    :return: integer
+    """
+
+    result = db.session.query(func.max(Product.id)).first()
+    return result[0]
+
 
 #########################################################################
 # Items/ItemSold database Access                                        #
@@ -412,6 +423,28 @@ def getItemData(db, itemID):
                      item.author_id])
     return itemTup
 
+@getfromDB_Error
+def getMaxItemID(db):
+    """
+    Gets the max item id in the item table
+    :param db: database pointer
+    :return: integer
+    """
+
+    result = db.session.query(func.max(Item.id)).first()
+    return result[0]
+
+@getfromDB_Error
+def getMaxItemSoldID(db):
+    """
+    Gets the max item id in the item table
+    :param db: database pointer
+    :return: integer
+    """
+
+    result = db.session.query(func.max(ItemSold.id)).first()
+    return result[0]
+
 
 #########################################################################
 # Supplier database Access                                              #
@@ -497,6 +530,16 @@ def destroySupplier(db, supplierID):
     # Commit our changes
     db.session.commit()
 
+@getfromDB_Error
+def getMaxSupplierID(db):
+    """
+    Gets the max supplier id in the suppliers table
+    :param db: database pointer
+    :return: integer
+    """
+
+    result = db.session.query(func.max(Supplier.id)).first()
+    return result[0]
 
 #########################################################################
 # Discount database Access                                              #
@@ -552,6 +595,16 @@ def destroyDiscount(db, discountID):
     # Commit our changes
     db.session.commit()
 
+@getfromDB_Error
+def getMaxDiscountID(db):
+    """
+    Gets the max discount id in the discounts table
+    :param db: database pointer
+    :return: integer
+    """
+
+    result = db.session.query(func.max(Discount.id)).first()
+    return result[0]
 
 #########################################################################
 # Transaction database Access                                           #
@@ -604,6 +657,17 @@ def addTransaction(db, cust_name, cust_contact, payment_type):
     # Commit that
     db.session.commit()
     # return the transaction ID of most recent transaction add
+    return result[0]
+
+@getfromDB_Error
+def getMaxTransactionID(db):
+    """
+    Gets the max transaction id in the transactions table
+    :param db: database pointer
+    :return: integer
+    """
+
+    result = db.session.query(func.max(Transaction.id)).first()
     return result[0]
 
 #########################################################################
@@ -687,6 +751,17 @@ def destroyUser(db, id):
     db.session.query(User).filter(User.id == id).delete()
     # Commit the change!
     db.session.commit()
+
+@getfromDB_Error
+def getMaxUserID(db):
+    """
+    Gets the max user id in the users table
+    :param db: database pointer
+    :return: integer
+    """
+
+    result = db.session.query(func.max(User.id)).first()
+    return result[0]
 
 
 #########################################################################

@@ -8,14 +8,22 @@
 	    <form id="database-form">
 	    	<div class="form-group">
 		    	<label for="idInput">ID: </label>
-		        <input type="number" class="form-control" name="DatabaseID" id="idInput">
-		        <button type="submit" class="btn btn-info" form="database-form" formaction={% block deleteURL %}{% endblock %} formmethod="post" >Delete</button>
+		        <input type="number" class="form-control" name="DatabaseID" id="idInput" min=1>
 	    	</div>
+	    	
+	        <div class="form-group">
+	        	<button type="submit" class="btn btn-info" form="database-form" formaction={% block deleteURL %}{% endblock %} formmethod="post" >Delete</button>
+	        </div>
 	        
 	        {% block formData %}{% endblock %}
 
-	        <button type="submit" class="btn btn-info" form="database-form" formaction={% block updateURL %}{% endblock %} formmethod="post" >Update</button>
-	        <button type="submit" class="btn btn-info" form="database-form" formaction={% block cancelURL %}{% endblock %} formmethod="post">Cancel</button>
+	        <div class="form-group">
+		        <button type="submit" class="btn btn-info" form="database-form" formaction={% block updateURL %}{% endblock %} formmethod="post" >Update</button>
+	        </div>
+
+	        <div class="form-group">
+		        <button type="submit" class="btn btn-info" form="database-form" formaction={% block cancelURL %}{% endblock %} formmethod="post">Cancel</button>
+	    	</div>
 	    </form>
     </div>
 {% endblock %}

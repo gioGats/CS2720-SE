@@ -430,18 +430,31 @@ def register():
 @app.route('/itemsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
 def itemsDB(page):
+    global error
+
     if is_manager(current_user) or is_cashier(current_user):
         pagination = Item.query.paginate(page, 16)
-        return render_template("itemsDB.html", pagination=pagination)
+        return render_template("itemsDB.html", pagination=pagination, error=error)
     else:
         return redirect(url_for('login'))
 
 @app.route('/itemdb-delete', methods=["POST"])
 @login_required
 def itemDBDeleteItem():
-    # send it to the helper!
-    deleteDBRow("item")
-    # reload the page
+    global error
+    error = None
+    
+    inputDict = POS_display.get_item_row(request)
+
+    # if the id input is greater than the max id in the database, then print error
+    if (int(inputDict["item-id"]) > POS_database.getMaxItemID(db)):
+        error = "You entered an item ID that is out of bounds."
+        
+    # otherwise delete the row
+    else: 
+        # send it to the helper!
+        deleteDBRow("item")
+
     return redirect(url_for('itemsDB'))
 
 @app.route('/itemdb-add', methods=["POST"])
@@ -477,15 +490,28 @@ def itemDBCancel():
 @app.route('/productsDB', methods=['GET', 'POST'])
 @login_required
 def productsDB():
+    global error
     result = db.session.query(Product).all()
-    return render_template("productsDB.html", productsDBTable=result)
+    return render_template("productsDB.html", productsDBTable=result, error=error)
 
 @app.route('/productdb-delete', methods=["POST"])
 @login_required
 def productDBDeleteProduct():
-    # send it to the helper!
-    deleteDBRow("product")
-    # reload the page
+    global error
+    error = None
+    
+    inputDict = POS_display.get_product_row(request)
+
+    # if the id input is greater than the max id in the database, then print error
+    if (int(inputDict["product-id"]) > POS_database.getMaxProductID(db)):
+        error = "You entered a product ID that is out of bounds."
+        
+    # otherwise delete the row
+    else: 
+        # send it to the helper!
+        deleteDBRow("product")
+
+    # always reload the page
     return redirect(url_for('productsDB'))
 
 @app.route('/productdb-add', methods=["POST"])
@@ -524,9 +550,21 @@ def transactionsDB():
 @app.route('/transactiondb-delete', methods=["POST"])
 @login_required
 def transactionDBDeleteTransaction():
-    # send it to the helper!
-    deleteDBRow("transaction")
-    # reload the page
+    global error
+    error = None
+    
+    inputDict = POS_display.get_transaction_row(request)
+
+    # if the id input is greater than the max id in the database, then print error
+    if (int(inputDict["transaction-id"]) > POS_database.getMaxTransactionID(db)):
+        error = "You entered a transaction ID that is out of bounds."
+        
+    # otherwise delete the row
+    else: 
+        # send it to the helper!
+        deleteDBRow("transaction")
+
+    # always reload the page
     return redirect(url_for('transactionsDB'))
 
 @app.route('/transactiondb-add', methods=["POST"])
@@ -559,13 +597,26 @@ def transactionDBCancel():
 @app.route('/itemssoldDB', methods=['GET', 'POST'])
 @login_required
 def itemssoldDB():
+    global error
     result = db.session.query(ItemSold).all()
-    return render_template("itemssoldDB.html", itemsSoldDBTable=result)
+    return render_template("itemssoldDB.html", itemsSoldDBTable=result, error=error)
 
 @app.route('/itemsolddb-delete', methods=["POST"])
 @login_required
 def itemsoldDBDeleteItemsold():
-    #TODO database support for deleting itemssold
+    global error
+    error = None
+    
+    inputDict = POS_display.get_itemsold_row(request)
+
+    # if the id input is greater than the max id in the database, then print error
+    if (int(inputDict["itemsold_id"]) > POS_database.getMaxItemSoldID(db)):
+        error = "You entered an Item Sold ID that is out of bounds."
+        
+    # otherwise delete the row
+    else: 
+        # send it to the helper!
+        deleteDBRow("itemsold")
 
     # reload the page
     return redirect(url_for('itemssoldDB'))
@@ -589,15 +640,28 @@ def itemsoldDBCancel():
 @app.route('/discountsDB', methods=['GET', 'POST'])
 @login_required
 def discountsDB():
+    global error
     result = db.session.query(Discount).all()
-    return render_template("discountsDB.html", discountsDBTable=result)
+    return render_template("discountsDB.html", discountsDBTable=result, error=error)
 
 @app.route('/discountdb-delete', methods=["POST"])
 @login_required
 def discountDBDeleteDiscount():
-    # send it to the helper!
-    deleteDBRow("discount")
-    # reload the page
+    global error
+    error = None
+    
+    inputDict = POS_display.get_discount_row(request)
+
+    # if the id input is greater than the max id in the database, then print error
+    if (int(inputDict["discount-id"]) > POS_database.getMaxDiscountID(db)):
+        error = "You entered a discount ID that is out of bounds."
+        
+    # otherwise delete the row
+    else: 
+        # send it to the helper!
+        deleteDBRow("discount")
+
+    # always reload the page
     return redirect(url_for('discountsDB'))
 
 @app.route('/discountdb-add', methods=["POST"])
@@ -634,22 +698,36 @@ def discountDBCancel():
 @app.route('/supplierDB', methods=['GET', 'POST'])
 @login_required
 def supplierDB():
+    global error
     result = db.session.query(Supplier).all()
-    return render_template("suppliersDB.html", suppliersDBTable=result)
+    return render_template("suppliersDB.html", suppliersDBTable=result, error=error)
 
 @app.route('/supplierdb-delete', methods=["POST"])
 @login_required
 def supplierDBDeleteSupplier():
-    # send it to the helper!
-    deleteDBRow("supplier")
+    global error
+    error = None
+    
+    inputDict = POS_display.get_supplier_row(request)
 
-    # reload the page
+    # if the id input is greater than the max id in the database, then print error
+    if (int(inputDict["supplier-id"]) > POS_database.getMaxSupplierID(db)):
+        error = "You entered a supplier ID that is out of bounds."
+
+    # otherwise delete the row
+    else:
+        # send it to the helper!
+        deleteDBRow("supplier")
+
+    # always reload the page
     return redirect(url_for('supplierDB'))
 
 @app.route('/supplierdb-add', methods=["POST"])
 def supplierDBUpdateSupplier():
     # get the user input from the form submit
     inputDict = POS_display.get_supplier_row(request)
+
+
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
@@ -675,14 +753,26 @@ def supplierDBCancel():
 @app.route('/userDB', methods=['GET', 'POST'])
 @login_required
 def userDB():
+    global error
     result = db.session.query(User).all()
-    return render_template("userDB.html", usersDBTable=result)
+    return render_template("userDB.html", usersDBTable=result, error=error)
 
 @app.route('/userdb-delete', methods=["POST"])
 @login_required
 def userDBDeleteUser():
-    # send it to the helper!
-    deleteDBRow("user")
+    global error
+    error = None
+    
+    inputDict = POS_display.get_user_row(request)
+
+    # if the id input is greater than the max id in the database, then print error
+    if (int(inputDict["user-id"]) > POS_database.getMaxUserID(db)):
+        error = "You entered a user ID that is out of bounds."
+
+    # otherwise delete the row
+    else:
+        # send it to the helper!
+        deleteDBRow("user")
 
     # reload the page
     return redirect(url_for('userDB'))
