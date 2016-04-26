@@ -347,8 +347,19 @@ def stockerAddRow():
 
 @app.route('/stockerdelete', methods=["POST"])
 def stockerDeleteRow():
+    global error
+    error = None
     inputDict = POS_display.get_stocker_row(request)
-    POS_logic.stocker_table.delete_row(int(inputDict["row_number"]))
+
+    # if the enter row number is out of bounds, print error
+    if (int(inputDict["row_number"]) > POS_logic.stocker_table.get_row_count()):
+        error = "That row number is out of bounds!"
+
+    # otherwise go ahead and delete the row
+    else:
+        POS_logic.stocker_table.delete_row(int(inputDict["row_number"]))
+
+    # always reload the stocker page
     return redirect(url_for('stocker'))
 
 @app.route('/stockercommit', methods=["POST"])

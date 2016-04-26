@@ -49,7 +49,7 @@
 		<form id="cashierForm" method=post>
 			<div class="form-group">
 				<label for="row-number-input">Row Number: </label>
-				<input type="number" class="form-control" name="row_number">
+				<input type="number" class="form-control" name="row_number" min=1>
 				<button type="submit" class="btn btn-info" formid="cashierForm" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post">Delete</button>
 			</div>
 

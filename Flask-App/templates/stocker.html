@@ -50,7 +50,7 @@
         <form id="stocker-form">
             <div class="form-group">
                 <label for="row-number-input">Row Number: </label>
-                <input type="number" class="form-control" name="row_number" id="row-number-input">
+                <input type="number" class="form-control" name="row_number" id="row-number-input" min=1>
                 <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post">Delete</button>
             </div>
 
