@@ -11,8 +11,9 @@
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/models.py">/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/models.py</a></font></td></tr></table>
     <p><tt>File:&nbsp;models.py<br>
 Author:&nbsp;Jacob&nbsp;Campbell;&nbsp;Ryan&nbsp;Giarusso<br>
-Created:&nbsp;3/10/2016<br>
-Purpose:&nbsp;All&nbsp;the&nbsp;databases!</tt></p>
+Created:&nbsp;3/10/2016&nbsp;(Last&nbsp;Modified:&nbsp;4/20/2016)<br>
+Purpose:&nbsp;Contains&nbsp;the&nbsp;SQL-Alchemy&nbsp;database&nbsp;model&nbsp;extension&nbsp;classes&nbsp;for&nbsp;each&nbsp;database&nbsp;table&nbsp;and&nbsp;the&nbsp;associated<br>
+automatic&nbsp;functionality&nbsp;when&nbsp;working&nbsp;with&nbsp;calculated&nbsp;entries.</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -82,7 +83,7 @@ Data descriptors defined here:<br>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103eedb38; Discount&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x104004198; Discount&gt;</dl>
 
 <dl><dt><strong>__table__</strong> = Table('discounts', MetaData(bind=None), Column('... table=&lt;discounts&gt;, nullable=False), schema=None)</dl>
 
@@ -157,7 +158,7 @@ Data descriptors defined here:<br>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ea5c88; Item&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ec92e8; Item&gt;</dl>
 
 <dl><dt><strong>__table__</strong> = Table('items', MetaData(bind=None), Column('id',...eignKey('users.id'), table=&lt;items&gt;), schema=None)</dl>
 
@@ -239,7 +240,7 @@ Data descriptors defined here:<br>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ecfdd8; ItemSold&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ef8438; ItemSold&gt;</dl>
 
 <dl><dt><strong>__table__</strong> = Table('items_sold', MetaData(bind=None), Column(...table=&lt;items_sold&gt;, nullable=False), schema=None)</dl>
 
@@ -313,7 +314,7 @@ Data descriptors defined here:<br>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ecf7b8; Product&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ec9dd8; Product&gt;</dl>
 
 <dl><dt><strong>__table__</strong> = Table('products', MetaData(bind=None), Column('i..., table=&lt;products&gt;, nullable=False), schema=None)</dl>
 
@@ -376,7 +377,7 @@ Data descriptors defined here:<br>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103eed208; Supplier&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ef8828; Supplier&gt;</dl>
 
 <dl><dt><strong>__table__</strong> = Table('suppliers', MetaData(bind=None), Column('... table=&lt;suppliers&gt;, nullable=False), schema=None)</dl>
 
@@ -422,7 +423,7 @@ standard&nbsp;query&nbsp;as&nbsp;well.</tt></dl>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Transaction-__init__"><strong>__init__</strong></a>(self, cust_name, cust_contact, payment_type, date=datetime.date(2016, 4, 24))</dt><dd><tt>Database&nbsp;table&nbsp;stores&nbsp;records&nbsp;of&nbsp;transactions.<br>
+<dl><dt><a name="Transaction-__init__"><strong>__init__</strong></a>(self, cust_name, cust_contact, payment_type, date=datetime.date(2016, 4, 26))</dt><dd><tt>Database&nbsp;table&nbsp;stores&nbsp;records&nbsp;of&nbsp;transactions.<br>
 :param&nbsp;cust_name:&nbsp;str<br>
 :param&nbsp;cust_contact:&nbsp;str<br>
 :param&nbsp;payment_type:&nbsp;int<br>
@@ -445,7 +446,7 @@ Data descriptors defined here:<br>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103eed6a0; Transaction&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ef8cc0; Transaction&gt;</dl>
 
 <dl><dt><strong>__table__</strong> = Table('transactions', MetaData(bind=None), Colum...ble=&lt;transactions&gt;, nullable=False), schema=None)</dl>
 
@@ -521,7 +522,7 @@ Data descriptors defined here:<br>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ecf2b0; User&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x103ec98d0; User&gt;</dl>
 
 <dl><dt><strong>__table__</strong> = Table('users', MetaData(bind=None), Column('id',...r(), table=&lt;users&gt;, nullable=False), schema=None)</dl>
 

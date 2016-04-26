@@ -11,8 +11,9 @@
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/app.py">/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/app.py</a></font></td></tr></table>
     <p><tt>File:&nbsp;app.py<br>
 Author:&nbsp;Jacob&nbsp;Campbell;&nbsp;Ethan&nbsp;Morisette<br>
-Created:&nbsp;3/11/2016<br>
-Purpose:&nbsp;This&nbsp;is&nbsp;the&nbsp;master&nbsp;file&nbsp;for&nbsp;the&nbsp;Flask&nbsp;application.</tt></p>
+Created:&nbsp;3/11/2016&nbsp;(Last&nbsp;Modified:&nbsp;4/24/2016)<br>
+Purpose:&nbsp;This&nbsp;is&nbsp;the&nbsp;master&nbsp;file&nbsp;for&nbsp;the&nbsp;Flask&nbsp;application,&nbsp;contains&nbsp;logic&nbsp;for&nbsp;generating&nbsp;webpages,&nbsp;routing<br>
+data,&nbsp;and&nbsp;managing&nbsp;the&nbsp;flow&nbsp;of&nbsp;the&nbsp;entire&nbsp;system.</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -56,6 +57,7 @@ Purpose:&nbsp;This&nbsp;is&nbsp;the&nbsp;master&nbsp;file&nbsp;for&nbsp;the&nbsp
  <dl><dt><a name="-discountsAddRow"><strong>discountsAddRow</strong></a>()</dt></dl>
  <dl><dt><a name="-discountsDB"><strong>discountsDB</strong></a>()</dt></dl>
  <dl><dt><a name="-downloadReport"><strong>downloadReport</strong></a>()</dt></dl>
+ <dl><dt><a name="-enterCustomerInfo"><strong>enterCustomerInfo</strong></a>()</dt></dl>
  <dl><dt><a name="-escape"><strong>escape</strong></a>(...)</dt><dd><tt><a href="#-escape">escape</a>(s)&nbsp;-&gt;&nbsp;markup<br>
 &nbsp;<br>
 Convert&nbsp;the&nbsp;characters&nbsp;&amp;,&nbsp;&lt;,&nbsp;&gt;,&nbsp;',&nbsp;and&nbsp;"&nbsp;in&nbsp;string&nbsp;s&nbsp;to&nbsp;HTML-safe<br>
@@ -92,6 +94,7 @@ such&nbsp;characters&nbsp;in&nbsp;HTML.&nbsp;&nbsp;Marks&nbsp;return&nbsp;value&
  <dl><dt><a name="-transactionDBDeleteTransaction"><strong>transactionDBDeleteTransaction</strong></a>()</dt></dl>
  <dl><dt><a name="-transactionDBUpdateTransaction"><strong>transactionDBUpdateTransaction</strong></a>()</dt></dl>
  <dl><dt><a name="-transactionsDB"><strong>transactionsDB</strong></a>()</dt></dl>
+ <dl><dt><a name="-updateCustomRange"><strong>updateCustomRange</strong></a>()</dt></dl>
  <dl><dt><a name="-updateInventory"><strong>updateInventory</strong></a>()</dt></dl>
  <dl><dt><a name="-userDB"><strong>userDB</strong></a>()</dt></dl>
  <dl><dt><a name="-userDBCancel"><strong>userDBCancel</strong></a>()</dt></dl>
@@ -104,25 +107,29 @@ such&nbsp;characters&nbsp;in&nbsp;HTML.&nbsp;&nbsp;Marks&nbsp;return&nbsp;value&
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
+<td width="100%"><strong>MAXYEAR</strong> = 9999<br>
+<strong>MINYEAR</strong> = 1<br>
+<strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
 <strong>app</strong> = &lt;Flask 'app'&gt;<br>
-<strong>appcontext_popped</strong> = &lt;blinker.base.NamedSignal object at 0x1036ade80; 'appcontext-popped'&gt;<br>
-<strong>appcontext_pushed</strong> = &lt;blinker.base.NamedSignal object at 0x1036adcc0; 'appcontext-pushed'&gt;<br>
-<strong>appcontext_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1036adc88; 'appcontext-tearing-down'&gt;<br>
+<strong>appcontext_popped</strong> = &lt;blinker.base.NamedSignal object at 0x1035a5fd0; 'appcontext-popped'&gt;<br>
+<strong>appcontext_pushed</strong> = &lt;blinker.base.NamedSignal object at 0x1035a5f60; 'appcontext-pushed'&gt;<br>
+<strong>appcontext_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1035a5f28; 'appcontext-tearing-down'&gt;<br>
 <strong>bcrypt</strong> = &lt;flask_bcrypt.Bcrypt object&gt;<br>
 <strong>current_app</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>current_user</strong> = None<br>
+<strong>datetime_CAPI</strong> = &lt;capsule object "datetime.datetime_CAPI"&gt;<br>
 <strong>db</strong> = &lt;SQLAlchemy engine='sqlite:///items.db'&gt;<br>
+<strong>error</strong> = None<br>
 <strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
-<strong>got_request_exception</strong> = &lt;blinker.base.NamedSignal object at 0x1036adc50; 'got-request-exception'&gt;<br>
+<strong>got_request_exception</strong> = &lt;blinker.base.NamedSignal object at 0x1035a5ef0; 'got-request-exception'&gt;<br>
 <strong>json_available</strong> = True<br>
 <strong>login_manager</strong> = &lt;helper.LoginManager object&gt;<br>
-<strong>message_flashed</strong> = &lt;blinker.base.NamedSignal object at 0x1036b5860; 'message-flashed'&gt;<br>
+<strong>message_flashed</strong> = &lt;blinker.base.NamedSignal object at 0x1035adb00; 'message-flashed'&gt;<br>
 <strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
-<strong>request_finished</strong> = &lt;blinker.base.NamedSignal object at 0x1036adb00; 'request-finished'&gt;<br>
-<strong>request_started</strong> = &lt;blinker.base.NamedSignal object at 0x1036ada90; 'request-started'&gt;<br>
-<strong>request_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1036adc18; 'request-tearing-down'&gt;<br>
+<strong>request_finished</strong> = &lt;blinker.base.NamedSignal object at 0x1035a5da0; 'request-finished'&gt;<br>
+<strong>request_started</strong> = &lt;blinker.base.NamedSignal object at 0x1035a5d30; 'request-started'&gt;<br>
+<strong>request_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1035a5eb8; 'request-tearing-down'&gt;<br>
 <strong>session</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>signals_available</strong> = True<br>
-<strong>template_rendered</strong> = &lt;blinker.base.NamedSignal object at 0x1036ada20; 'template-rendered'&gt;</td></tr></table>
+<strong>template_rendered</strong> = &lt;blinker.base.NamedSignal object at 0x1035a5cc0; 'template-rendered'&gt;</td></tr></table>
 </body></html>

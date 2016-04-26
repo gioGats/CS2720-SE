@@ -11,8 +11,8 @@
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/POS_logic.py">/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/POS_logic.py</a></font></td></tr></table>
     <p><tt>File:&nbsp;POS_logic.py<br>
 Author:&nbsp;Ethan&nbsp;Morisette;&nbsp;Ryan&nbsp;Giarusso<br>
-Created:&nbsp;3/1/2016<br>
-Purpose:&nbsp;module&nbsp;that&nbsp;holds&nbsp;all&nbsp;class&nbsp;definitions,&nbsp;function&nbsp;definitions,&nbsp;and&nbsp;variables&nbsp;for&nbsp;displaying&nbsp;information<br>
+Created:&nbsp;3/1/2016&nbsp;(Last&nbsp;Modified:&nbsp;4/24/2016)<br>
+Purpose:&nbsp;Module&nbsp;that&nbsp;holds&nbsp;all&nbsp;class&nbsp;definitions,&nbsp;function&nbsp;definitions,&nbsp;and&nbsp;variables&nbsp;for&nbsp;displaying&nbsp;information<br>
 to&nbsp;the&nbsp;WEBSITE&nbsp;tables&nbsp;(not&nbsp;to&nbsp;be&nbsp;confused&nbsp;with&nbsp;our&nbsp;db&nbsp;tables)</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -145,6 +145,12 @@ Methods inherited from <a href="POS_logic.html#Table">Table</a>:<br>
 <dl><dt><a name="CashierTable-delete_row"><strong>delete_row</strong></a>(self, row_number)</dt><dd><tt>Deletes&nbsp;the&nbsp;row&nbsp;at&nbsp;index&nbsp;row_number-1<br>
 :param&nbsp;row_number:&nbsp;int<br>
 :return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="CashierTable-get_row_count"><strong>get_row_count</strong></a>(self)</dt><dd><tt>Gets&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;in&nbsp;the&nbsp;table<br>
+:return:&nbsp;self.<strong>rowCount</strong></tt></dd></dl>
+
+<dl><dt><a name="CashierTable-isEmpty"><strong>isEmpty</strong></a>(self)</dt><dd><tt>tells&nbsp;the&nbsp;caller&nbsp;if&nbsp;the&nbsp;table&nbsp;is&nbsp;empty&nbsp;or&nbsp;not<br>
+:return:&nbsp;boolean</tt></dd></dl>
 
 <hr>
 Data descriptors inherited from <a href="POS_logic.html#Table">Table</a>:<br>
@@ -364,6 +370,12 @@ Methods inherited from <a href="POS_logic.html#Table">Table</a>:<br>
 :param&nbsp;row_number:&nbsp;int<br>
 :return:&nbsp;None</tt></dd></dl>
 
+<dl><dt><a name="ReportTable-get_row_count"><strong>get_row_count</strong></a>(self)</dt><dd><tt>Gets&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;in&nbsp;the&nbsp;table<br>
+:return:&nbsp;self.<strong>rowCount</strong></tt></dd></dl>
+
+<dl><dt><a name="ReportTable-isEmpty"><strong>isEmpty</strong></a>(self)</dt><dd><tt>tells&nbsp;the&nbsp;caller&nbsp;if&nbsp;the&nbsp;table&nbsp;is&nbsp;empty&nbsp;or&nbsp;not<br>
+:return:&nbsp;boolean</tt></dd></dl>
+
 <hr>
 Data descriptors inherited from <a href="POS_logic.html#Table">Table</a>:<br>
 <dl><dt><strong>__dict__</strong></dt>
@@ -468,6 +480,12 @@ Methods inherited from <a href="POS_logic.html#Table">Table</a>:<br>
 :param&nbsp;row_number:&nbsp;int<br>
 :return:&nbsp;None</tt></dd></dl>
 
+<dl><dt><a name="StockerTable-get_row_count"><strong>get_row_count</strong></a>(self)</dt><dd><tt>Gets&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;in&nbsp;the&nbsp;table<br>
+:return:&nbsp;self.<strong>rowCount</strong></tt></dd></dl>
+
+<dl><dt><a name="StockerTable-isEmpty"><strong>isEmpty</strong></a>(self)</dt><dd><tt>tells&nbsp;the&nbsp;caller&nbsp;if&nbsp;the&nbsp;table&nbsp;is&nbsp;empty&nbsp;or&nbsp;not<br>
+:return:&nbsp;boolean</tt></dd></dl>
+
 <hr>
 Data descriptors inherited from <a href="POS_logic.html#Table">Table</a>:<br>
 <dl><dt><strong>__dict__</strong></dt>
@@ -525,6 +543,12 @@ all&nbsp;items&nbsp;currently&nbsp;in&nbsp;the&nbsp;table,&nbsp;etc.)<br>&nbsp;<
 <dl><dt><a name="Table-delete_row"><strong>delete_row</strong></a>(self, row_number)</dt><dd><tt>Deletes&nbsp;the&nbsp;row&nbsp;at&nbsp;index&nbsp;row_number-1<br>
 :param&nbsp;row_number:&nbsp;int<br>
 :return:&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="Table-get_row_count"><strong>get_row_count</strong></a>(self)</dt><dd><tt>Gets&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;in&nbsp;the&nbsp;table<br>
+:return:&nbsp;self.<strong>rowCount</strong></tt></dd></dl>
+
+<dl><dt><a name="Table-isEmpty"><strong>isEmpty</strong></a>(self)</dt><dd><tt>tells&nbsp;the&nbsp;caller&nbsp;if&nbsp;the&nbsp;table&nbsp;is&nbsp;empty&nbsp;or&nbsp;not<br>
+:return:&nbsp;boolean</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -617,22 +641,22 @@ such&nbsp;characters&nbsp;in&nbsp;HTML.&nbsp;&nbsp;Marks&nbsp;return&nbsp;value&
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
-<strong>appcontext_popped</strong> = &lt;blinker.base.NamedSignal object at 0x102eb1e48; 'appcontext-popped'&gt;<br>
-<strong>appcontext_pushed</strong> = &lt;blinker.base.NamedSignal object at 0x102eb12e8; 'appcontext-pushed'&gt;<br>
-<strong>appcontext_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x102eb12b0; 'appcontext-tearing-down'&gt;<br>
+<strong>appcontext_popped</strong> = &lt;blinker.base.NamedSignal object at 0x1036b85f8; 'appcontext-popped'&gt;<br>
+<strong>appcontext_pushed</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8438; 'appcontext-pushed'&gt;<br>
+<strong>appcontext_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8400; 'appcontext-tearing-down'&gt;<br>
 <strong>cashier_table</strong> = &lt;POS_logic.CashierTable object&gt;<br>
 <strong>current_app</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
-<strong>got_request_exception</strong> = &lt;blinker.base.NamedSignal object at 0x102eb1278; 'got-request-exception'&gt;<br>
+<strong>got_request_exception</strong> = &lt;blinker.base.NamedSignal object at 0x1036b83c8; 'got-request-exception'&gt;<br>
 <strong>json_available</strong> = True<br>
-<strong>message_flashed</strong> = &lt;blinker.base.NamedSignal object at 0x102eb14a8; 'message-flashed'&gt;<br>
+<strong>message_flashed</strong> = &lt;blinker.base.NamedSignal object at 0x1036c3048; 'message-flashed'&gt;<br>
 <strong>report_table</strong> = &lt;POS_logic.ReportTable object&gt;<br>
 <strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
-<strong>request_finished</strong> = &lt;blinker.base.NamedSignal object at 0x102eb1128; 'request-finished'&gt;<br>
-<strong>request_started</strong> = &lt;blinker.base.NamedSignal object at 0x102eb10b8; 'request-started'&gt;<br>
-<strong>request_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x102eb1240; 'request-tearing-down'&gt;<br>
+<strong>request_finished</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8278; 'request-finished'&gt;<br>
+<strong>request_started</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8208; 'request-started'&gt;<br>
+<strong>request_tearing_down</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8390; 'request-tearing-down'&gt;<br>
 <strong>session</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>signals_available</strong> = True<br>
 <strong>stocker_table</strong> = &lt;POS_logic.StockerTable object&gt;<br>
-<strong>template_rendered</strong> = &lt;blinker.base.NamedSignal object at 0x102eb1048; 'template-rendered'&gt;</td></tr></table>
+<strong>template_rendered</strong> = &lt;blinker.base.NamedSignal object at 0x1036b8198; 'template-rendered'&gt;</td></tr></table>
 </body></html>

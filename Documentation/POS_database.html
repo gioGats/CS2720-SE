@@ -11,8 +11,8 @@
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/POS_database.py">/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/POS_database.py</a></font></td></tr></table>
     <p><tt>File:&nbsp;models.py<br>
 Author:&nbsp;Ethan&nbsp;Morisette;&nbsp;Braden&nbsp;Menke<br>
-Created:&nbsp;03/09/2016&nbsp;(Last&nbsp;Modified:&nbsp;4/20/2016)<br>
-Purpose:&nbsp;to&nbsp;hold&nbsp;all&nbsp;of&nbsp;our&nbsp;database&nbsp;interactions&nbsp;in&nbsp;a&nbsp;single&nbsp;module</tt></p>
+Created:&nbsp;03/09/2016&nbsp;(Last&nbsp;Modified:&nbsp;4/24/2016)<br>
+Purpose:&nbsp;Contains&nbsp;all&nbsp;database&nbsp;interaction&nbsp;functions&nbsp;for&nbsp;passing&nbsp;data&nbsp;between&nbsp;the&nbsp;user&nbsp;interface&nbsp;and&nbsp;databases.</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -154,11 +154,6 @@ This&nbsp;is&nbsp;the&nbsp;smallest&nbsp;integral&nbsp;value&nbsp;&gt;=&nbsp;x.<
 :param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
 :param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
 :return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
- <dl><dt><a name="-fuckyou"><strong>fuckyou</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
-:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
-:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
-:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
-:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
  <dl><dt><a name="-getDiscountFor"><strong>getDiscountFor</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
 :param&nbsp;db:&nbsp;database&nbsp;pointer<br>
 :param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
@@ -185,6 +180,41 @@ This&nbsp;is&nbsp;the&nbsp;smallest&nbsp;integral&nbsp;value&nbsp;&gt;=&nbsp;x.<
 :param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
 :return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
  <dl><dt><a name="-getItemProduct"><strong>getItemProduct</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getMaxDiscountID"><strong>getMaxDiscountID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getMaxItemID"><strong>getMaxItemID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getMaxItemSoldID"><strong>getMaxItemSoldID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getMaxProductID"><strong>getMaxProductID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getMaxSupplierID"><strong>getMaxSupplierID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getMaxTransactionID"><strong>getMaxTransactionID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getMaxUserID"><strong>getMaxUserID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
 :param&nbsp;db:&nbsp;database&nbsp;pointer<br>
 :param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
 :param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
@@ -287,6 +317,11 @@ This&nbsp;is&nbsp;the&nbsp;smallest&nbsp;integral&nbsp;value&nbsp;&gt;=&nbsp;x.<
 :param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
 :param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
 :return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-revenueCheck"><strong>revenueCheck</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
  <dl><dt><a name="-runOutReport"><strong>runOutReport</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
 :param&nbsp;db:&nbsp;database&nbsp;pointer<br>
 :param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
@@ -294,13 +329,16 @@ This&nbsp;is&nbsp;the&nbsp;smallest&nbsp;integral&nbsp;value&nbsp;&gt;=&nbsp;x.<
 :return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
  <dl><dt><a name="-toCSV"><strong>toCSV</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
 :param&nbsp;db:&nbsp;database&nbsp;pointer<br>
-:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
-:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
-:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
- <dl><dt><a name="-updateCashierTable"><strong>updateCashierTable</strong></a>(db, rowsList)</dt><dd><tt>update&nbsp;the&nbsp;items_sold,&nbsp;items,&nbsp;and&nbsp;transaction&nbsp;tables&nbsp;given&nbsp;a&nbsp;list&nbsp;of&nbsp;rows<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-updateCashierTable"><strong>updateCashierTable</strong></a>(db, rowsList, customerName, customerContact, paymentType)</dt><dd><tt>update&nbsp;the&nbsp;items_sold,&nbsp;items,&nbsp;and&nbsp;transaction&nbsp;tables&nbsp;given&nbsp;a&nbsp;list&nbsp;of&nbsp;rows<br>
 :param&nbsp;db:&nbsp;database&nbsp;pointer<br>
 :param&nbsp;rowsList:&nbsp;list&nbsp;of&nbsp;row&nbsp;objects<br>
-:return:&nbsp;-</tt></dd></dl>
+:param&nbsp;customerName:&nbsp;String<br>
+:param&nbsp;customerContact:&nbsp;String<br>
+:param&nbsp;paymentType:&nbsp;Int<br>
+:return:</tt></dd></dl>
  <dl><dt><a name="-updateItemTable"><strong>updateItemTable</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
 :param&nbsp;db:&nbsp;database&nbsp;pointer<br>
 :param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
@@ -317,11 +355,11 @@ This&nbsp;is&nbsp;the&nbsp;smallest&nbsp;integral&nbsp;value&nbsp;&gt;=&nbsp;x.<
 <strong>absolute_import</strong> = _Feature((2, 5, 0, 'alpha', 1), (3, 0, 0, 'alpha', 0), 16384)<br>
 <strong>app</strong> = &lt;Flask 'app'&gt;<br>
 <strong>bcrypt</strong> = &lt;flask_bcrypt.Bcrypt object&gt;<br>
-<strong>before_models_committed</strong> = &lt;blinker.base.NamedSignal object at 0x103d9be80; 'before-models-committed'&gt;<br>
+<strong>before_models_committed</strong> = &lt;blinker.base.NamedSignal object at 0x103db7f98; 'before-models-committed'&gt;<br>
 <strong>connection_stack</strong> = &lt;werkzeug.local.LocalStack object&gt;<br>
 <strong>db</strong> = &lt;SQLAlchemy engine='sqlite:///items.db'&gt;<br>
 <strong>func</strong> = &lt;sqlalchemy.sql.functions._FunctionGenerator object&gt;<br>
-<strong>models_committed</strong> = &lt;blinker.base.NamedSignal object at 0x10334f240; 'models-committed'&gt;<br>
+<strong>models_committed</strong> = &lt;blinker.base.NamedSignal object at 0x10346d128; 'models-committed'&gt;<br>
 <strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>string_types</strong> = (&lt;class 'str'&gt;,)<br>
 <strong>with_statement</strong> = _Feature((2, 5, 0, 'alpha', 1), (2, 6, 0, 'alpha', 0), 32768)</td></tr></table>
