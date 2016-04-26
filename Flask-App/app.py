@@ -96,7 +96,6 @@ def load_user(user_id):
 #############################
 current_user = None
 
-
 #############################
 # Route Declarations
 #############################
@@ -217,6 +216,10 @@ def downloadReport():
     return r
 
     #return redirect(url_for("reports"))
+
+@app.route('/updatecustom', methods=["POST"])
+def updateCustomRange():
+    return redirect(url_for("reports"))
 
 # -------------------------------------------------- #
 
@@ -467,8 +470,8 @@ def productDBCancel():
 @app.route('/transactionsDB', methods=['GET', 'POST'])
 @login_required
 def transactionsDB():
+    error = None
     result = db.session.query(Transaction).all()
-    error = "You Suck"
     return render_template("transactionsDB.html", transactionsDBTable=result, error=error)
 
 @app.route('/transactiondb-delete', methods=["POST"])
