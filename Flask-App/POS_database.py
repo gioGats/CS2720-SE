@@ -1180,4 +1180,4 @@ def revenueCheck(db, time):
         revenue += itemsold.price_sold
         cost += itemsold.inventory_cost
 
-    return tuple([revenue, cost, revenue-cost])
+    return [revenue, cost, revenue-cost]
