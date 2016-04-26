@@ -30,8 +30,8 @@ suppliers_init = [
 
 products_init = [
     # name, supplier_id, min_inventory, shelf_life, standard_price
-    ["poop", 1, 10, 10, 1.50],
-    ["banana", 1, 20, 5, 1.00],
+    ["lighter", 1, 10, 10, 1.50],
+    ["cookies", 1, 20, 5, 1.00],
     ["matches", 2, 15, 100, 1.25]
 ]
 
@@ -83,8 +83,8 @@ discounts_init = [
 
 transactions_init = [
     # cust_name, cust_contact, payment_type
-    ["Bob", "never!", 1],
-    ["Tom", "Gah!", 2]
+    ["Bob", "555-555-5555", 1],
+    ["Tom", "tom@notADomain.not", 2]
 ]
 
 # Probably useless, but doesn't hurt to have them all right?
