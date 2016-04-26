@@ -206,7 +206,6 @@ def downloadReport():
         r = POS_database.reportInfoCSV(db)  # Dating doesn't make sense in this context.
     # if the report type is revenue audit report, do special download
     elif dropDownItem == "revenue_audit_report":
-        print(type(startDate))
         r = POS_database.reportRevenueAudit(db, (startDate, endDate,))
     # if the report type is purchase order report, do special download
     elif dropDownItem == 'purchase_order_report':

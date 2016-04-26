@@ -902,6 +902,7 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
         typeStr  = 'inventory'
         typeType =  Item
 
+    records = []
     # Get dated stuff if we're given a date range
     if dateTup is not None\
             and typeStr in DATED_TABLES:
@@ -922,10 +923,13 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
     # No dates given, get the whole table.
     else:
         records = db.session.query(typeType).all()
+    if len(records) == 0:
+        return ('', 204)
 
     si = StringIO()
 
     outcsv = csv.writer(si)
+    outcsv.writerow(records[0].__table__.columns._data.keys())
     for row in records:
         row_as_list = []
         for thing in row.__table__.columns._data:
@@ -958,6 +962,7 @@ def reportInfoCSV(db, dateTup = None):
     si = StringIO()
 
     outcsv = csv.writer(si)
+    outcsv.writerow(allItemInfo[0].__table__.columns._data.keys())
     for row in allItemInfo:
         row_as_list = []
         for thing in row.__table__.columns._data:
@@ -971,7 +976,6 @@ def reportInfoCSV(db, dateTup = None):
                                                                     dt.datetime.today().day,
                                                                     dt.datetime.today().year, )
     response.headers["Content-Type"] = "text/csv"
-    print(response)
     return response
 
 
@@ -985,19 +989,15 @@ def reportRevenueAudit(db, dateTup = None):
     """
     # SQLAlchemy is fucking magic. Look at this shit:
     start = dateTup[0]
-    print(start, type(start))
     end = dateTup[1]
-    print("HERE")
-    #allItemInfo = db.session.query(ItemSold).join(Transaction, ItemSold.transaction_id==Transaction.id).first()
-    #print(getTransaction(db, allItemInfo.transaction_id)[3], type(getTransaction(db, allItemInfo.transaction_id)[3]))
     allItemInfo = db.session.query(ItemSold).join(Transaction, ItemSold.transaction_id==Transaction.id).\
         filter(getTransaction(db, ItemSold.transaction_id)[3] >= start).\
         filter(getTransaction(db, ItemSold.transaction_id)[3] <= end).all()
-    print("After the query")
     # That's supposed to work just right; automagically joins on foreign keys without specifications. Boom.
     si = StringIO()
 
     outcsv = csv.writer(si)
+    outcsv.writerow(allItemInfo[0].__table__.columns._data.keys())
     for row in allItemInfo:
         row_as_list = []
         for thing in row.__table__.columns._data:
@@ -1010,7 +1010,6 @@ def reportRevenueAudit(db, dateTup = None):
                                                                     dt.datetime.today().day,
                                                                     dt.datetime.today().year)
     response.headers["Content-Type"] = "text/csv"
-    print(response)
     return response
 
 
@@ -1025,11 +1024,11 @@ def areWeGoingToRunOutOf(db, product_id):
     :param product_id: int
     :return: True/False, prediction
     """
-    oneWeekAgo   = datetime.date(dt.date.today()) - dt.timedelta(weeks=1) # Does what it says on the box.
+    oneWeekAgo   = dt.date.today() - dt.timedelta(weeks=1) # Does what it says on the box.
     productDelta = db.session.query(ItemSold).filter(ItemSold.product_id == product_id)\
-                                            .filter(oneWeekAgo <= getTransaction(db, ItemSold.transaction_id)[3])\
-                                            .count() # Count how many we would've had.
-    thisProduct = db.session.query(Product).filter(Product.product_id == product_id).first()
+        .filter(oneWeekAgo <= getTransaction(db, ItemSold.transaction_id)[3])\
+        .count() # Count how many we would've had.
+    thisProduct = db.session.query(Product).filter(Product.id == product_id).first()
     if (thisProduct.inventory_count - productDelta) < thisProduct.min_inventory:
         return thisProduct.join(Supplier)
         # return True  # We WILL run out (maybe)
@@ -1050,19 +1049,25 @@ def runOutReport(db):
     for line in fullTable:
         thisPrediction = areWeGoingToRunOutOf(db, line.id)
         if thisPrediction != False:
-            thisPrediction = thisPrediction.join(Supplier)
+            #thisPrediction = thisPrediction.join(Supplier)
             predictionsList.append(thisPrediction)
         else:
             continue
+    # If there are no predictions, empty response.
+    if len(predictionsList) == 0:
+        return ('', 204)
+
     si = StringIO()
-    writer = csv.writer(si)
+    outcsv = csv.writer(si)
+    outcsv.writerow(predictionsList[0].__table__.columns._data)
     for row in predictionsList:
-        writer.writerow(row)
-    # writer.writerows(predictionsList)
+        row_as_list = []
+        for thing in row.__table__.columns._data:
+            row_as_list.append(getattr(row, thing))
+        outcsv.writerow(row_as_list)
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename = export.csv"
     output.headers["Content-type"] = "text/csv"
-    print(output)
     return output
 
 #########################################################################
@@ -1089,8 +1094,6 @@ def revenueCheck(db, time):
         timetup = time
     else:
         raise ValueError
-    # transactions = db.session.query(Transaction).filter(Transaction.date >= timetup[0]).\
-                                                 #filter(Transaction.date <= timetup[1])
     items_sold = db.session.query(ItemSold).filter(getTransaction(db, ItemSold.transaction_id)[3] >= timetup[0])\
                                            .filter(getTransaction(db, ItemSold.transaction_id)[3] <= timetup[1]).all()
     revenue = 0
@@ -1100,5 +1103,3 @@ def revenueCheck(db, time):
         cost += itemsold.inventory_cost
 
     return tuple([revenue, cost, revenue-cost])
-# TODO dated gets from db's
-# TODO reportInfo for products
