@@ -622,6 +622,7 @@ def getTransaction(db, transactionID):
     # Structure it into a tuple
     retT = tuple([transaction.cust_name, transaction.cust_contact,
                   transaction.payment_type, transaction.date])
+    print("Got transaction", retT)
     # Return that.
     return retT
 
@@ -1160,7 +1161,7 @@ def revenueCheck(db, time):
     :return: (revenue, cost, prophet,) tuple
     """
     if time == 'day':
-        thisMorning = dt.date.today()
+        thisMorning = dt.date.today() -dt.timedelta(days=1)
         timetup = (thisMorning, dt.date.today()+dt.timedelta(days=1),)
     elif time == 'week':
         aWeekAgo = dt.date.today() - dt.timedelta(weeks = 1)
@@ -1172,11 +1173,15 @@ def revenueCheck(db, time):
         timetup = time
     else:
         raise ValueError
-    items_sold = db.session.query(ItemSold).filter(getTransaction(db, ItemSold.transaction_id)[3] >= timetup[0])\
-                                           .filter(getTransaction(db, ItemSold.transaction_id)[3] <= timetup[1]).all()
+    items_sold = db.session.query(ItemSold).all()
+    in_range = []
+    for itemSold in items_sold:
+        if getTransaction(db, itemSold.transaction_id)[3] >= timetup[0]:
+            if getTransaction(db, itemSold.transaction_id)[3] <= timetup[1]:
+                in_range.append(itemSold)
     revenue = 0
     cost = 0
-    for itemsold in items_sold:
+    for itemsold in in_range:
         revenue += itemsold.price_sold
         cost += itemsold.inventory_cost
 
