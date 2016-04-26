@@ -865,7 +865,7 @@ def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
 # Reporting Databases                                                   #
 #########################################################################
 #@app.route('/download')
-@commitDB_Errorcatch
+@getfromDB_Error
 def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properly give back the right database's setup
     # TODO Joined tables : items_sold + transactions
     """
@@ -923,23 +923,24 @@ def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properl
     else:
         records = db.session.query(typeType).all()
 
-    #print(type(records))
-    #outfile = open('{}.csv'.format(typeStr), 'wb')
     si = StringIO()
+
     outcsv = csv.writer(si)
     for row in records:
         row_as_list = []
-        #print(type(row))
         for thing in row.__table__.columns._data:
             row_as_list.append(getattr(row, thing))
         outcsv.writerow(row_as_list)
-    return send_file(si,
-                     attachment_filename="TEST.csv",
-                     as_attachment=True)
-    #output = make_response(si.getvalue())
-    #output.headers["Content-Disposition"] = "attachment; filename = export.csv"
-    #output.headers["Content-type"] = "text/csv"
-    #return output
+
+    csvVals = si.getvalue()
+    response = make_response(csvVals)
+    response.headers["Content-Disposition"] = "attachment; filename={}_{}-{}-{}.csv".format(typeStr,
+                                                                                            dt.datetime.today().month,
+                                                                                            dt.datetime.today().day,
+                                                                                            dt.datetime.today().year,)
+    response.headers["Content-Type"] = "text/csv"
+
+    return response
 
 
 #@app.route('/download')
@@ -948,22 +949,30 @@ def reportInfoCSV(db, dateTup = None):
     """
     Optional date range; gives a joined csv of things.
     :param db: database pointer
-    :param dateTup: tuple; optional- should be of type (start_date,end_date,)
+    :param dateTup: tuple; optional- should be of type (start_date,end_date,) #Doesn't make sense in context#
     :return: response to a flask app that instantiates a download
     """
     # SQLAlchemy is fucking magic. Look at this shit:
     allItemInfo = db.session.query(Item).join(Product).join(Supplier).all()
     # That's supposed to work just right; automagically joins on foreign keys without specifications. Boom.
-    #outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
     si = StringIO()
-    outcsv = csv.writer(si, delimiter=',')
+
+    outcsv = csv.writer(si)
     for row in allItemInfo:
-        outcsv.writerow(row)
-    # outcsv.writerows(allItemInfo)
-    output = make_response(si.getvalue())
-    output.headers["Content-Disposition"] = "attachment; filename = export.csv"
-    output.headers["Content-type"] = "text/csv"
-    return output
+        row_as_list = []
+        for thing in row.__table__.columns._data:
+            row_as_list.append(getattr(row, thing))
+        outcsv.writerow(row_as_list)
+
+    csvVals = si.getvalue()
+    response = make_response(csvVals)
+    response.headers["Content-Disposition"] =\
+        "attachment; filename=inventory_report_{}-{}-{}.csv".format(dt.datetime.today().month,
+                                                                    dt.datetime.today().day,
+                                                                    dt.datetime.today().year, )
+    response.headers["Content-Type"] = "text/csv"
+    print(response)
+    return response
 
 
 @getfromDB_Error
@@ -975,16 +984,34 @@ def reportRevenueAudit(db, dateTup = None):
     :return: response to a flask app that instantiates a download
     """
     # SQLAlchemy is fucking magic. Look at this shit:
-    allItemInfo = db.session.query(ItemSold).join(Transaction).all()
+    start = dateTup[0]
+    print(start, type(start))
+    end = dateTup[1]
+    print("HERE")
+    #allItemInfo = db.session.query(ItemSold).join(Transaction, ItemSold.transaction_id==Transaction.id).first()
+    #print(getTransaction(db, allItemInfo.transaction_id)[3], type(getTransaction(db, allItemInfo.transaction_id)[3]))
+    allItemInfo = db.session.query(ItemSold).join(Transaction, ItemSold.transaction_id==Transaction.id).\
+        filter(getTransaction(db, ItemSold.transaction_id)[3] >= start).\
+        filter(getTransaction(db, ItemSold.transaction_id)[3] <= end).all()
+    print("After the query")
     # That's supposed to work just right; automagically joins on foreign keys without specifications. Boom.
-    #outfile = open("FullInventoryReport{}.csv".format(dt.date.today()), 'wb')
     si = StringIO()
-    outcsv = csv.writer(si, delimiter=',')
-    outcsv.writerows(allItemInfo)
-    output = make_response(si.getvalue())
-    output.headers["Content-Disposition"] = "attachment; filename = export.csv"
-    output.headers["Content-type"] = "text/csv"
-    return output
+
+    outcsv = csv.writer(si)
+    for row in allItemInfo:
+        row_as_list = []
+        for thing in row.__table__.columns._data:
+            row_as_list.append(getattr(row, thing))
+        outcsv.writerow(row_as_list)
+    csvVals = si.getvalue()
+    response = make_response(csvVals)
+    response.headers["Content-Disposition"] = \
+        "attachment; filename=inventory_report_{}-{}-{}.csv".format(dt.datetime.today().month,
+                                                                    dt.datetime.today().day,
+                                                                    dt.datetime.today().year)
+    response.headers["Content-Type"] = "text/csv"
+    print(response)
+    return response
 
 
 #########################################################################
@@ -998,7 +1025,7 @@ def areWeGoingToRunOutOf(db, product_id):
     :param product_id: int
     :return: True/False, prediction
     """
-    oneWeekAgo   = datetime.date(datetime.today()) - dt.timedelta(weeks=1) # Does what it says on the box.
+    oneWeekAgo   = datetime.date(dt.date.today()) - dt.timedelta(weeks=1) # Does what it says on the box.
     productDelta = db.session.query(ItemSold).filter(ItemSold.product_id == product_id)\
                                             .filter(oneWeekAgo <= getTransaction(db, ItemSold.transaction_id)[3])\
                                             .count() # Count how many we would've had.
@@ -1035,44 +1062,43 @@ def runOutReport(db):
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename = export.csv"
     output.headers["Content-type"] = "text/csv"
+    print(output)
     return output
 
 #########################################################################
 # On-the-fly reporting                                                  #
 #########################################################################
 @getfromDB_Error
-def fuckyou(db, time):
+def revenueCheck(db, time):
     """
-    Fuck you.
+    Get the revenue for a given custom time-tuple or a given string (day, week, month)
     :param db: database pointer
     :param time: "day", "week", "month", or a tuple of (start, end)
     :return: (revenue, cost, prophet,) tuple
     """
     if time == 'day':
-        thisMorning = datetime.today()
-        thisMorning = thisMorning - dt.timedelta(hours = thisMorning.hour,
-                                                 minutes = thisMorning.minute,
-                                                 seconds = thisMorning.second)
-        timetup = (thisMorning, datetime.today(),)
+        thisMorning = dt.date.today()
+        timetup = (thisMorning, dt.date.today()+dt.timedelta(days=1),)
     elif time == 'week':
-        aWeekAgo = datetime.today()
-        aWeekAgo = aWeekAgo - dt.timedelta(weeks = 1,
-                                           seconds = aWeekAgo.second,
-                                           minutes = aWeekAgo.minute,
-                                           hours = aWeekAgo.hour)
-        timetup = (aWeekAgo, datetime.today(),)
+        aWeekAgo = dt.date.today() - dt.timedelta(weeks = 1)
+        timetup = (aWeekAgo, dt.date.today()+dt.timedelta(days=1),)
     elif time == 'month':
-        aMonthAgo = datetime.today()
-        aMonthAgo = aMonthAgo - dt.timedelta(weeks = 4,
-                                             seconds = aMonthAgo.second,
-                                             minutes = aMonthAgo.minute,
-                                             hours = aMonthAgo.hour)
-        timetup = (aMonthAgo, datetime.today(),)
+        aMonthAgo = dt.date.today() - dt.timedelta(weeks = 4)
+        timetup = (aMonthAgo, dt.date.today()+dt.timedelta(days=1),)
     elif (type(time) == tuple):
         timetup = time
     else:
         raise ValueError
-    transactions = db.session.query(Transaction).filter(Transaction.date >= timetup[0]).filter(Transaction.date <= timetup[1])
-    revenueGet = db.session.query(ItemSold).filter(ItemSold.transaction_id)
+    # transactions = db.session.query(Transaction).filter(Transaction.date >= timetup[0]).\
+                                                 #filter(Transaction.date <= timetup[1])
+    items_sold = db.session.query(ItemSold).filter(getTransaction(db, ItemSold.transaction_id)[3] >= timetup[0])\
+                                           .filter(getTransaction(db, ItemSold.transaction_id)[3] <= timetup[1]).all()
+    revenue = 0
+    cost = 0
+    for itemsold in items_sold:
+        revenue += itemsold.price_sold
+        cost += itemsold.inventory_cost
+
+    return tuple([revenue, cost, revenue-cost])
 # TODO dated gets from db's
 # TODO reportInfo for products
