@@ -1081,7 +1081,7 @@ def reportRevenueAudit(db, dateTup = None):
     csvVals = si.getvalue()
     response = make_response(csvVals)
     response.headers["Content-Disposition"] = \
-        "attachment; filename=inventory_report_{}-{}-{}.csv".format(dt.datetime.today().month,
+        "attachment; filename=revenue_audit_{}-{}-{}.csv".format(dt.datetime.today().month,
                                                                     dt.datetime.today().day,
                                                                     dt.datetime.today().year)
     response.headers["Content-Type"] = "text/csv"
@@ -1141,7 +1141,10 @@ def runOutReport(db):
             row_as_list.append(getattr(row, thing))
         outcsv.writerow(row_as_list)
     output = make_response(si.getvalue())
-    output.headers["Content-Disposition"] = "attachment; filename = export.csv"
+    output.headers["Content-Disposition"] =\
+        "attachment; filename = product_order_{}-{}-{}.csv".format(dt.datetime.today().month,
+                                                                   dt.datetime.today().day,
+                                                                   dt.datetime.today().year)
     output.headers["Content-type"] = "text/csv"
     return output
 
