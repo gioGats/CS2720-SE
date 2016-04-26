@@ -191,21 +191,32 @@ def reports():
 @app.route('/download', methods=["POST"])
 def downloadReport():
     dropDownItem = request.form["report-dropdown"]
+    print(dropDownItem)
     if request.form["report-start-date"]:
         startDate = POS_display.convert_string_to_date(request.form["report-start-date"])
+    else:
+        startDate = datetime.date(1990, 5, 27)  # Before the creation of the system.
     if request.form["report-end-date"]:
         endDate = POS_display.convert_string_to_date(request.form["report-end-date"])
+    else:
+        endDate = datetime.date.today()+datetime.timedelta(days=1)  # Last possible date
 
     # if the report type is inventory worth report, do special download
-
+    if dropDownItem == 'inventory_worth_report':
+        r = POS_database.reportInfoCSV(db)  # Dating doesn't make sense in this context.
     # if the report type is revenue audit report, do special download
-
+    elif dropDownItem == "revenue_audit_report":
+        r = POS_database.reportRevenueAudit(db, (startDate, endDate,))
     # if the report type is purchase order report, do special download
-
+    elif dropDownItem == 'purchase_order_report':
+        r = POS_database.runOutReport(db)
     # otherwise do a database table report download
-    POS_database.toCSV(db, dropDownItem)
+    else:
+        r = POS_database.toCSV(db, dropDownItem, (startDate, endDate,))
 
-    return redirect(url_for("reports"))
+    return r
+
+    #return redirect(url_for("reports"))
 
 # -------------------------------------------------- #
 
