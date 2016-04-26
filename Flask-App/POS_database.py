@@ -622,7 +622,6 @@ def getTransaction(db, transactionID):
     # Structure it into a tuple
     retT = tuple([transaction.cust_name, transaction.cust_contact,
                   transaction.payment_type, transaction.date])
-    print("Got transaction", retT)
     # Return that.
     return retT
 
