@@ -95,6 +95,7 @@ def load_user(user_id):
 # Global Variables
 #############################
 current_user = None
+error = None
 
 #############################
 # Route Declarations
@@ -104,7 +105,7 @@ current_user = None
 # Home Route (login page) #
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    error = None
+    global error
     form = LoginForm(request.form)
     global current_user  # allows changing of the globally defined current_user #
 
@@ -228,15 +229,17 @@ def updateCustomRange():
 @app.route('/cashier')
 @login_required
 def cashier():
+    
     if is_manager(current_user) or is_cashier(current_user):
-        return render_template("cashier.html", cashierTable=POS_logic.cashier_table)
+        return render_template("cashier.html", cashierTable=POS_logic.cashier_table, error=error)
     else:
         return redirect('/')
 
 
 @app.route('/cashieradd', methods=["POST"])
 def cashierAddRow():
-
+    global error
+    error = None
     # get the information from the user
     inputDict = POS_display.get_cashier_row(request)
     
@@ -257,12 +260,33 @@ def cashierAddRow():
 
 @app.route('/cashierdelete', methods=["POST"])
 def cashierDeleteRow():
+    global error
+    error = None
     inputDict = POS_display.get_cashier_row(request)
-    POS_logic.cashier_table.delete_row(int(inputDict["row_number"]))
+
+    # if the row number does not exist, display an error
+    if (int(inputDict["row_number"]) > POS_logic.cashier_table.get_row_count()):
+        error = "That row number is out of bounds."
+
+    # otherwise, delete the row number
+    else:
+        POS_logic.cashier_table.delete_row(int(inputDict["row_number"]))
+    
+    # always reload the page
     return redirect(url_for('cashier'))
 
 @app.route('/customerinfo', methods=["POST"])
 def enterCustomerInfo():
+    global error
+    error = None
+
+    # if the cart is empty print an error and reload the cashier page
+    print(POS_logic.cashier_table.isEmpty())
+    if (POS_logic.cashier_table.isEmpty()):
+        error = "You don't have any items in your cart!"
+        return redirect(url_for("cashier"))
+
+    # otherwise go to the customerinfo page
     return render_template("customerinfo.html")
 
 @app.route('/cashiercommit', methods=["POST"])
@@ -292,8 +316,9 @@ def cashierCancel():
 @app.route('/stocker')
 @login_required
 def stocker():
+    global error
     if is_manager(current_user) or is_stocker(current_user):
-        return render_template("stocker.html", stockerTable=POS_logic.stocker_table)
+        return render_template("stocker.html", stockerTable=POS_logic.stocker_table, error=error)
     else:
         return redirect('/')
 
@@ -328,10 +353,21 @@ def stockerDeleteRow():
 
 @app.route('/stockercommit', methods=["POST"])
 def updateInventory():
-    # send all information from the local stocking table to the database for storage
-    POS_database.updateItemTable(db, POS_logic.stocker_table.rowsList)
-    # clear the local stocking table out
-    POS_logic.stocker_table.clear_table()
+    global error
+    error = None
+
+    # if there aren't any items in the inventory, print error
+    if (POS_logic.stocker_table.isEmpty()):
+        error = "You don't have any items in your cart!"
+
+    # otherwise update the database table
+    else:
+        # send all information from the local stocking table to the database for storage
+        POS_database.updateItemTable(db, POS_logic.stocker_table.rowsList)
+        # clear the local stocking table out
+        POS_logic.stocker_table.clear_table()
+
+    # always go back to the stocker page 
     return redirect(url_for('stocker'))
 
 @app.route('/stockercancel', methods=["POST"])
@@ -470,7 +506,7 @@ def productDBCancel():
 @app.route('/transactionsDB', methods=['GET', 'POST'])
 @login_required
 def transactionsDB():
-    error = None
+    global error
     result = db.session.query(Transaction).all()
     return render_template("transactionsDB.html", transactionsDBTable=result, error=error)
 

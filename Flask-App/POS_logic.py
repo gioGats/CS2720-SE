@@ -236,6 +236,22 @@ class Table:
         self.rowsList.pop(row_number-1)
         self.rowCount -= 1
 
+    def get_row_count(self):
+        """
+        Gets the number of rows in the table
+        :return: self.rowCount
+        """
+        return self.rowCount
+
+    def isEmpty(self):
+        """
+        tells the caller if the table is empty or not
+        :return: boolean
+        """
+        if (self.rowCount == 0):
+            return True
+        return False
+
 
 class CashierTable(Table):
 
