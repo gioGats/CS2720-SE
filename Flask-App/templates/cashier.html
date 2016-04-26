@@ -49,18 +49,18 @@
 		<form id="cashierForm" method=post>
 			<div class="form-group">
 				<label for="row-number-input">Row Number: </label>
-				<input type="text" class="form-control" name="row_number" placeholder="Row Number">
+				<input type="number" class="form-control" name="row_number">
 				<button type="submit" class="btn btn-info" formid="cashierForm" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post">Delete</button>
 			</div>
 
 			<div class="form-group">
 				<label for="item-id-input">Item ID: </label>
-				<input type="text" class="form-control" name="item_id" placeholder="Item ID">
+				<input type="number" class="form-control" name="item_id">
 			</div>
 
 			<div class="form-group">
 				<label for="price-per-unit-input">Price Per Unit: </label>
-				<input type="text" class="form-control" name="price_per_unit" placeholder="Price Per Unit">
+				<input type="number" class="form-control" name="price_per_unit">
 			</div>
 
 			<button type="submit" class="btn btn-info" formid="cashierForm" formaction="{{ url_for('cashierAddRow') }}" formmethod="post">Update</button>
