@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module POS_database</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>POS_database</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/POS_database.py">/Users/ryangiarusso/PycharmProjects/CS2720-SE/Flask-App/POS_database.py</a></font></td></tr></table>
+    <p><tt>File:&nbsp;models.py<br>
+Author:&nbsp;Ethan&nbsp;Morisette;&nbsp;Braden&nbsp;Menke<br>
+Created:&nbsp;03/09/2016&nbsp;(Last&nbsp;Modified:&nbsp;4/20/2016)<br>
+Purpose:&nbsp;to&nbsp;hold&nbsp;all&nbsp;of&nbsp;our&nbsp;database&nbsp;interactions&nbsp;in&nbsp;a&nbsp;single&nbsp;module</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="csv.html">csv</a><br>
+<a href="datetime.html">datetime</a><br>
+<a href="sqlalchemy.event.html">sqlalchemy.event</a><br>
+</td><td width="25%" valign=top><a href="functools.html">functools</a><br>
+<a href="sqlalchemy.orm.html">sqlalchemy.orm</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+<a href="sqlalchemy.html">sqlalchemy</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+<a href="warnings.html">warnings</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-Lock"><strong>Lock</strong></a> = allocate_lock(...)</dt><dd><tt>allocate_lock()&nbsp;-&gt;&nbsp;lock&nbsp;object<br>
+(allocate()&nbsp;is&nbsp;an&nbsp;obsolete&nbsp;synonym)<br>
+&nbsp;<br>
+Create&nbsp;a&nbsp;new&nbsp;lock&nbsp;object.&nbsp;&nbsp;See&nbsp;help(LockType)&nbsp;for&nbsp;information&nbsp;about&nbsp;locks.</tt></dd></dl>
+ <dl><dt><a name="-addDiscount"><strong>addDiscount</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-addItem"><strong>addItem</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-addProduct"><strong>addProduct</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-addSupplier"><strong>addSupplier</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-addTransaction"><strong>addTransaction</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-addUser"><strong>addUser</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-areWeGoingToRunOutOf"><strong>areWeGoingToRunOutOf</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-ceil"><strong>ceil</strong></a>(...)</dt><dd><tt><a href="#-ceil">ceil</a>(x)<br>
+&nbsp;<br>
+Return&nbsp;the&nbsp;ceiling&nbsp;of&nbsp;x&nbsp;as&nbsp;an&nbsp;int.<br>
+This&nbsp;is&nbsp;the&nbsp;smallest&nbsp;integral&nbsp;value&nbsp;&gt;=&nbsp;x.</tt></dd></dl>
+ <dl><dt><a name="-commitDB_Errorcatch"><strong>commitDB_Errorcatch</strong></a>(func)</dt><dd><tt>Decorator&nbsp;to&nbsp;wrap&nbsp;a&nbsp;function&nbsp;in&nbsp;errorchecking<br>
+:param&nbsp;func:&nbsp;decorates&nbsp;a&nbsp;function<br>
+:return:&nbsp;the&nbsp;decorated&nbsp;function</tt></dd></dl>
+ <dl><dt><a name="-decProduct"><strong>decProduct</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-destroyDiscount"><strong>destroyDiscount</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-destroyItem"><strong>destroyItem</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-destroyProduct"><strong>destroyProduct</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-destroySupplier"><strong>destroySupplier</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-destroyTransaction"><strong>destroyTransaction</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-destroyUser"><strong>destroyUser</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-editDiscount"><strong>editDiscount</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-editItem"><strong>editItem</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-editItemSold"><strong>editItemSold</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-editProduct"><strong>editProduct</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-editSupplier"><strong>editSupplier</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-editTransaction"><strong>editTransaction</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-editUser"><strong>editUser</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-fuckyou"><strong>fuckyou</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getDiscountFor"><strong>getDiscountFor</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getItemAuthor"><strong>getItemAuthor</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getItemCost"><strong>getItemCost</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getItemData"><strong>getItemData</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getItemExpirationDate"><strong>getItemExpirationDate</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getItemProduct"><strong>getItemProduct</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getProductInventoryCount"><strong>getProductInventoryCount</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getProductMinInventory"><strong>getProductMinInventory</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getProductName"><strong>getProductName</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getProductPrice"><strong>getProductPrice</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getProductShelfLife"><strong>getProductShelfLife</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getProductSupplierID"><strong>getProductSupplierID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getSupplier"><strong>getSupplier</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getSupplierEmail"><strong>getSupplierEmail</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getSupplierID"><strong>getSupplierID</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getSupplierName"><strong>getSupplierName</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getTransaction"><strong>getTransaction</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getUser"><strong>getUser</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getUserName"><strong>getUserName</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getUserPassword"><strong>getUserPassword</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getUserPermissions"><strong>getUserPermissions</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-getfromDB_Error"><strong>getfromDB_Error</strong></a>(func)</dt><dd><tt>Decorator&nbsp;to&nbsp;wrap&nbsp;a&nbsp;function&nbsp;in&nbsp;error-checking<br>
+:param&nbsp;func:&nbsp;decorates&nbsp;a&nbsp;function<br>
+:return:&nbsp;the&nbsp;decorated&nbsp;function</tt></dd></dl>
+ <dl><dt><a name="-incProduct"><strong>incProduct</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-popItemToItemSold"><strong>popItemToItemSold</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-reportInfoCSV"><strong>reportInfoCSV</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-reportRevenueAudit"><strong>reportRevenueAudit</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-runOutReport"><strong>runOutReport</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:param&nbsp;kwargs:&nbsp;As&nbsp;needed&nbsp;by&nbsp;the&nbsp;function<br>
+:return:&nbsp;the&nbsp;function's&nbsp;return&nbsp;value,&nbsp;or&nbsp;-1&nbsp;if&nbsp;the&nbsp;operation&nbsp;fails.</tt></dd></dl>
+ <dl><dt><a name="-toCSV"><strong>toCSV</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+ <dl><dt><a name="-updateCashierTable"><strong>updateCashierTable</strong></a>(db, rowsList)</dt><dd><tt>update&nbsp;the&nbsp;items_sold,&nbsp;items,&nbsp;and&nbsp;transaction&nbsp;tables&nbsp;given&nbsp;a&nbsp;list&nbsp;of&nbsp;rows<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;rowsList:&nbsp;list&nbsp;of&nbsp;row&nbsp;objects<br>
+:return:&nbsp;-</tt></dd></dl>
+ <dl><dt><a name="-updateItemTable"><strong>updateItemTable</strong></a> = wrapperFunction(db, *args, **kwargs)</dt><dd><tt>Wrapper&nbsp;function&nbsp;to&nbsp;error-check<br>
+:param&nbsp;db:&nbsp;database&nbsp;pointer<br>
+:param&nbsp;args:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:param&nbsp;kwargs:&nbsp;Whatever&nbsp;the&nbsp;wrapped&nbsp;function&nbsp;needs<br>
+:return:&nbsp;0&nbsp;if&nbsp;no&nbsp;issues,&nbsp;-1&nbsp;if&nbsp;failure</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
+<strong>absolute_import</strong> = _Feature((2, 5, 0, 'alpha', 1), (3, 0, 0, 'alpha', 0), 16384)<br>
+<strong>app</strong> = &lt;Flask 'app'&gt;<br>
+<strong>bcrypt</strong> = &lt;flask_bcrypt.Bcrypt object&gt;<br>
+<strong>before_models_committed</strong> = &lt;blinker.base.NamedSignal object at 0x103d9be80; 'before-models-committed'&gt;<br>
+<strong>connection_stack</strong> = &lt;werkzeug.local.LocalStack object&gt;<br>
+<strong>db</strong> = &lt;SQLAlchemy engine='sqlite:///items.db'&gt;<br>
+<strong>func</strong> = &lt;sqlalchemy.sql.functions._FunctionGenerator object&gt;<br>
+<strong>models_committed</strong> = &lt;blinker.base.NamedSignal object at 0x10334f240; 'models-committed'&gt;<br>
+<strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>string_types</strong> = (&lt;class 'str'&gt;,)<br>
+<strong>with_statement</strong> = _Feature((2, 5, 0, 'alpha', 1), (2, 6, 0, 'alpha', 0), 32768)</td></tr></table>
+</body></html>
