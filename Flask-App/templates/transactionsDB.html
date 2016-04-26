@@ -1,7 +1,7 @@
 {% extends "databasetemplate.html" %}
 
 {% block title %}
-    Transactions Menu
+    POS | Transactions | DB
 {% endblock %}
 
 {% block navbar %}
@@ -94,7 +94,7 @@
     </thead>
 
     <tbody>
-        {% for row in transactionsDBTable %}
+        {% for row in pagination.items %}
             <tr>
                 <td>{{ row.id }}</td>
                 <td>{{ row.cust_name }}</td>
@@ -104,4 +104,14 @@
             </tr>
         {% endfor %}
     </tbody>
+{% endblock %}
+
+{% block tableInput %}
+    <div style="font-size: 15px; background-color: white;padding: 10px; border: 5px solid black; text-align: center; ">
+        <a href="{{ url_for('transactionsDB')}}"> 1 </a>|
+{% if pagination.has_prev %}<a href="{{ url_for('transactionsDB', page=pagination.prev_num) }}">{{ pagination.prev_num }}..</a>{% else %}{% endif %}
+    <strong>{{ pagination.page }}</strong>
+{% if pagination.has_next %}<a href="{{ url_for('transactionsDB', page=pagination.next_num) }}">..{{ pagination.next_num }} </a>{% else %}{% endif %}
+        | <a href="{{ url_for('transactionsDB',page=pagination.pages) }}">{{ pagination.pages }}</a>
+    </div>
 {% endblock %}
