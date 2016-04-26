@@ -181,14 +181,8 @@ def discountsAddRow():
 # Requires: Login, Manager/Admin permission #
 @app.route('/reports')
 @login_required
-def reports():
-    DailyRep = POS_database.revenueCheck(db, "day")
-    WeeklyRep = POS_database.revenueCheck(db, "week")
-    MonthlyRep = POS_database.revenueCheck(db, "month")
-    revenues = [DailyRep[0], WeeklyRep[0], MonthlyRep[0]]
-    costs = [DailyRep[1], WeeklyRep[1], MonthlyRep[1]]
-    profits = [DailyRep[2], WeeklyRep[2], MonthlyRep[2]]
-    POS_logic.report_table.make_table(revenues,costs,profits)
+def reports():  
+    POS_logic.report_table.make_table([1,3,4],[4,3,4],[4,4,4])
     if is_manager(current_user):
         return render_template("reports.html", reportTable=POS_logic.report_table)
     else:
@@ -197,6 +191,7 @@ def reports():
 @app.route('/download', methods=["POST"])
 def downloadReport():
     dropDownItem = request.form["report-dropdown"]
+    print(dropDownItem)
     if request.form["report-start-date"]:
         startDate = POS_display.convert_string_to_date(request.form["report-start-date"])
     else:
@@ -430,7 +425,7 @@ def register():
 
 
 # itemsDB
-# Requires: Login, Manager/Admin/Stocker permission #
+# Requires: Login, Manager/Admin/Cashier permission #
 @app.route('/itemsDB',defaults={'page':1}, methods=['GET', 'POST'])
 @app.route('/itemsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
@@ -492,12 +487,17 @@ def itemDBCancel():
 
 # productsDB
 # Requires: Login, Manager/Admin/Stocker permission #
-@app.route('/productsDB', methods=['GET', 'POST'])
+@app.route('/productsDB',defaults={'page':1}, methods=['GET', 'POST'])
+@app.route('/productsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
-def productsDB():
+def productsDB(page):
     global error
-    result = db.session.query(Product).all()
-    return render_template("productsDB.html", productsDBTable=result, error=error)
+
+    if is_manager(current_user) or is_stocker(current_user):
+        pagination = Product.query.paginate(page, 16)
+        return render_template("productsDB.html", pagination=pagination, error=error)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/productdb-delete', methods=["POST"])
 @login_required
@@ -545,12 +545,17 @@ def productDBCancel():
 
 # transactionsDB
 # Requires: Login, Manager/Admin/Cashier permission #
-@app.route('/transactionsDB', methods=['GET', 'POST'])
+@app.route('/transactionsDB',defaults={'page':1}, methods=['GET', 'POST'])
+@app.route('/transactionsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
-def transactionsDB():
+def transactionsDB(page):
     global error
-    result = db.session.query(Transaction).all()
-    return render_template("transactionsDB.html", transactionsDBTable=result, error=error)
+
+    if is_manager(current_user) or is_cashier(current_user):
+        pagination = Transaction.query.paginate(page, 16)
+        return render_template("transactionsDB.html", pagination=pagination, error=error)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/transactiondb-delete', methods=["POST"])
 @login_required
@@ -599,12 +604,17 @@ def transactionDBCancel():
 
 # itemssoldDB
 # Requires: Login, Manager/Admin/Cashier permission #
-@app.route('/itemssoldDB', methods=['GET', 'POST'])
+@app.route('/itemssoldDB',defaults={'page':1}, methods=['GET', 'POST'])
+@app.route('/itemssoldDB/<int:page>', methods=['GET', 'POST'])
 @login_required
-def itemssoldDB():
+def itemssoldDB(page):
     global error
-    result = db.session.query(ItemSold).all()
-    return render_template("itemssoldDB.html", itemsSoldDBTable=result, error=error)
+
+    if is_manager(current_user) or is_cashier(current_user):
+        pagination = ItemSold.query.paginate(page, 16)
+        return render_template("itemssoldDB.html", pagination=pagination, error=error)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/itemsolddb-delete', methods=["POST"])
 @login_required
@@ -642,12 +652,17 @@ def itemsoldDBCancel():
 
 # discountsDB
 # Requires: Login, Manager/Admin permission #
-@app.route('/discountsDB', methods=['GET', 'POST'])
+@app.route('/discountsDB',defaults={'page':1}, methods=['GET', 'POST'])
+@app.route('/discountsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
-def discountsDB():
+def discountsDB(page):
     global error
-    result = db.session.query(Discount).all()
-    return render_template("discountsDB.html", discountsDBTable=result, error=error)
+
+    if is_manager(current_user):
+        pagination = Discount.query.paginate(page, 16)
+        return render_template("discountsDB.html", pagination=pagination, error=error)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/discountdb-delete', methods=["POST"])
 @login_required
@@ -700,12 +715,17 @@ def discountDBCancel():
 
 # supplierDB
 # Requires: Login, Manager/Admin permission #
-@app.route('/supplierDB', methods=['GET', 'POST'])
+@app.route('/supplierDB',defaults={'page':1}, methods=['GET', 'POST'])
+@app.route('/supplierDB/<int:page>', methods=['GET', 'POST'])
 @login_required
-def supplierDB():
+def supplierDB(page):
     global error
-    result = db.session.query(Supplier).all()
-    return render_template("suppliersDB.html", suppliersDBTable=result, error=error)
+
+    if is_manager(current_user):
+        pagination = Supplier.query.paginate(page, 16)
+        return render_template("suppliersDB.html", pagination=pagination, error=error)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/supplierdb-delete', methods=["POST"])
 @login_required
@@ -755,12 +775,17 @@ def supplierDBCancel():
 
 # userDB
 # Requires: Login, Manager/Admin permission #
-@app.route('/userDB', methods=['GET', 'POST'])
+@app.route('/userDB',defaults={'page':1}, methods=['GET', 'POST'])
+@app.route('/userDB/<int:page>', methods=['GET', 'POST'])
 @login_required
-def userDB():
+def userDB(page):
     global error
-    result = db.session.query(User).all()
-    return render_template("userDB.html", usersDBTable=result, error=error)
+
+    if is_manager(current_user):
+        pagination = User.query.paginate(page, 16)
+        return render_template("userDB.html", pagination=pagination, error=error)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/userdb-delete', methods=["POST"])
 @login_required
