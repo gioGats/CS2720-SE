@@ -8,16 +8,20 @@ Purpose: Contains all database interaction functions for passing data between th
 # IMPORTS																											   #
 ########################################################################################################################
 
-from flask_sqlalchemy import *
-from flask import Flask, make_response, send_file
-from sqlalchemy import func
-from models import *
-import re
+# from flask_sqlalchemy import *
 import csv
 import datetime as dt
-from datetime import datetime
+import re
+# from datetime import datetime
 from io import StringIO
-from app import app
+
+from flask import make_response
+from sqlalchemy import func
+
+from models import *
+
+
+# from app import app
 
 ########################################################################################################################
 # WRAPPER FUNCTION      																					           #
@@ -555,8 +559,8 @@ def getDiscountFor(db, productID):
     # Get the discount tuple if it satisfies conditionals                   ::Correct product, correct date.
     # Get the discount tuple if it satisfies conditionals
     currentDiscount = db.session.query(Discount).filter(Discount.product_id == productID)\
-                                                .filter(Discount.start_date <= datetime.date(datetime.today()))\
-                                                .filter(Discount.end_date > datetime.date(datetime.today()))\
+                                                .filter(Discount.start_date <= datetime.date.today())\
+                                                .filter(Discount.end_date >= datetime.date.today())\
                                                         .first()  # Pick the first one.
     # Filter the price out; or 0 for no matches
     if currentDiscount is None:
