@@ -182,8 +182,7 @@ def discountsAddRow():
 @app.route('/reports')
 @login_required
 def reports():
-    DailyRep = POS_database.revenueCheck(db, "day") + POS_logic.report_table.make_table([1, 3, 4], [4, 3, 4],
-                                                                                        [4, 4, 4])
+    DailyRep = POS_database.revenueCheck(db, "day")
     WeeklyRep = POS_database.revenueCheck(db, "week")
     MonthlyRep = POS_database.revenueCheck(db, "month")
     revenues = [DailyRep[0], WeeklyRep[0], MonthlyRep[0]]
