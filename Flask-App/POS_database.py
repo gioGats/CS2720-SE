@@ -119,7 +119,6 @@ def getProductName(db, productID):
     return result.name
 
 
-
 @getfromDB_Error
 def getProductPrice(db, productID):
     """
@@ -946,7 +945,6 @@ def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
 #@app.route('/download')
 @getfromDB_Error
 def toCSV(db, theRedPill, dateTup = None): # Should ask for a string and properly give back the right database's setup
-    # TODO Joined tables : items_sold + transactions
     """
     Brings in a string of the type, gives ya' a .csv for that.
     :param db: database pointer

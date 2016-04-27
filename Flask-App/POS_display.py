@@ -40,11 +40,14 @@ def convert_string_to_date(dateString):
     :param dateString: String coming from HTML user-input in format YYYY-MM-DD
     :return: Instance of FormattedDate
     """
-    string_list = dateString.split("-")
-    year = int(string_list[0])
-    month = int(string_list[1])
-    day = int(string_list[2])
-    date_result = FormattedDate(year=year, month=month, day=day)
+    try:
+        string_list = dateString.split("-")
+        year = int(string_list[0])
+        month = int(string_list[1])
+        day = int(string_list[2])
+        date_result = FormattedDate(year=year, month=month, day=day)
+    except ValueError:
+        return -1
 
     return date_result
 
