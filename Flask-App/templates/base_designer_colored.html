@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+  <!-- Bootstrap Header Declaration -->
+  <head>
+      <title>{% block title %}{% endblock %}</title>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link rel="stylesheet" type="text/css" href="static/custom.css">
+      <link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
+
+      <link rel="shortcut icon"
+            type="image/x-icon"
+            href="http://www.free-icons-download.net/images/green-dollar-sign-button-icon-12080.png"/>
+  <style>
+
+      /* Author: Ethan Morisette
+/* Purpose: to add custom styling on top of the bootstrap styling
+/* Notes: please alphabetize selector properties for enhanced readability */
+
+html						{background-color:#000000;}
+#pagecontent				{height:750px; margin-top:50px; padding:0px;}
+
+/************************************************************************************************************************************************
+	  HEADER STYLING
+************************************************************************************************************************************************/
+nav.navbar					{border-radius:0px; margin:0px;}
+
+
+/************************************************************************************************************************************************
+      SIDE PANEL STYLING
+************************************************************************************************************************************************/
+#sidepanel					{background-color:#717171; border-color:black #2e2e2e; border-style:solid ridge none none; border-width:5px 10px 0px 0px; height:100%; position:relative;}
+.side-panel-top				{position:absolute; top:10px;}
+.side-panel-bot				{bottom:10px; position:absolute;}
+
+/************************************************************************************************************************************************
+	  MAIN PANEL STYLING
+************************************************************************************************************************************************/
+#mainpanel					{background-color:#288fff; height:100%;}
+
+/***********************************************************************************************************************************************
+	  TABLE STYLING
+************************************************************************************************************************************************/
+#tablewindow				{background-color:#88dfff; border:3px solid black; height:650px; margin:20px; overflow-y:hidden;}
+.table-header				{background-color:#717171; border-bottom:1px solid black;}
+
+/************************************************************************************************************************************************
+	  TABLE FORM STYLING
+************************************************************************************************************************************************/
+#tableinput					{height:200px; margin:20px;}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff8000;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #ff8000;
+}
+::-webkit-scrollbar-track {
+  background: #333333;
+  border: 0px none #ffffff;
+  border-radius: 100px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #333333;
+}
+::-webkit-scrollbar-track:active {
+  background: #333333;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
+
+
+.dropbtn {
+    background-color: #222;
+    color: #9d9d9d;
+    padding: 15px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    height: 50.4px;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #222;
+    color: white;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #f1f1f1}
+
+.show {display:block;}
+
+      .pagination-page-info {
+    padding: .6em;
+    padding-left: 0;
+    width: 40em;
+    margin: .5em;
+    margin-left: 0;
+    font-size: 12px;
+}
+.pagination-page-info b {
+    color: black;
+    background: #6aa6ed;
+    padding-left: 2px;
+    padding: .1em .25em;
+    font-size: 150%;
+}
+  </style>
+  </head>
+
+ <!-- HTML Body Code Declaration -->
+ <body>
+
+     <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="z-index: 100; max-height: 50px;">
+      <div class="container-fluid">
+        <!-- each block will have its own version of navbar
+        this is done to allow the items in the navbar to stay
+        highlighted when they are currently being viewed -->
+        {% block navbar %} {% block dropdown %}
+            <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn">Databases</button>
+                    <div id="myDropdown" class="dropdown-content">
+                        {%  if current_user.permissions == 1 or current_user.permissions == 3 %}
+                        <a href="/itemsDB">Items</a>
+                        <a href="/productsDB">Products</a>
+                        {%  endif %}
+                          {%  if current_user.permissions == 1 or current_user.permissions == 2 %}
+                        <a href="/transactionsDB">Transactions</a>
+                        <a href="/itemssoldDB">Items Sold</a>
+                        {%  endif %}
+                      {%  if current_user.permissions == 1 %}
+                        <a href="/discountsDB">Discounts</a>
+                          <a href="/supplierDB">Suppliers</a>
+                        <a href="/userDB">User</a>
+                        {%  endif %}
+                    </div>
+                    </div>
+        {% endblock %}
+
+        {% endblock %}
+
+      </div>
+
+     {% if error %}
+        <div class="alert alert-danger" style="width:400px; height:3%; z-index: 100; position: absolute; top:8px;left: 200px; right: 0px; margin: 0;">
+          <div style="top: 6px; position: absolute;">
+            <div style="left: 105%; position: absolute;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            </div>
+              <p class="error"><strong>Error:</strong> {{ error }}</p>
+          </div>
+        </div>
+
+      {% endif %}
+
+      <!-- Flash Message Handling -->
+      {% for message in get_flashed_messages() %}
+          <div class="alert alert-success" style="width:400px; max-width: 400px; height:3%; z-index: 100; position: absolute; top:10px;left: 200px; right: 0px; margin: 0;">
+          <div style="top: 6px; position: absolute;">
+              <div style="left: 105%; position: absolute;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              </div>
+        {{ message }}
+          </div>
+        </div>
+      {% endfor %}
+    </nav>
+
+     <!-- Child Template Injection -->
+      {% block content %}{% endblock %}
+
+     <footer class="navbar navbar-inverse n+tom">
+        <p class="navbar-text navbar-center">
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
+                <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
+            This work is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
+                Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
+            </a>.
+        </p>
+     </footer>
+
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/static/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="static/dropdown.js"></script>
+
+ <script>
+     /**
+ * Created by Jacob on 4/16/2016.
+ */
+
+
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+ </script>
+  </body>
+
+</html>
+
