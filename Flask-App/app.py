@@ -181,8 +181,15 @@ def discountsAddRow():
 # Requires: Login, Manager/Admin permission #
 @app.route('/reports')
 @login_required
-def reports():  
-    POS_logic.report_table.make_table([1,3,4],[4,3,4],[4,4,4])
+def reports():
+    DailyRep = POS_database.revenueCheck(db, "day") + POS_logic.report_table.make_table([1, 3, 4], [4, 3, 4],
+                                                                                        [4, 4, 4])
+    WeeklyRep = POS_database.revenueCheck(db, "week")
+    MonthlyRep = POS_database.revenueCheck(db, "month")
+    revenues = [DailyRep[0], WeeklyRep[0], MonthlyRep[0]]
+    costs = [DailyRep[1], WeeklyRep[1], MonthlyRep[1]]
+    profits = [DailyRep[2], WeeklyRep[2], MonthlyRep[2]]
+    POS_logic.report_table.make_table(revenues, costs, profits)
     if is_manager(current_user):
         return render_template("reports.html", reportTable=POS_logic.report_table)
     else:
@@ -191,7 +198,6 @@ def reports():
 @app.route('/download', methods=["POST"])
 def downloadReport():
     dropDownItem = request.form["report-dropdown"]
-    print(dropDownItem)
     if request.form["report-start-date"]:
         startDate = POS_display.convert_string_to_date(request.form["report-start-date"])
     else:
