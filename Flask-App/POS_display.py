@@ -172,3 +172,14 @@ def get_transaction_row(request):
     input_dict["customer-contact"] = request.form["customer-contact"]
     input_dict["payment-type"] = request.form["payment-type"]
     return input_dict
+
+def get_report_custom_row(request):
+    """
+    Purpose:    to get user input from the GUI and pass it into the system
+    :param request: request (request object)
+    :return: a dictionary of form data
+    """
+    input_dict = dict();
+    input_dict["custom_start_date"] = request.form["custom_start_date"]
+    input_dict["custom_end_date"] = request.form["custom_end_date"]
+    return input_dict

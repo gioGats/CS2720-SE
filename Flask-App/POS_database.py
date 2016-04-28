@@ -448,6 +448,35 @@ def getMaxItemSoldID(db):
     result = db.session.query(func.max(ItemSold.id)).first()
     return result[0]
 
+@commitDB_Errorcatch
+def addItemSold(db, item_id, price_sold, transaction_id):
+    """
+    Creates and adds to a database a user
+    :param db: database pointer
+    :param name: str
+    :param password: str (unhashed!)
+    :param permissions: int (1-3)
+    :return: -
+    """
+    # Create the thing!
+    db.session.add(ItemSold(item_id, price_sold, transaction_id))
+    # Commit our change!
+    db.session.commit()
+
+
+
+@commitDB_Errorcatch
+def destroyItemSold(db, itemSoldID):
+    """
+    Destroys an item out of the pointed database
+    :param db: database pointer
+    :param itemID: int
+    :return: -
+    """
+    # Find and destroy the thingie
+    db.session.query(ItemSold).filter(ItemSold.id == itemSoldID).delete()
+    # Commit the changes
+    db.session.commit()
 
 #########################################################################
 # Supplier database Access                                              #
@@ -622,7 +651,6 @@ def getTransaction(db, transactionID):
     """
     # Get the transaction
     transaction = db.session.query(Transaction).filter(Transaction.id == transactionID).first()
-    print(transaction)
     # Structure it into a tuple
     retT = tuple([transaction.cust_name, transaction.cust_contact,
                   transaction.payment_type, transaction.date])

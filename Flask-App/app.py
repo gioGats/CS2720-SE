@@ -185,14 +185,10 @@ def reports():
     DailyRep = POS_database.revenueCheck(db, "day")
     WeeklyRep = POS_database.revenueCheck(db, "week")
     MonthlyRep = POS_database.revenueCheck(db, "month")
-    customStart = POS_display.FormattedDate(2016, 4, 26)
-    customEnd = POS_display.FormattedDate(2016, 4, 27)
-    customRep = POS_database.revenueCheck(db, (customStart, customEnd)) 
     revenues = [DailyRep[0], WeeklyRep[0], MonthlyRep[0]]
     costs = [DailyRep[1], WeeklyRep[1], MonthlyRep[1]]
     profits = [DailyRep[2], WeeklyRep[2], MonthlyRep[2]]
     POS_logic.report_table.make_table(revenues, costs, profits)
-    POS_logic.report_table.update_custom_column(customRep[0], customRep[1], customRep[2])
     if is_manager(current_user):
         return render_template("reports.html", reportTable=POS_logic.report_table)
     else:
@@ -229,6 +225,20 @@ def downloadReport():
 
 @app.route('/updatecustom', methods=["POST"])
 def updateCustomRange():
+    inputDict = POS_display.get_report_custom_row(request)
+    print(inputDict["custom_start_date"])
+    print(inputDict["custom_end_date"])
+    startDate = date(2016, 4, 27)
+    endDate = date(2016, 4, 28)
+    startDate = POS_display.convert_string_to_date(inputDict["custom_start_date"])
+    endDate = POS_display.convert_string_to_date(inputDict["custom_end_date"])
+    print(startDate)
+    print(endDate)
+    customRep = POS_database.revenueCheck(db, (startDate, endDate))
+    print(customRep)
+
+    POS_logic.report_table.update_custom_column(customRep[0], customRep[1], customRep[2])
+
     return redirect(url_for("reports"))
 
 # -------------------------------------------------- #
@@ -671,8 +681,13 @@ def itemsoldDBDeleteItemsold():
 
 @app.route('/itemsolddb-add', methods=["POST"])
 def itemsoldDBUpdateItemsold():
+    inputDict = POS_display.get_itemsold_row(request)
     #TODO database support for adding and modifying items sold
-    
+    if (inputDict["itemsold_id"]):
+        POS_database.editItemSold(db, inputDict["itemsold_id"], inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
+    else:
+        POS_database.addItemSold(db, inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
+
     # reload the page
     return redirect(url_for('itemssoldDB'))
 
@@ -899,6 +914,10 @@ def deleteDBRow(dbTableName):
         getRowFunc = POS_display.get_transaction_row
         destroyRowFunc = POS_database.destroyTransaction
         idFieldName = "transaction-id"
+    elif (dbTableName == "itemsold"):
+        getRowFunc = POS_display.get_itemsold_row
+        destroyRowFunc = POS_database.destroyItemSold
+        idFieldName = "itemsold_id"
 
     # get the user input from the form submit
     inputDict = getRowFunc(request)

@@ -83,12 +83,12 @@
         <form id="custom_range_form" action="{{ url_for('updateCustomRange') }}" method=post>
             <div class="form-group">
                 <label for="custom_start_date_input">Start Date</label> 
-                <input type="date" class="form-control" id="custom_start_date_input" name="custom_start_date"> 
+                <input type="date" class="form-control" id="custom_start_date_input" name="custom_start_date" required> 
             </div>
 
             <div class="form-group">
                 <label for="custom_end_date_input">Start Date</label>
-                <input type="date" class="form-control" id="custom_end_date_input" name="custom_end_date">
+                <input type="date" class="form-control" id="custom_end_date_input" name="custom_end_date" required>
             </div>
 
             <div class="form-group">
