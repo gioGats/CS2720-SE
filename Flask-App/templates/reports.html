@@ -45,7 +45,7 @@
 
 {% block sidePanelContent %}
     <div class="side-panel-top">
-        <h2>Report Menu</h2>
+        <h2 class="side-panel-header"><u>Report Menu</u></h2>
         <h4>Download a report...</h4>
         <form id="manager-form" action="/download" method=post>
             <div class="form-group">
@@ -75,7 +75,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" name="managerReportDownload" class="btn btn-info">Download Report</button>
+                <button type="submit" name="managerReportDownload" class="btn btn-info side-panel-button">Download Report</button>
             </div>
         </form>
 
@@ -92,7 +92,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-info">Update Custom Range</button>
+                <button type="submit" class="btn btn-info side-panel-button">Update Custom Range</button>
             </div>
         </form>
     </div>

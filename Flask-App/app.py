@@ -273,8 +273,12 @@ def cashierDeleteRow():
     error = None
     inputDict = POS_display.get_cashier_row(request)
 
+    # if no row id was entered then print an error
+    if (not inputDict["row_number"]):
+        error = "What are you trying to delete?"
+
     # if the row number does not exist, display an error
-    if (int(inputDict["row_number"]) > POS_logic.cashier_table.get_row_count()):
+    elif (int(inputDict["row_number"]) > POS_logic.cashier_table.get_row_count()):
         error = "That row number is out of bounds."
 
     # otherwise, delete the row number
@@ -360,8 +364,12 @@ def stockerDeleteRow():
     error = None
     inputDict = POS_display.get_stocker_row(request)
 
+    # if no row id was entered then print an erro
+    if (not inputDict["row_number"]):
+        error = "What are you trying to delete?"
+
     # if the enter row number is out of bounds, print error
-    if (int(inputDict["row_number"]) > POS_logic.stocker_table.get_row_count()):
+    elif (int(inputDict["row_number"]) > POS_logic.stocker_table.get_row_count()):
         error = "That row number is out of bounds!"
 
     # otherwise go ahead and delete the row
@@ -441,7 +449,7 @@ def register():
 def itemsDB(page):
     global error
 
-    if is_manager(current_user) or is_cashier(current_user):
+    if is_manager(current_user) or is_stocker(current_user):
         pagination = Item.query.paginate(page, 16)
         return render_template("itemsDB.html", pagination=pagination, error=error)
     else:
@@ -455,8 +463,12 @@ def itemDBDeleteItem():
     
     inputDict = POS_display.get_item_row(request)
 
+    # if the user didn't enter an item id to delete print error
+    if (not inputDict["item-id"]):
+        error = "What are you trying to delete?"
+
     # if the id input is greater than the max id in the database, then print error
-    if (int(inputDict["item-id"]) > POS_database.getMaxItemID(db)):
+    elif (int(inputDict["item-id"]) > POS_database.getMaxItemID(db)):
         error = "You entered an item ID that is out of bounds."
         
     # otherwise delete the row
@@ -516,8 +528,12 @@ def productDBDeleteProduct():
     
     inputDict = POS_display.get_product_row(request)
 
+    # if the user didn't enter an item id to delete print error
+    if (not inputDict["product-id"]):
+        error = "What are you trying to delete?"
+
     # if the id input is greater than the max id in the database, then print error
-    if (int(inputDict["product-id"]) > POS_database.getMaxProductID(db)):
+    elif (int(inputDict["product-id"]) > POS_database.getMaxProductID(db)):
         error = "You entered a product ID that is out of bounds."
         
     # otherwise delete the row
@@ -574,10 +590,14 @@ def transactionDBDeleteTransaction():
     
     inputDict = POS_display.get_transaction_row(request)
 
+    # if no transaction id was entered then print an error
+    if (not inputDict["transaction-id"]):
+        error = "What are you trying to delete?"
+
     # if the id input is greater than the max id in the database, then print error
-    if (int(inputDict["transaction-id"]) > POS_database.getMaxTransactionID(db)):
+    elif (int(inputDict["transaction-id"]) > POS_database.getMaxTransactionID(db)):
         error = "You entered a transaction ID that is out of bounds."
-        
+
     # otherwise delete the row
     else: 
         # send it to the helper!
@@ -595,7 +615,7 @@ def transactionDBUpdateTransaction():
     #TODO check if the entered id number is valid
     #TODO add database support for editing a transaction
     if (inputDict["transaction-id"]):
-        pass
+        POS_database.editTransaction(db, inputDict["transaction-id"], inputDict["customer-name"], inputDict["customer-contact"], inputDict["payment-type"])
 
     # else if the user did not enter an id, add a new user
     else:
@@ -633,8 +653,12 @@ def itemsoldDBDeleteItemsold():
     
     inputDict = POS_display.get_itemsold_row(request)
 
+    # if no transaction id was entered then print an error
+    if (not inputDict["itemsold_id"]):
+        error = "What are you trying to delete?"
+
     # if the id input is greater than the max id in the database, then print error
-    if (int(inputDict["itemsold_id"]) > POS_database.getMaxItemSoldID(db)):
+    elif (int(inputDict["itemsold_id"]) > POS_database.getMaxItemSoldID(db)):
         error = "You entered an Item Sold ID that is out of bounds."
         
     # otherwise delete the row
@@ -681,8 +705,12 @@ def discountDBDeleteDiscount():
     
     inputDict = POS_display.get_discount_row(request)
 
+    # if the user didn't enter a dicount id to delete print error
+    if (not inputDict["discount-id"]):
+        error = "What are you trying to delete?"
+
     # if the id input is greater than the max id in the database, then print error
-    if (int(inputDict["discount-id"]) > POS_database.getMaxDiscountID(db)):
+    elif (int(inputDict["discount-id"]) > POS_database.getMaxDiscountID(db)):
         error = "You entered a discount ID that is out of bounds."
         
     # otherwise delete the row
@@ -744,8 +772,12 @@ def supplierDBDeleteSupplier():
     
     inputDict = POS_display.get_supplier_row(request)
 
+    # if the user didn't enter a supplier id to delete print error
+    if (not inputDict["supplier-id"]):
+        error = "What are you trying to delete?"
+
     # if the id input is greater than the max id in the database, then print error
-    if (int(inputDict["supplier-id"]) > POS_database.getMaxSupplierID(db)):
+    elif (int(inputDict["supplier-id"]) > POS_database.getMaxSupplierID(db)):
         error = "You entered a supplier ID that is out of bounds."
 
     # otherwise delete the row
@@ -804,8 +836,12 @@ def userDBDeleteUser():
     
     inputDict = POS_display.get_user_row(request)
 
+    # if the user didn't enter an user id to delete print error
+    if (not inputDict["user-id"]):
+        error = "What are you trying to delete?"
+
     # if the id input is greater than the max id in the database, then print error
-    if (int(inputDict["user-id"]) > POS_database.getMaxUserID(db)):
+    elif (int(inputDict["user-id"]) > POS_database.getMaxUserID(db)):
         error = "You entered a user ID that is out of bounds."
 
     # otherwise delete the row

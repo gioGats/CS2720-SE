@@ -68,7 +68,11 @@
 
     <div class="form-group">
         <label for="permissionsInput">Permissions: </label>
-        <input type="number" class="form-control" id="permissionsInput" name="permissions" min="1" max="3"> 
+        <select class="form-control" id="permissionsInput" name="permissions">
+            <option value="1">Administrator/Manager</option>
+            <option value="2">Cashier</option>
+            <option value="3">Stocker</option>                 
+        </select>
     </div> 
 {% endblock %}
 
