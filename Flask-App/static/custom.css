@@ -14,20 +14,24 @@ nav.navbar					{border-radius:0px; margin:0px;}
 /************************************************************************************************************************************************
       SIDE PANEL STYLING		   
 ************************************************************************************************************************************************/
-#sidepanel					{background-color:#616161; border-color:black #2e2e2e; border-style:solid ridge none none; border-width:5px 10px 0px 0px; height:100%; position:relative;}
-.side-panel-top				{position:absolute; top:10px;}
-.side-panel-bot				{bottom:10px; position:absolute;}
+#sidepanel							{background-color:#717171; border-color:black #2e2e2e; border-style:solid ridge none none; border-width:5px 10px 0px 0px; height:100%; position:relative;}
+.side-panel-top						{position:relative; top:10px; width:100%;}
+.side-panel-bot						{bottom:10px; position:absolute;}
+button.side-panel-button			{display:block; width:50%; margin-left:auto; margin-right:auto;}
+h2.side-panel-header				{text-align:center; margin-bottom:30px;}
+label.side-panel-label				{display:block;}
+label.side-panel-label.emphasize 	{border: solid black 1px;}
 
 /************************************************************************************************************************************************
 	  MAIN PANEL STYLING
 ************************************************************************************************************************************************/
-#mainpanel					{background-color:#8A0651; height:100%;}
+#mainpanel					{background-color:#288fff; height:100%; padding: 20px;}
 
 /***********************************************************************************************************************************************
 	  TABLE STYLING
 ************************************************************************************************************************************************/
-#tablewindow				{background-color:#FDE1F0; border:3px solid black; height:650px; margin:20px; overflow-y:scroll;}
-.table-header				{background-color:#616161; border-bottom:1px solid black;}
+#tablewindow				{background-color:#88dfff; border:3px solid black; height:650px;}
+.table-header				{background-color:#717171; border-bottom:1px solid black;}
 
 /************************************************************************************************************************************************
 	  TABLE FORM STYLING

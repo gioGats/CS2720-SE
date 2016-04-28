@@ -46,12 +46,15 @@
 
 {% block sidePanelContent %}
     <div class="side-panel-top">
-        <h2>Stocker Menu</h2>
+        <h2 class="side-panel-header"><u>Stocker Menu</u></h2>
         <form id="stocker-form">
             <div class="form-group">
                 <label for="row-number-input">Row Number: </label>
                 <input type="number" class="form-control" name="row_number" id="row-number-input" min=1>
-                <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post">Delete</button>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post">Delete</button>
             </div>
 
             <div class="form-group">
@@ -69,13 +72,17 @@
                 <input type="number" class="form-control" name="inventory_cost" id="inventory-cost-input">
             </div>
 
-            <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerAddRow') }}" formmethod="post">Update</button>
-            <button type="submit" class="btn btn-info" formid="stocker-form" formaction="{{ url_for('stockerCancel') }}" formmethod="post">Cancel</button>
+            <div class="form-group">
+                <button type="submit" class="btn btn-info side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerAddRow') }}" formmethod="post">Update</button>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-info side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerCancel') }}" formmethod="post">Cancel</button>
+            </div>
+
         </form>
-        <div style="padding-top: 10px;">
-            <form action="{{ url_for('updateInventory') }}" method=post>
-                </div>
-            <button type="submit" class="btn btn-info">Update Inventory</button>
+        <form action="{{ url_for('updateInventory') }}" method=post>
+            <button type="submit" class="btn btn-info side-panel-button">Update Inventory</button>
         </form>
     </div>
 {% endblock %}
