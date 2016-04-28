@@ -133,13 +133,15 @@ def getProductName(db, productID):
 
 
 @getfromDB_Error
-def getProductPrice(db, productID):
+def getProductPrice(db, productID, overridePrice = ''):
     """
     gets the price for a given ID
     :param db: database pointer
     :param productID: int
     :return: float (discounted price)
     """
+    if overridePrice != '':
+        return float(overridePrice)
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
