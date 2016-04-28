@@ -185,10 +185,14 @@ def reports():
     DailyRep = POS_database.revenueCheck(db, "day")
     WeeklyRep = POS_database.revenueCheck(db, "week")
     MonthlyRep = POS_database.revenueCheck(db, "month")
+    customStart = POS_display.FormattedDate(2016, 4, 26)
+    customEnd = POS_display.FormattedDate(2016, 4, 27)
+    customRep = POS_database.revenueCheck(db, (customStart, customEnd)) 
     revenues = [DailyRep[0], WeeklyRep[0], MonthlyRep[0]]
     costs = [DailyRep[1], WeeklyRep[1], MonthlyRep[1]]
     profits = [DailyRep[2], WeeklyRep[2], MonthlyRep[2]]
     POS_logic.report_table.make_table(revenues, costs, profits)
+    POS_logic.report_table.update_custom_column(customRep[0], customRep[1], customRep[2])
     if is_manager(current_user):
         return render_template("reports.html", reportTable=POS_logic.report_table)
     else:

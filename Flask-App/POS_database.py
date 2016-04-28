@@ -622,6 +622,7 @@ def getTransaction(db, transactionID):
     """
     # Get the transaction
     transaction = db.session.query(Transaction).filter(Transaction.id == transactionID).first()
+    print(transaction)
     # Structure it into a tuple
     retT = tuple([transaction.cust_name, transaction.cust_contact,
                   transaction.payment_type, transaction.date])
