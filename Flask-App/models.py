@@ -11,7 +11,7 @@ from app import bcrypt
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 import datetime
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import * #SQLAlchemyError
 
 
 class Item(db.Model):

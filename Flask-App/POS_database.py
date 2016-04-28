@@ -23,6 +23,10 @@ from models import *
 
 # from app import app
 
+# ErrorCodes
+INTEGRITY_ERROR = -1337
+
+
 ########################################################################################################################
 # WRAPPER FUNCTION      																					           #
 ########################################################################################################################
@@ -45,6 +49,9 @@ def commitDB_Errorcatch(func):
             return 0
         except SQLAlchemyError as e:
             db.session.rollback()
+            if type(e) == IntegrityError:
+                # print(INTEGRITY_ERROR)
+                return INTEGRITY_ERROR
             return -1  # !!
 
     # Hand back the function for future usage.
@@ -68,6 +75,10 @@ def getfromDB_Error(func):
             v = func(db, *args, **kwargs)
             return v
         except SQLAlchemyError as e:
+            db.session.rollback()
+            if type(e) == IntegrityError:
+                # print(INTEGRITY_ERROR)
+                return INTEGRITY_ERROR
             return -1
     return wrapperFunction
 
@@ -824,7 +835,7 @@ def editProduct(db, productID, name, supplier_id,
     if supplier_id != '':
         result.supplier_id = int(supplier_id)
     if min_inventory != '':
-        result.min_inventory = int(inv_count)
+        result.min_inventory = int(min_inventory)
     if shelf_life != '':
         result.shelf_life = int(shelf_life)
     if standard_price != '':
