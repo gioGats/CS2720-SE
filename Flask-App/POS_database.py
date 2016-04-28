@@ -220,6 +220,7 @@ def addProduct(db, name, supplier_id, min_inventory, shelf_life, standard_price)
     :param standard_price: float
     :return: -
     """
+
     # Build one
     db.session.add(Product(name, supplier_id, min_inventory, shelf_life, standard_price))
     # commit our addition!
@@ -802,7 +803,7 @@ def getMaxUserID(db):
 #########################################################################
 #########################################################################
 @commitDB_Errorcatch
-def editProduct(db, productID, name, supplier_id, inv_count,
+def editProduct(db, productID, name, supplier_id,
                 min_inventory, shelf_life, standard_price):
     """
     Give me all the things, I'll edit the ones you change.
@@ -822,8 +823,6 @@ def editProduct(db, productID, name, supplier_id, inv_count,
         result.name = name
     if supplier_id != '':
         result.supplier_id = int(supplier_id)
-    if inv_count != '':
-        result.inventory_count = int(inv_count)
     if min_inventory != '':
         result.min_inventory = int(inv_count)
     if shelf_life != '':

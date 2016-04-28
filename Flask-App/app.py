@@ -263,16 +263,14 @@ def cashierAddRow():
     inputDict = POS_display.get_cashier_row(request)
     
     if (inputDict["row_number"]):
-        #TODO add edit functionality for cashier
-        pass
+        POS_logic.cashier_table.edit_row(inputDict["row_number"], inputDict["item_id"], inputDict["price_per_unit"])
     else:
-        #add 
+        # get the product name and price from the database
         productID = POS_database.getItemProduct(db, inputDict["item_id"])
         productName = POS_database.getProductName(db, productID)
         pricePerUnit = POS_database.getProductPrice(db, productID)
         # add the received information to the local receipt table
         POS_logic.cashier_table.add_row(inputDict["item_id"], productName, pricePerUnit)
-        # get the product name and price from the database
 
     # reload page
     return redirect(url_for('cashier'))
@@ -361,7 +359,7 @@ def stockerAddRow():
 
     if (inputDict["row_number"]):
         print("I am editing!")
-        POS_logic.stocker_table.edit_row(int(inputDict["row_number"]), productID, productName, int(inputDict["quantity"]), inputDict["inventory_cost"])
+        POS_logic.stocker_table.edit_row(inputDict["row_number"], productID, productName, inputDict["quantity"], inputDict["inventory_cost"])
     else:
         # add all of the information received to the local stocking table
         POS_logic.stocker_table.add_row(productID, productName, int(inputDict['quantity']), inputDict['inventory_cost'])
@@ -556,12 +554,19 @@ def productDBDeleteProduct():
 
 @app.route('/productdb-add', methods=["POST"])
 def productDBUpdateProduct():
+    global error
+    error = None
     # get the user input from the form submit
     inputDict = POS_display.get_product_row(request)
 
+    # if the dictiionary doensn't have any items in it print error
+    if ((not inputDict["product-id"]) and (not inputDict["product-name"]) and (not inputDict["supplier-id"]) and (not inputDict["min-inventory"]) and (not inputDict["shelf-life"]) and (not inputDict["standard-price"])):
+        print("blah")
+        error = "You didn't enter anything!"
+
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
-    if (inputDict["product-id"]):
+    elif (inputDict["product-id"]):
         POS_database.editProduct(db, inputDict["product-id"], inputDict["product-name"], inputDict["supplier-id"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
 
     # else if the user did not enter an id, add a new user
@@ -618,13 +623,19 @@ def transactionDBDeleteTransaction():
 
 @app.route('/transactiondb-add', methods=["POST"])
 def transactionDBUpdateTransaction():
+    global error
+    error = None
     # get the user input from the form submit
     inputDict = POS_display.get_transaction_row(request)
+
+    # if the dictiionary doensn't have any items in it print error
+    if (not inputDict):
+        error = "You didn't enter anything!"
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
     #TODO add database support for editing a transaction
-    if (inputDict["transaction-id"]):
+    elif (inputDict["transaction-id"]):
         POS_database.editTransaction(db, inputDict["transaction-id"], inputDict["customer-name"], inputDict["customer-contact"], inputDict["payment-type"])
 
     # else if the user did not enter an id, add a new user

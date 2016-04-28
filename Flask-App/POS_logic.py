@@ -278,9 +278,9 @@ class CashierTable(Table):
         :return:
         """
         if item_id == '':
-            item_id = self.rowsList[row_number-1].item_id
+            item_id = self.rowsList[int(row_number)-1].item_id
         if price == '':
-            price = self.rowsList[row_number-1].price
+            price = self.rowsList[int(row_number)-1].price
         self.rowsList[row_number-1] = CashierRow(item_id, price)
 
 
@@ -315,10 +315,12 @@ class StockerTable(Table):
         if product_id == '':
             product_id = self.rowsList[row_number-1].product_id
         if quantity == "":
+            quantity = int(quantity)
             quantity = self.rowsList[row_number-1].quantity
         if inventory_cost == '':
             inventory_cost = self.rowsList[row_number-1].inventory_cost
-        self.rowsList[row_number-1] = StockerRow(product_id, name, inventory_cost, quantity)
+
+        self.rowsList[row_number-1] = StockerRow(int(product_id), name, inventory_cost, int(quantity))
 
 
 class ReportTable(Table):
