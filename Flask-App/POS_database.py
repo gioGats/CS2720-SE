@@ -49,6 +49,7 @@ def commitDB_Errorcatch(func):
             return 0
         except SQLAlchemyError as e:
             db.session.rollback()
+            print(e)
             if type(e) == IntegrityError:
                 # print(INTEGRITY_ERROR)
                 return INTEGRITY_ERROR
@@ -76,6 +77,7 @@ def getfromDB_Error(func):
             return v
         except SQLAlchemyError as e:
             db.session.rollback()
+            print(e)
             if type(e) == IntegrityError:
                 # print(INTEGRITY_ERROR)
                 return INTEGRITY_ERROR
@@ -638,6 +640,18 @@ def destroyDiscount(db, discountID):
     db.session.query(Discount).filter(Discount.id == discountID).delete()
     # Commit our changes
     db.session.commit()
+
+
+@commitDB_Errorcatch
+def doesDiscountExist(db, discountID):
+    """
+    Does this discount exist?
+    :param db: database pointer
+    :param discountID: int
+    :return: -
+    """
+    db.session.query(Discount).filter(Discount.id == discountID).first()
+
 
 @getfromDB_Error
 def getMaxDiscountID(db):
