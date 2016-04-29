@@ -644,7 +644,9 @@ def transactionDBUpdateTransaction():
     #TODO check if the entered id number is valid
     #TODO add database support for editing a transaction
     elif (inputDict["transaction-id"]):
-        POS_database.editTransaction(db, inputDict["transaction-id"], inputDict["customer-name"], inputDict["customer-contact"], inputDict["payment-type"])
+        result = POS_database.editTransaction(db, inputDict["transaction-id"], inputDict["customer-name"], inputDict["customer-contact"], inputDict["payment-type"])
+        if (result == POS_database.NO_RESULT):
+            error = "That item is not in the database."
 
     # else if the user did not enter an id, add a new user
     else:
@@ -705,10 +707,15 @@ def itemsoldDBDeleteItemsold():
 
 @app.route('/itemsolddb-add', methods=["POST"])
 def itemsoldDBUpdateItemsold():
+    global error
+    error = None
+
     inputDict = POS_display.get_itemsold_row(request)
     #TODO database support for adding and modifying items sold
     if (inputDict["itemsold_id"]):
-        POS_database.editItemSold(db, inputDict["itemsold_id"], inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
+        result = POS_database.editItemSold(db, inputDict["itemsold_id"], inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
+        if (result == POS_database.NO_RESULT):
+            error = "That item is not in the database."
     else:
         POS_database.addItemSold(db, inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
 
@@ -767,13 +774,19 @@ def discountDBDeleteDiscount():
 
 @app.route('/discountdb-add', methods=["POST"])
 def discountDBUpdateDiscount():
+    global error
+    error = None
+
     # get the user input from the form submit
     inputDict = POS_display.get_discount_row(request)
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
     if (inputDict["discount-id"]):
-        POS_database.editDiscount(db, inputDict["discount-id"], inputDict["product-id"], inputDict["start-date"], inputDict["end-date"], inputDict["percent-off"])
+        result = POS_database.editDiscount(db, inputDict["discount-id"], inputDict["product-id"], inputDict["start-date"], inputDict["end-date"], inputDict["percent-off"])
+        if (result == POS_database.NO_RESULT):
+            error = "That item is not in the database."
+
 
     # else if the user did not enter an id, add a new user
     else:
@@ -839,15 +852,17 @@ def supplierDBDeleteSupplier():
 
 @app.route('/supplierdb-add', methods=["POST"])
 def supplierDBUpdateSupplier():
+    global error
+    error = None
     # get the user input from the form submit
     inputDict = POS_display.get_supplier_row(request)
-
-
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
     if (inputDict["supplier-id"]):
-        POS_database.editSupplier(db, inputDict["supplier-id"], inputDict["supplier-name"], inputDict["supplier-email"])
+        result = POS_database.editSupplier(db, inputDict["supplier-id"], inputDict["supplier-name"], inputDict["supplier-email"])
+        if (result == POS_database.NO_RESULT):
+            error = "That item is not in the database."
 
     # else if the user did not enter an id, add a new user
     else:
@@ -906,13 +921,17 @@ def userDBDeleteUser():
 
 @app.route('/userdb-add', methods=["POST"])
 def userDBUpdateUser():
+    global error
+    error = None
     # get the user input from the form submit
     inputDict = POS_display.get_user_row(request)
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
     if (inputDict["user-id"]):
-        POS_database.editUser(db, inputDict["user-id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+        result = POS_database.editUser(db, inputDict["user-id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
+        if (result == POS_database.NO_RESULT):
+            error = "That item is not in the database."
 
     # else if the user did not enter an id, add a new user
     else:

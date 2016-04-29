@@ -900,11 +900,17 @@ def editSupplier(db, id, name, email):
     :return: -
     """
     result = db.session.query(Supplier).filter(Supplier.id == id).first()
-    if name != '':
-        result.name = name
-    if email != '':
-        result.email = email
-    db.session.commit()
+    
+    # if the result is empty, raise a no result exception
+    if (not result):
+        raise NoResult
+    # otherwise, make modifications to the result
+    else:
+        if name != '':
+            result.name = name
+        if email != '':
+            result.email = email
+        db.session.commit()
 
 
 @commitDB_Errorcatch
@@ -919,13 +925,19 @@ def editUser(db, id, name, password, permissions):
     :return: -
     """
     result = db.session.query(User).filter(User.id == id).first()
-    if name != '':
-        result.name = name
-    if password != '':
-        result.password = bcrypt.generate_password_hash(password)
-    if permissions != '':
-        result.permissions = int(permissions)
-    db.session.commit()
+
+    # if the result is empty, raise a no result exception
+    if (not result):
+        raise NoResult
+    # otherwise, make modifications to the result
+    else:
+        if name != '':
+            result.name = name
+        if password != '':
+            result.password = bcrypt.generate_password_hash(password)
+        if permissions != '':
+            result.permissions = int(permissions)
+        db.session.commit()
 
 
 @commitDB_Errorcatch
@@ -940,17 +952,23 @@ def editDiscount(db, id, product_id, start_date, end_date, percent):
     :return: -
     """
     result = db.session.query(Discount).filter(Discount.id == id).first()
-    if product_id != '':
-        result.product_id = int(product_id)
-    if start_date != '':
-        match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', str(start_date))
-        result.start_date = dt.datetime(match.groups('year'), match.groups('month'), match.groups('day'))
-    if end_date != '':
-        match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', str(end_date))
-        result.end_date = dt.datetime(match.groups('year'), match.groups('month'), match.groups('day'))
-    if percent != '':
-        result.discount = float(percent)
-    db.session.commit()
+
+    # if the result is empty, raise a no result exception
+    if (not result):
+        raise NoResult
+    # otherwise, make modifications to the result
+    else:
+        if product_id != '':
+            result.product_id = int(product_id)
+        if start_date != '':
+            match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', str(start_date))
+            result.start_date = dt.datetime(match.groups('year'), match.groups('month'), match.groups('day'))
+        if end_date != '':
+            match = re.match(r'''(?P<month>\d\d?).(?P<day>\d\d?).(?P<year>\d\d\d\d)''', str(end_date))
+            result.end_date = dt.datetime(match.groups('year'), match.groups('month'), match.groups('day'))
+        if percent != '':
+            result.discount = float(percent)
+        db.session.commit()
 
 
 @commitDB_Errorcatch
@@ -988,22 +1006,28 @@ def editItemSold(db, id, item_id, sold_at, transaction_id):
     :return: -
     """
     result = db.session.query(ItemSold).filter(ItemSold.id == id).first()
-    if item_id != '':
-        try:
-            result.item_id = int(item_id)
-        except ValueError:
-            raise
-    if sold_at != '':
-        try:
-            result.price_sold = float(sold_at)
-        except ValueError:
-            raise
-    if transaction_id:
-        try:
-            result.transaction_id = int(transaction_id)
-        except ValueError:
-            raise
-    db.session.commit()
+
+    # if the result is empty, raise a no result exception
+    if (not result):
+        raise NoResult
+    # otherwise, make modifications to the result
+    else:
+        if item_id != '':
+            try:
+                result.item_id = int(item_id)
+            except ValueError:
+                raise
+        if sold_at != '':
+            try:
+                result.price_sold = float(sold_at)
+            except ValueError:
+                raise
+        if transaction_id:
+            try:
+                result.transaction_id = int(transaction_id)
+            except ValueError:
+                raise
+        db.session.commit()
 
 @commitDB_Errorcatch
 def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
@@ -1017,16 +1041,22 @@ def editTransaction(db, transactionID, cust_name, cust_contact, payment_type):
     :return: -
     """
     result = db.session.query(Transaction).filter(Transaction.id == transactionID).first()
-    if cust_name != '':
-        result.cust_name = cust_name
-    if cust_contact != '':
-        result.cust_contact = cust_contact
-    if payment_type != '':
-        try:
-            result.payment_type = int(payment_type)
-        except ValueError:
-            raise
-    db.session.commit()
+
+    # if the result is empty, raise a no result exception
+    if (not result):
+        raise NoResult
+    # otherwise, make modifications to the result
+    else:
+        if cust_name != '':
+            result.cust_name = cust_name
+        if cust_contact != '':
+            result.cust_contact = cust_contact
+        if payment_type != '':
+            try:
+                result.payment_type = int(payment_type)
+            except ValueError:
+                raise
+        db.session.commit()
 
 #########################################################################
 # Reporting Databases                                                   #
