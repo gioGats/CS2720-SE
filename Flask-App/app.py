@@ -988,7 +988,7 @@ def deleteDBRow(dbTableName):
         error = "That item is not in the database"
 
     # delete the row  
-    if (== POS_database.INTEGRITY_ERROR):
+    if (result == POS_database.INTEGRITY_ERROR):
         error = "Another item in your database depends on this item. You can't delete this yet."
 
 # -------------------------------------------------- #
