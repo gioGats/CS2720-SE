@@ -97,6 +97,9 @@ def getfromDB_Error(func):
                 # print(INTEGRITY_ERROR)
                 return INTEGRITY_ERROR
             return -1
+        except NoResult as e:
+            print(e)
+            return NO_RESULT    
     return wrapperFunction
 
 
@@ -242,7 +245,12 @@ def destroyProduct(db, productID):
     :return: -
     """
     # Kill it!
-    db.session.query(Product).filter(Product.id == productID).delete()
+    result = db.session.query(Product).filter(Product.id == productID).delete()
+
+    # if the result has nothing in it (i.e. result == 0), then raise no result exception
+    if (not result):
+        raise NoResult
+    
     # Commit
     db.session.commit()
 
@@ -385,12 +393,22 @@ def destroyItem(db, itemID):
     :param itemID: int
     :return: -
     """
-    # Decrement the product
-    decProduct(db, getItemProduct(db, itemID))
-    # Find and destroy the thingie
-    db.session.query(Item).filter(Item.id == itemID).delete()
-    # Commit the changes
-    db.session.commit()
+
+    itemProduct = getItemProduct(db, itemID)
+
+    # if the item product doesn't have a result in it raise a no error exception
+    # all items have an associated product, so if this returns no result, then the item id doesn't exist
+    if (itemProduct == NO_RESULT):
+        raise NoResult
+    # otherwise delete the item
+    else:
+        # Decrement the product
+        result = decProduct(db, getItemProduct(db, itemID))
+        # Find and destroy the thingie
+        result = db.session.query(Item).filter(Item.id == itemID).delete()
+        print("item destroy: ", result)
+        # Commit the changes
+        db.session.commit()
 
 @getfromDB_Error
 def getItemProduct(db, itemID):
@@ -402,8 +420,14 @@ def getItemProduct(db, itemID):
     """
     # Get the one we want
     item = db.session.query(Item).filter(Item.id == itemID).first()
-    # Filter the thing off
-    return item.product_id
+
+    # if the query didn't return anything, raise noresult exception
+    if (not item):
+        raise NoResult
+    # otherwise, return the product_id
+    else:
+        # Filter the thing off
+        return item.product_id
 
 
 @getfromDB_Error
@@ -513,7 +537,12 @@ def destroyItemSold(db, itemSoldID):
     :return: -
     """
     # Find and destroy the thingie
-    db.session.query(ItemSold).filter(ItemSold.id == itemSoldID).delete()
+    result = db.session.query(ItemSold).filter(ItemSold.id == itemSoldID).delete()
+
+    # if the result has nothing in it (i.e. result == 0), then raise no result exception
+    if (not result):
+        raise NoResult
+
     # Commit the changes
     db.session.commit()
 
@@ -597,7 +626,12 @@ def destroySupplier(db, supplierID):
     :return: -
     """
     # Kill it!
-    db.session.query(Supplier).filter(Supplier.id == supplierID).delete()
+    result = db.session.query(Supplier).filter(Supplier.id == supplierID).delete()
+
+    # if the result has nothing in it (i.e. result == 0), then raise no result exception
+    if (not result):
+        raise NoResult
+
     # Commit our changes
     db.session.commit()
 
@@ -662,7 +696,12 @@ def destroyDiscount(db, discountID):
     :return: -
     """
     # Kill it!
-    db.session.query(Discount).filter(Discount.id == discountID).delete()
+    result = db.session.query(Discount).filter(Discount.id == discountID).delete()
+
+    # if the result has nothing in it (i.e. result == 0), then raise no result exception
+    if (not result):
+        raise NoResult
+
     # Commit our changes
     db.session.commit()
 
@@ -718,7 +757,12 @@ def destroyTransaction(db, transactionID):
     :return: -
     """
     # Kill it!
-    db.session.query(Transaction).filter(Transaction.id == transactionID).delete()
+    result = db.session.query(Transaction).filter(Transaction.id == transactionID).delete()
+
+    # if the result has nothing in it (i.e. result == 0), then raise no result exception
+    if (not result):
+        raise NoResult
+
     # Commit this obliteration
     db.session.commit()
 
@@ -831,7 +875,12 @@ def destroyUser(db, id):
     :return: -
     """
     # Kill it!
-    db.session.query(User).filter(User.id == id).delete()
+    result = db.session.query(User).filter(User.id == id).delete()
+
+    # if the result has nothing in it (i.e. result == 0), then raise no result exception
+    if (not result):
+        raise NoResult
+
     # Commit the change!
     db.session.commit()
 
@@ -900,7 +949,7 @@ def editSupplier(db, id, name, email):
     :return: -
     """
     result = db.session.query(Supplier).filter(Supplier.id == id).first()
-    
+
     # if the result is empty, raise a no result exception
     if (not result):
         raise NoResult

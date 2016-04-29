@@ -478,6 +478,7 @@ def itemDBDeleteItem():
         # send it to the helper!
         deleteDBRow("item")
 
+
     return redirect(url_for('itemsDB'))
 
 @app.route('/itemdb-add', methods=["POST"])
@@ -491,6 +492,7 @@ def itemDBUpdateItem():
     #  if the user did enter an id number, check if its valid and modify item if it is
     if inputDict["item-id"]:
         result = POS_database.editItem(db, inputDict["item-id"], inputDict["product-id"], inputDict["inventory-cost"])
+
         if (result == POS_database.NO_RESULT):
             error = "That item is not in the database."
 
@@ -979,9 +981,14 @@ def deleteDBRow(dbTableName):
 
     # get the user input from the form submit
     inputDict = getRowFunc(request)
+    result = destroyRowFunc(db, inputDict[idFieldName]) 
+
+    print(result)
+    if (result == POS_database.NO_RESULT):
+        error = "That item is not in the database"
 
     # delete the row  
-    if (destroyRowFunc(db, inputDict[idFieldName]) == POS_database.INTEGRITY_ERROR):
+    if (== POS_database.INTEGRITY_ERROR):
         error = "Another item in your database depends on this item. You can't delete this yet."
 
 # -------------------------------------------------- #
