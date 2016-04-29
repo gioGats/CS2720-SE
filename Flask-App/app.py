@@ -21,6 +21,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import *
 import POS_display
 import POS_logic
+from werkzeug.exceptions import HTTPException, NotFound, BadRequest
 
 ################################################################################################################################################
 # APPLICATION CONFIGURATION ####################################################################################################################
@@ -149,14 +150,31 @@ def logout():
 # > permission:    manager                                                                                                                    #
 # > login:         required                                                                                                                   #
 #---------------------------------------------------------------------------------------------------------------------------------------------#
-@app.route('/reports')
+@app.route('/reports', methods=["GET", "POST"])
 @login_required
 def reports():
+
+    # get the dates for the custom rows
+    # whenever the page is first loaded it will try to get the custom dates, so we raise an exception in this case
+    try:
+        inputDict = POS_display.get_report_custom_row(request)
+        print(inputDict["custom_start_date"])
+        print(inputDict["custom_end_date"])
+    except BadRequest as e:
+        print("Could not grab the custom row information.")
+
+    startDate = date(1990, 1, 1)
+    endDate = date(2016, 4, 28)
+
+
     # get the report table information
-    reportTableDict = getReportTableInfo(db)
+    reportTableDict     = getReportTableInfo(db, startDate, endDate)
+    customList          = reportTableDict["custom"] 
+    # print(customList)
 
     # add the information to the report table
     POS_logic.report_table.make_table(reportTableDict["revenues"], reportTableDict["costs"], reportTableDict["profits"])
+    POS_logic.report_table.update_custom_column(customList[0], customList[1], customList[2])
 
     # display the page
     if is_manager(current_user):
@@ -211,7 +229,7 @@ def updateCustomRange():
 
     return redirect(url_for("reports"))
 
-def getReportTableInfo(db):
+def getReportTableInfo(db, startDate, endDate):
     """
     gets report information for the table displayed in the reports tab
     :param db: database pointer
@@ -219,20 +237,25 @@ def getReportTableInfo(db):
     """
     reportTableDict = dict()
 
+
+
     # get info from the databases
-    DailyRep = POS_database.revenueCheck(db, "day")
-    WeeklyRep = POS_database.revenueCheck(db, "week")
-    MonthlyRep = POS_database.revenueCheck(db, "month")
+    dailyRep = POS_database.revenueCheck(db, "day")
+    weeklyRep = POS_database.revenueCheck(db, "week")
+    monthlyRep = POS_database.revenueCheck(db, "month")
+    customRep = POS_database.revenueCheck(db, (startDate, endDate))
+    # print(customRep)
 
     # store info in arrays representing rows
-    revenues = [DailyRep[0], WeeklyRep[0], MonthlyRep[0]]
-    costs = [DailyRep[1], WeeklyRep[1], MonthlyRep[1]]
-    profits = [DailyRep[2], WeeklyRep[2], MonthlyRep[2]]
+    revenues = [dailyRep[0], weeklyRep[0], monthlyRep[0]]
+    costs = [dailyRep[1], weeklyRep[1], monthlyRep[1]]
+    profits = [dailyRep[2], weeklyRep[2], monthlyRep[2]]
 
     # add rows to dictionary
     reportTableDict["revenues"] = revenues
     reportTableDict["costs"] = costs
     reportTableDict["profits"] = profits
+    reportTableDict["custom"] = customRep    # order: revenues, costs, profits
 
     return reportTableDict
 
@@ -459,14 +482,17 @@ def itemDBDeleteItem():
 
 @app.route('/itemdb-add', methods=["POST"])
 def itemDBUpdateItem():
+    global error
+    error = None
+
     # get the user input from the form submit
     inputDict = POS_display.get_item_row(request)
 
     #  if the user did enter an id number, check if its valid and modify item if it is
-    #TODO check if the entered id number is valid
-
     if inputDict["item-id"]:
-        POS_database.editItem(db, inputDict["item-id"], inputDict["product-id"], inputDict["inventory-cost"])
+        result = POS_database.editItem(db, inputDict["item-id"], inputDict["product-id"], inputDict["inventory-cost"])
+        if (result == POS_database.NO_RESULT):
+            error = "That item is not in the database."
 
     # else if the user did not enter an id, add a new item
     else:
@@ -537,13 +563,15 @@ def productDBUpdateProduct():
 
     # if the dictiionary doensn't have any items in it print error
     if ((not inputDict["product-id"]) and (not inputDict["product-name"]) and (not inputDict["supplier-id"]) and (not inputDict["min-inventory"]) and (not inputDict["shelf-life"]) and (not inputDict["standard-price"])):
-        print("blah")
         error = "You didn't enter anything!"
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
     elif (inputDict["product-id"]):
-        POS_database.editProduct(db, inputDict["product-id"], inputDict["product-name"], inputDict["supplier-id"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
+        result = POS_database.editProduct(db, inputDict["product-id"], inputDict["product-name"], inputDict["supplier-id"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
+        
+        if (result == POS_database.NO_RESULT):
+            error = "That item is not in the database."
 
     # else if the user did not enter an id, add a new user
     else:

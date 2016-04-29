@@ -24,8 +24,19 @@ from models import *
 
 # from app import app
 
+########################################################################################################################
+# GLOBAL CONSTANTS #####################################################################################################
+########################################################################################################################
 # ErrorCodes
 INTEGRITY_ERROR = -1337
+NO_RESULT = -2
+
+########################################################################################################################
+# CLASS DEFINITIONS                                                                                                    #
+########################################################################################################################
+class NoResult(Exception):
+    def __str__(self):
+        return "ERROR: no result returned from query!"
 
 
 ########################################################################################################################
@@ -55,6 +66,9 @@ def commitDB_Errorcatch(func):
                 # print(INTEGRITY_ERROR)
                 return INTEGRITY_ERROR
             return -1  # !!
+        except NoResult as e:
+            print(e)
+            return NO_RESULT
 
     # Hand back the function for future usage.
     return wrapperFunction
@@ -855,17 +869,23 @@ def editProduct(db, productID, name, supplier_id,
     :return: -
     """
     result = db.session.query(Product).filter(Product.id == productID).first()
-    if name != '':
-        result.name = name
-    if supplier_id != '':
-        result.supplier_id = int(supplier_id)
-    if min_inventory != '':
-        result.min_inventory = int(min_inventory)
-    if shelf_life != '':
-        result.shelf_life = int(shelf_life)
-    if standard_price != '':
-        result.standard_price = float(standard_price)
-    db.session.commit()
+
+    # if there is no result, raise an error
+    if (not result):
+        raise NoResult
+    # otherwise, modify result
+    else:
+        if name != '':
+            result.name = name
+        if supplier_id != '':
+            result.supplier_id = int(supplier_id)
+        if min_inventory != '':
+            result.min_inventory = int(min_inventory)
+        if shelf_life != '':
+            result.shelf_life = int(shelf_life)
+        if standard_price != '':
+            result.standard_price = float(standard_price)
+        db.session.commit()
 
 
 @commitDB_Errorcatch
@@ -944,11 +964,16 @@ def editItem(db, id, product_id, inventory_cost):
     :return: -
     """
     result = db.session.query(Item).filter(Item.id == id).first()
-    if product_id != '':
-        result.product_id = int(product_id)
-    if inventory_cost != '':
-        result.inventory_cost = float(inventory_cost)
-    db.session.commit()
+    
+    # if there is no result, raise an error
+    if (not result):
+        raise NoResult
+    else:
+        if product_id != '':
+            result.product_id = int(product_id)
+        if inventory_cost != '':
+            result.inventory_cost = float(inventory_cost)
+        db.session.commit()
 
 
 @commitDB_Errorcatch
@@ -1225,6 +1250,9 @@ def revenueCheck(db, time):
     :param time: "day", "week", "month", or a tuple of (start, end)
     :return: (revenue, cost, prophet,) tuple
     """
+
+    # print(time[0])
+    # print(time[1])
     if time == 'day':
         thisMorning = dt.date.today() -dt.timedelta(days=1)
         timetup = (thisMorning, dt.date.today()+dt.timedelta(days=1),)
@@ -1247,7 +1275,13 @@ def revenueCheck(db, time):
     revenue = 0
     cost = 0
     for itemsold in in_range:
+        # print(itemsold)
+        print(itemsold.price_sold)
+        print(revenue)
         revenue += itemsold.price_sold
         cost += itemsold.inventory_cost
+
+    print(revenue)
+    print(cost)
 
     return [revenue, cost, revenue-cost]
