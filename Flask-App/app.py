@@ -1,14 +1,14 @@
 """
 File: app.py
-Author: Jacob Campbell; Ethan Morisette
-Created: 3/11/2016 (Last Modified: 4/24/2016)
+Author: Jacob Campbell; Ethan Morisette; Ryan Giarusso; Braden Menke
+Created: 3/11/2016 (Last Modified: 4/29/2016)
 Purpose: This is the master file for the Flask application, contains logic for generating webpages, routing
 data, and managing the flow of the entire system.
 """
 
-#############################
-# Import Statements
-#############################
+###############################################################################################################################################
+# IMPORT STATEMENTS ###########################################################################################################################
+###############################################################################################################################################
 from flask import *
 from POS_helpers import *
 from templates.form import LoginForm, RegisterForm
@@ -22,12 +22,9 @@ from datetime import *
 import POS_display
 import POS_logic
 
-# -------------------------------------------------- #
-
-
-#############################
-# Configure the Application
-#############################
+################################################################################################################################################
+# APPLICATION CONFIGURATION ####################################################################################################################
+################################################################################################################################################
 
 # Grabs the domain name the app is running on #
 app = Flask(__name__)
@@ -79,22 +76,29 @@ def load_user(user_id):
     current_user = User.query.filter(User.id == int(user_id)).first()
     return User.query.filter(User.id == int(user_id)).first()
 
-
-# -------------------------------------------------- #
-
-
-######################################################################################
-# Global Variables ###################################################################
-######################################################################################
+###############################################################################################################################################
+# GLOBAL VARIABLES ############################################################################################################################
+###############################################################################################################################################
 current_user = None     # stores information on the current user logged in 
 error = None            # stores errors in the system
 
-######################################################################################
-# Route Declarations #################################################################
-######################################################################################
 
 
-# Home Route (login page) #
+
+###############################################################################################################################################
+# ROUTE DECLARATIONS ##########################################################################################################################
+###############################################################################################################################################
+
+###############################################################################################################################################
+# DATABASE PAGE ROUTES ########################################################################################################################
+###############################################################################################################################################
+
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# home/login page functions                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    none                                                                                                                       #
+# > login:         not required                                                                                                               #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/', methods=['GET', 'POST'])
 def login():
     global error
@@ -125,11 +129,6 @@ def login():
     # If the form was not a submit, we just need to grab the page data (GET request) #
     return render_template('login.html', form=form, error=error)
 
-
-# -------------------------------------------------- #
-
-
-# Logout Route(has no page, merely a function) #
 @app.route('/logout')
 def logout():
     global current_user
@@ -142,20 +141,24 @@ def logout():
     return redirect(url_for('login'))
 
 
-# -------------------------------------------------- #
 
-# Reports Page
-# Requires: Login, Manager/Admin permission #
+
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# reports page functions                                                                                                                      #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager                                                                                                                    #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/reports')
 @login_required
 def reports():
-    DailyRep = POS_database.revenueCheck(db, "day")
-    WeeklyRep = POS_database.revenueCheck(db, "week")
-    MonthlyRep = POS_database.revenueCheck(db, "month")
-    revenues = [DailyRep[0], WeeklyRep[0], MonthlyRep[0]]
-    costs = [DailyRep[1], WeeklyRep[1], MonthlyRep[1]]
-    profits = [DailyRep[2], WeeklyRep[2], MonthlyRep[2]]
-    POS_logic.report_table.make_table(revenues, costs, profits)
+    # get the report table information
+    reportTableDict = getReportTableInfo(db)
+
+    # add the information to the report table
+    POS_logic.report_table.make_table(reportTableDict["revenues"], reportTableDict["costs"], reportTableDict["profits"])
+
+    # display the page
     if is_manager(current_user):
         return render_template("reports.html", reportTable=POS_logic.report_table)
     else:
@@ -208,10 +211,38 @@ def updateCustomRange():
 
     return redirect(url_for("reports"))
 
-# -------------------------------------------------- #
+def getReportTableInfo(db):
+    """
+    gets report information for the table displayed in the reports tab
+    :param db: database pointer
+    :return: dictionary of arrays
+    """
+    reportTableDict = dict()
 
-# Cashier Page
-# Requires: Login, Cashier/Manager permission #
+    # get info from the databases
+    DailyRep = POS_database.revenueCheck(db, "day")
+    WeeklyRep = POS_database.revenueCheck(db, "week")
+    MonthlyRep = POS_database.revenueCheck(db, "month")
+
+    # store info in arrays representing rows
+    revenues = [DailyRep[0], WeeklyRep[0], MonthlyRep[0]]
+    costs = [DailyRep[1], WeeklyRep[1], MonthlyRep[1]]
+    profits = [DailyRep[2], WeeklyRep[2], MonthlyRep[2]]
+
+    # add rows to dictionary
+    reportTableDict["revenues"] = revenues
+    reportTableDict["costs"] = costs
+    reportTableDict["profits"] = profits
+
+    return reportTableDict
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# cashier page functions                                                                                                                      #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager, cashier                                                                                                           #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/cashier')
 @login_required
 def cashier():
@@ -296,11 +327,14 @@ def cashierCancel():
 
 
 
-# -------------------------------------------------- #
 
 
-# Stocker Page
-# Requires: Login, Stocker/Manager permission #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# stocker page functions                                                                                                                      #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager, stocker                                                                                                           #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/stocker')
 @login_required
 def stocker():
@@ -378,46 +412,16 @@ def stockerCancel():
     POS_logic.stocker_table.clear_table()
     return redirect(url_for('stocker'))
 
+#####################################################################################################################################################################################
+# DATABASE PAGE ROUTES ##############################################################################################################################################################
+#####################################################################################################################################################################################
 
-# -------------------------------------------------- #
-
-
-# Register Page
-# Requires: Login, Manager/Admin permission #
-@app.route('/register', methods=['GET', 'POST'])
-@login_required
-def register():
-    global current_user
-
-    form = RegisterForm()
-    if is_manager(current_user):
-        if form.validate_on_submit():
-            user = User(
-                name=form.username.data,
-                password=form.password.data,
-                permissions=form.permission.data
-            )
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            current_user = user
-            return redirect('/')
-
-        else:
-            return render_template("register.html", form=form)
-    else:
-        return redirect('/')
-
-
-# -------------------------------------------------- #
-
-#############################
-# Database Page Routes
-#############################
-
-
-# itemsDB
-# Requires: Login, Manager/Admin/Cashier permission #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# items page functions                                                                                                                        #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager, cashier                                                                                                           #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/itemsDB',defaults={'page':1}, methods=['GET', 'POST'])
 @app.route('/itemsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
@@ -478,11 +482,15 @@ def itemDBUpdateItem():
 def itemDBCancel():
     return redirect(url_for('itemsDB'))
 
-# -------------------------------------------------- #
 
 
-# productsDB
-# Requires: Login, Manager/Admin/Stocker permission #
+
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# products page functions                                                                                                                     #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager , stocker                                                                                                          #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/productsDB',defaults={'page':1}, methods=['GET', 'POST'])
 @app.route('/productsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
@@ -548,11 +556,15 @@ def productDBUpdateProduct():
 def productDBCancel():
     return redirect(url_for('productsDB'))
 
-# -------------------------------------------------- #
 
 
-# transactionsDB
-# Requires: Login, Manager/Admin/Cashier permission #
+
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# transactions page functions                                                                                                                 #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager, cashier                                                                                                           #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/transactionsDB',defaults={'page':1}, methods=['GET', 'POST'])
 @app.route('/transactionsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
@@ -617,11 +629,16 @@ def transactionDBUpdateTransaction():
 def transactionDBCancel():
     return redirect(url_for('transactionsDB'))
 
-# -------------------------------------------------- #
 
 
-# itemssoldDB
-# Requires: Login, Manager/Admin/Cashier permission #
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# items sold page functions                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager, cashier                                                                                                           #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/itemssoldDB',defaults={'page':1}, methods=['GET', 'POST'])
 @app.route('/itemssoldDB/<int:page>', methods=['GET', 'POST'])
 @login_required
@@ -674,11 +691,16 @@ def itemsoldDBUpdateItemsold():
 def itemsoldDBCancel():
     return redirect(url_for('itemssoldDB'))
 
-# -------------------------------------------------- #
 
 
-# discountsDB
-# Requires: Login, Manager/Admin permission #
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# discounts page functions                                                                                                                    #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager                                                                                                                    #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/discountsDB',defaults={'page':1}, methods=['GET', 'POST'])
 @app.route('/discountsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
@@ -741,11 +763,16 @@ def discountDBUpdateDiscount():
 def discountDBCancel():
     return redirect(url_for('discountsDB'))
 
-# -------------------------------------------------- #
 
 
-# supplierDB
-# Requires: Login, Manager/Admin permission #
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# suppliers page functions                                                                                                                    #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager                                                                                                                    #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/supplierDB',defaults={'page':1}, methods=['GET', 'POST'])
 @app.route('/supplierDB/<int:page>', methods=['GET', 'POST'])
 @login_required
@@ -805,11 +832,14 @@ def supplierDBUpdateSupplier():
 def supplierDBCancel():
     return redirect(url_for('supplierDB'))
 
-# -------------------------------------------------- #
 
 
-# userDB
-# Requires: Login, Manager/Admin permission #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# users page functions                                                                                                                        #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
+# > permission:    manager                                                                                                                    #
+# > login:         required                                                                                                                   #
+#---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/userDB',defaults={'page':1}, methods=['GET', 'POST'])
 @app.route('/userDB/<int:page>', methods=['GET', 'POST'])
 @login_required
