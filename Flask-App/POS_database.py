@@ -14,9 +14,10 @@ import datetime as dt
 import re
 # from datetime import datetime
 from io import StringIO
-
+from sqlalchemy import event
 from flask import make_response
 from sqlalchemy import func
+from sqlalchemy.engine import Engine
 
 from models import *
 
@@ -114,6 +115,14 @@ def getfromDB_Error(func):
 # FUNCTION DEFINITIONS																								   #
 ########################################################################################################################
 
+#########################################################################
+# general database functions                                            #
+#########################################################################
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 #########################################################################
 # Product database Access                                               #

@@ -16,8 +16,8 @@ from helper import *
 from helper import login_user, login_required, logout_user
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy.engine import Engine
-from sqlalchemy import event
+#from sqlalchemy.engine import Engine
+# from sqlalchemy import event
 from datetime import *
 import POS_display
 import POS_logic
@@ -59,14 +59,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///items.db'
 # use: 'from app import db' #
 db = SQLAlchemy(app)
 
-
-@event.listens_for(Engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
-
-
 # Import all the database models from our 'models.py' file
 # NOTE: We import down here because we have to set up the database
 # (right above this) BEFORE we can import our models
@@ -91,15 +83,15 @@ def load_user(user_id):
 # -------------------------------------------------- #
 
 
-#############################
-# Global Variables
-#############################
-current_user = None
-error = None
+######################################################################################
+# Global Variables ###################################################################
+######################################################################################
+current_user = None     # stores information on the current user logged in 
+error = None            # stores errors in the system
 
-#############################
-# Route Declarations
-#############################
+######################################################################################
+# Route Declarations #################################################################
+######################################################################################
 
 
 # Home Route (login page) #
@@ -148,31 +140,6 @@ def logout():
     current_user = None
     flash('You have been successfully logged out.')
     return redirect(url_for('login'))
-
-
-# -------------------------------------------------- #
-
-# Discounts Page
-# Requires: Login, Manager/Admin permission #
-@app.route('/discounts')
-@login_required
-def discounts():
-    discountTable = []
-    if is_manager(current_user):
-        return render_template("discounts.html", discountTable=discountTable)
-    else:
-        return redirect('/')
-
-
-@app.route('/discountsadd', methods=["POST"])
-def discountsAddRow():
-    # get the information from the user
-    inputDict = POS_display.getDiscountRow(request)
-    # get the product name from the database
-    productName = POS_database.getProductName(db, inputDict["productID"])
-    POS_logic.addDiscountRow(productName, inputDict["productID"], inputDict["saleStart"], inputDict["saleEnd"],
-                             inputDict["salePrice"])
-    return redirect(url_for('discounts'))
 
 
 # -------------------------------------------------- #
