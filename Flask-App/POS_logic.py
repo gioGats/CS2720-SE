@@ -170,6 +170,9 @@ class CashierRow(Row):
         self.product_name = product_name
         self.price = price
 
+    def changePrice(price):
+        self.price = price
+
 
 class StockerRow(ItemRow):
     def __init__(self, product_id, name, inventory_cost, quantity=1):

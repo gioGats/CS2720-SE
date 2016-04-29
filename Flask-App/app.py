@@ -289,7 +289,13 @@ def cashierAddRow():
         # get the product name and price from the database
         productID = POS_database.getItemProduct(db, inputDict["item_id"])
         productName = POS_database.getProductName(db, productID)
-        pricePerUnit = POS_database.getProductPrice(db, productID)
+
+        # if the user enters a price per unit, than use that one
+        if (inputDict["price_per_unit"]):
+            pricePerUnit = int(inputDict["price_per_unit"])
+        # otherwise use the one in the database
+        else:
+            pricePerUnit = POS_database.getProductPrice(db, productID)
         # add the received information to the local receipt table
         POS_logic.cashier_table.add_row(inputDict["item_id"], productName, pricePerUnit)
 
