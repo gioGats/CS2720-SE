@@ -46,7 +46,7 @@
 {% block sidePanelContent %}
     <div class="side-panel-top">
         <h2 class="side-panel-header"><u>Report Menu</u></h2>
-        <h4>Download a report...</h4>
+        <h4 class="side-panel-header">Download a report...</h4>
         <form id="manager-form" action="/download" method=post>
             <div class="form-group">
                 <label for="report-dropdown-input">Pick a report: </label>
@@ -79,7 +79,11 @@
             </div>
         </form>
 
-        <h4>Table Custom Range</h4>
+        <div class="form-group">
+            <div class="side-panel-divider"></div>
+        </div>
+
+        <h4 class="side-panel-header">Table Custom Range</h4>
         <form id="custom_range_form" action="{{ url_for('updateCustomRange') }}" method=post>
             <div class="form-group">
                 <label for="custom_start_date_input">Start Date</label> 

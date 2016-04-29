@@ -536,6 +536,7 @@ def productDBDeleteProduct():
     
     inputDict = POS_display.get_product_row(request)
 
+
     # if the user didn't enter an item id to delete print error
     if (not inputDict["product-id"]):
         error = "What are you trying to delete?"
@@ -901,6 +902,8 @@ def userDBCancel():
 
 
 def deleteDBRow(dbTableName):
+    global error
+    error = None
     if (dbTableName == "user"):
         getRowFunc = POS_display.get_user_row
         destroyRowFunc = POS_database.destroyUser
@@ -934,7 +937,8 @@ def deleteDBRow(dbTableName):
     inputDict = getRowFunc(request)
 
     # delete the row  
-    destroyRowFunc(db, inputDict[idFieldName])
+    if (destroyRowFunc(db, inputDict[idFieldName]) == POS_database.INTEGRITY_ERROR):
+        error = "Another item in your database depends on this item. You can't delete this yet."
 
 # -------------------------------------------------- #
 

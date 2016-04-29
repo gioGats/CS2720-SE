@@ -18,9 +18,10 @@ nav.navbar					{border-radius:0px; margin:0px;}
 .side-panel-top						{position:relative; top:10px; width:100%;}
 .side-panel-bot						{bottom:10px; position:absolute;}
 button.side-panel-button			{display:block; width:50%; margin-left:auto; margin-right:auto;}
-h2.side-panel-header				{text-align:center; margin-bottom:30px;}
+.side-panel-header					{text-align:center; margin-bottom:30px;}
 label.side-panel-label				{display:block;}
-label.side-panel-label.emphasize 	{border: solid black 1px;}
+div.side-panel-divider				{width:100%; margin-bottom: 50px; border:solid black 4px}
+
 
 /************************************************************************************************************************************************
 	  MAIN PANEL STYLING
