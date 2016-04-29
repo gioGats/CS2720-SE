@@ -142,7 +142,6 @@ def get_product_row(request):
     input_dict["product-id"] = request.form["DatabaseID"]
     input_dict["product-name"] = request.form["product-name"]
     input_dict["supplier-id"] = request.form["supplier-id"]
-    input_dict["inventory-count"] = request.form["inventory-count"]
     input_dict["min-inventory"] = request.form["min-inventory"]
     input_dict["shelf-life"] = request.form["shelf-life"]
     input_dict["standard-price"] = request.form["standard-price"]
