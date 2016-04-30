@@ -71,7 +71,7 @@
     </div>
 
     <div class="form-group">
-        <label for="percent-off-input" data-toggle="tooltip">Percent Off: </label>
+        <label for="percent-off-input" data-toggle="tooltip" title="a decimal between 0.00 and 1.00 to indicate how much percent off">Percent Off: </label>
         <input type="number" class="form-control" name="percent-off" id="percent-off-input" step="0.01" min="0.01" max="1.00">  
     </div>
 
@@ -92,7 +92,7 @@
             <td>Product ID</td>
             <td>Start Date</td>
             <td>End Date</td>
-            <td>Discount</td>
+            <td data-toggle="tooltip" title="the percentage off of the standard price (i.e. standardPrice * (1 - percentOff))">Discount</td>
         </tr>
     </thead>
 

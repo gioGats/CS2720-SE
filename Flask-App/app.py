@@ -94,7 +94,7 @@ discountError = None
 transactionError = None
 reportError = None
 stockerError = None
-cashierError = None
+productError = None
 
 ###############################################################################################################################################
 # ROUTE DECLARATIONS ##########################################################################################################################
@@ -280,16 +280,16 @@ def getReportTableInfo(db, startDate, endDate):
 @app.route('/cashier')
 @login_required
 def cashier():
-    global cashierError
+    global productError
     if is_manager(current_user) or is_cashier(current_user):
-        return render_template("cashier.html", cashierTable=POS_logic.cashier_table, error=cashierError)
+        return render_template("cashier.html", cashierTable=POS_logic.cashier_table, error=productError)
     else:
         return redirect('/')
 
 @app.route('/cashieradd', methods=["POST"])
 def cashierAddRow():
-    global cashierError
-    cashierError = None
+    global productError
+    productError = None
     # get the information from the user
     inputDict = POS_display.get_cashier_row(request)
     
@@ -301,13 +301,13 @@ def cashierAddRow():
         # print("Item ID:", inputDict["item_id"])
 
         # if there was no result returned that means there was no item in the database with that id
-        # so return with an cashierError
+        # so return with an productError
         if (productID == POS_database.NO_RESULT):
-            cashierError = "That item is not in the database."
+            productError = "That item is not in the database."
         
-        # if there is a result but the id is already in the table, return an cashierError
+        # if there is a result but the id is already in the table, return an productError
         elif (POS_logic.cashier_table.check_id_exists(int(inputDict["item_id"]))):
-            cashierError = "That item is already in your table!"
+            productError = "That item is already in your table!"
         # otherwise, add the item
         else:
             productName = POS_database.getProductName(db, productID)
@@ -326,17 +326,17 @@ def cashierAddRow():
 
 @app.route('/cashierdelete', methods=["POST"])
 def cashierDeleteRow():
-    global cashierError
-    cashierError = None
+    global productError
+    productError = None
     inputDict = POS_display.get_cashier_row(request)
 
-    # if no row id was entered then print an cashierError
+    # if no row id was entered then print an productError
     if (not inputDict["row_number"]):
-        cashierError = "What are you trying to delete?"
+        productError = "What are you trying to delete?"
 
-    # if the row number does not exist, display an cashierError
+    # if the row number does not exist, display an productError
     elif (int(inputDict["row_number"]) > POS_logic.cashier_table.get_row_count()):
-        cashierError = "That row number is out of bounds."
+        productError = "That row number is out of bounds."
 
     # otherwise, delete the row number
     else:
@@ -347,13 +347,13 @@ def cashierDeleteRow():
 
 @app.route('/customerinfo', methods=["POST"])
 def enterCustomerInfo():
-    global cashierError
-    cashierError = None
+    global productError
+    productError = None
 
-    # if the cart is empty print an cashierError and reload the cashier page
+    # if the cart is empty print an productError and reload the cashier page
     print(POS_logic.cashier_table.isEmpty())
     if (POS_logic.cashier_table.isEmpty()):
-        cashierError = "You don't have any items in your cart!"
+        productError = "You don't have any items in your cart!"
         return redirect(url_for("cashier"))
 
     # otherwise go to the customerinfo page
@@ -373,6 +373,8 @@ def finishTransaction():
 
 @app.route('/cashiercancel', methods=["POST"])
 def cashierCancel():
+    global productError
+    productError = None
     POS_logic.cashier_table.clear_table()
     return redirect(url_for('cashier'))
 
@@ -464,6 +466,8 @@ def updateInventory():
 
 @app.route('/stockercancel', methods=["POST"])
 def stockerCancel():
+    global stockerError
+    stockerError = None
     POS_logic.stocker_table.clear_table()
     return redirect(url_for('stocker'))
 
@@ -544,6 +548,8 @@ def itemDBUpdateItem():
 
 @app.route('/itemdbcancel', methods=["POST"])
 def itemDBCancel():
+    global itemError
+    itemError = None
     return redirect(url_for('itemsDB'))
 
 
@@ -624,6 +630,8 @@ def productDBUpdateProduct():
 
 @app.route('/productdbcancel', methods=["POST"])
 def productDBCancel():
+    global productError
+    productError = None
     return redirect(url_for('productsDB'))
 
 
@@ -699,6 +707,8 @@ def transactionDBUpdateTransaction():
 
 @app.route('/transactiondbcancel', methods=["POST"])
 def transactionDBCancel():
+    global transactionError
+    transactionError = None
     return redirect(url_for('transactionsDB'))
 
 
@@ -995,6 +1005,10 @@ def userDBCancel():
     return redirect(url_for('userDB'))
 
 
+
+################################################################################################################################################
+# HELPER FUNCTIONS #############################################################################################################################
+################################################################################################################################################
 def deleteDBRow(dbTableName):
     global transactionError
     
@@ -1067,8 +1081,9 @@ def deleteDBRow(dbTableName):
         elif (dbTableName == "itemsold"):
             itemSoldError = error        
 
-# -------------------------------------------------- #
-
+################################################################################################################################################
+# MAIN PROGRAM #################################################################################################################################
+################################################################################################################################################
 
 # Used for local debugging
 # Turn debug=False on to run without getting errors back when running locally

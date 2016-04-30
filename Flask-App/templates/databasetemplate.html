@@ -12,7 +12,7 @@
 	    	</div>
 	    	
 	        <div class="form-group">
-	        	<button type="submit" class="btn btn-danger side-panel-button" form="database-form" formaction={% block deleteURL %}{% endblock %} formmethod="post" >Delete</button>
+	        	<button type="submit" class="btn btn-danger side-panel-button" form="database-form" formaction={% block deleteURL %}{% endblock %} formmethod="post" data-toggle="tooltip" title="enter an ID number to delete it from the database">Delete</button>
 	        </div>
 	        
 	        <div class="form-group">
@@ -22,11 +22,11 @@
 	        {% block formData %}{% endblock %}
 
 	        <div class="form-group">
-		        <button type="submit" class="btn btn-info side-panel-button" form="database-form" formaction={% block updateURL %}{% endblock %} formmethod="post" >Update</button>
+		        <button type="submit" class="btn btn-info side-panel-button" form="database-form" formaction={% block updateURL %}{% endblock %} formmethod="post" data-toggle="tooltip" title="enter an ID number to edit an ID in the database; enter no ID number to add a new item to the database">Update</button>
 	        </div>
 
 	        <div class="form-group">
-		        <button type="submit" class="btn btn-info side-panel-button" form="database-form" formaction={% block cancelURL %}{% endblock %} formmethod="post">Cancel</button>
+		        <button type="submit" class="btn btn-info side-panel-button" form="database-form" formaction={% block cancelURL %}{% endblock %} formmethod="post" data-toggle="tooltip" title="clear all text boxes">Cancel</button>
 	    	</div>
 	    </form>
     </div>

@@ -53,7 +53,7 @@
 				<input type="number" class="form-control" name="row_number" min=1>
 			</div>
 			<div class="form-group">
-				<button type="submit" class="btn btn-danger side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post">Delete</button>
+				<button type="submit" class="btn btn-danger side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post" data-toggle="tooltip" title="delete an item with the indicated row ID">Delete</button>
 			</div>
 
 			<div class="form-group">
@@ -71,14 +71,14 @@
 			</div>
 
 			<div class="form-group">
-				<button type="submit" class="btn btn-info side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierAddRow') }}" formmethod="post">Update</button>
+				<button type="submit" class="btn btn-info side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierAddRow') }}" formmethod="post" data-toggle="tooltip" title="enter an id and click this to edit a current cart item; click this without entering an id to add a new item to the cart">Update</button>
 			</div>
 			<div class="form-group">
-				<button type="submit" class="btn btn-info side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierCancel') }}" formmethod="post">Cancel</button>
+				<button type="submit" class="btn btn-info side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierCancel') }}" formmethod="post" data-toggle="tooltip" title="clear text boxes and current cart">Cancel</button>
   			</div>
     	</form>
         <form action="{{ url_for('enterCustomerInfo') }}" method=post>
-			<button type="submit" class="btn btn-info side-panel-button">Enter Customer Info</button>
+			<button type="submit" class="btn btn-info side-panel-button" data-toggle="tooltip" title="click to enter the customer info and finish this transaction">Enter Customer Info</button>
 		</form>
 	</div>
 {% endblock %}
@@ -89,7 +89,7 @@
 			<td>Row Number</td>
 			<td>Item ID</td>
 			<td>Product Name</td>
-			<td>Price Per Unit</td>
+			<td data-toggle="tooltip" title="the amount of money the customer pays for each item">Price Per Unit</td>
 		</tr>
 	</thead>
 

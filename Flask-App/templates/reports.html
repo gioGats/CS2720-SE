@@ -75,7 +75,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" name="managerReportDownload" class="btn btn-info side-panel-button">Download Report</button>
+                <button type="submit" name="managerReportDownload" class="btn btn-info side-panel-button" data-toggle="tooltip" title="click to download the indicated report">Download Report</button>
             </div>
         </form>
 
@@ -83,7 +83,7 @@
             <div class="side-panel-divider"></div>
         </div>
 
-        <h4 class="side-panel-header">Table Custom Range</h4>
+        <h4 class="side-panel-header" data-toggle="tooltip" title="use the boxes below to generate revenue, cost, and profit for a custom range">Table Custom Range</h4>
         <form id="custom_range_form" action="{{ url_for('reports') }}" method=post>
             <div class="form-group">
                 <label for="custom_start_date_input">Start Date</label> 
@@ -96,7 +96,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-info side-panel-button">Update Custom Range</button>
+                <button type="submit" class="btn btn-info side-panel-button" data-toggle="tooltip" title="click to update custom range in the table to the left">Update Custom Range</button>
             </div>
         </form>
     </div>
@@ -109,7 +109,7 @@
             <td>Daily</td>
             <td>Weekly</td>
             <td>Monthly</td>
-            <td>Custom</td>
+            <td data-toggle="tool-tip" title="select a date range in the side panel to generate custom range values">Custom</td>
         </tr>
     </thead>
 

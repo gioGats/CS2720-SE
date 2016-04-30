@@ -54,7 +54,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-danger side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post">Delete</button>
+                <button type="submit" class="btn btn-danger side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerDeleteRow') }}" formmethod="post" data-toggle="tooltip" title="delete an item with the indicated row ID">Delete</button>
             </div>
 
             <div class="form-group">
@@ -77,16 +77,16 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-info side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerAddRow') }}" formmethod="post">Update</button>
+                <button type="submit" class="btn btn-info side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerAddRow') }}" formmethod="post" data-toggle="tooltip" title="enter an id and click this to edit a current cart item; click this without entering an id to add a new item to the cart">Update</button>
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-info side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerCancel') }}" formmethod="post">Cancel</button>
+                <button type="submit" class="btn btn-info side-panel-button" formid="stocker-form" formaction="{{ url_for('stockerCancel') }}" formmethod="post" data-toggle="tooltip" title="clear text boxes and current cart">Cancel</button>
             </div>
 
         </form>
         <form action="{{ url_for('updateInventory') }}" method=post>
-            <button type="submit" class="btn btn-info side-panel-button">Update Inventory</button>
+            <button type="submit" class="btn btn-info side-panel-button" data-toggle="tooltip" title="click to finalize this cart and update the database">Update Inventory</button>
         </form>
     </div>
 {% endblock %}
@@ -98,7 +98,7 @@
             <td>Product Name</td>
             <td>Product ID</td>
             <td>Quantity</td>
-            <td>Inventory Cost</td>
+            <td data-toggle="tooltip" title="the amount of money WE paid for the item">Inventory Cost</td>
         </tr>
     </thead>
 
