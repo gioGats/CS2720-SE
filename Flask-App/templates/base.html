@@ -187,27 +187,19 @@ div.side-panel-divider        {width:100%; margin-bottom: 50px; border:solid bla
       </div>
 
      {% if error %}
-        <div class="alert alert-danger" style="width:700px; height:3%; z-index: 100; position: absolute; top:8px;left: 200px; right: 0px; margin: 0;">
-          <div style="top: 6px; position: absolute;">
-            <div style="left: 120%; position: absolute;">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            </div>
+        <div class="alert alert-danger" >
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
               <p class="error"><strong>Error:</strong> {{ error }}</p>
-          </div>
         </div>
 
       {% endif %}
 
       <!-- Flash Message Handling -->
       {% for message in get_flashed_messages() %}
-          <div class="alert alert-success" style="width:400px; max-width: 400px; height:3%; z-index: 100; position: absolute; top:10px;left: 200px; right: 0px; margin: 0;">
-          <div style="top: 6px; position: absolute;">
-              <div style="left: 105%; position: absolute;">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              </div>
-        {{ message }}
+          <div class="alert alert-success">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              {{ message }}
           </div>
-        </div>
       {% endfor %}
     </nav>
 

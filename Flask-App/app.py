@@ -84,7 +84,6 @@ def load_user(user_id):
 current_user = None     # stores information on the current user logged in 
 
 # each page has its own channel for errors to prevent trailing errors
-error = None
 productError = None
 itemError = None
 itemSoldError = None
@@ -95,6 +94,7 @@ transactionError = None
 reportError = None
 stockerError = None
 productError = None
+loginError = None
 
 ###############################################################################################################################################
 # ROUTE DECLARATIONS ##########################################################################################################################
@@ -112,7 +112,7 @@ productError = None
 #---------------------------------------------------------------------------------------------------------------------------------------------#
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    global error
+    global loginError
     form = LoginForm(request.form)
     global current_user  # allows changing of the globally defined current_user #
 
@@ -122,8 +122,8 @@ def login():
             user = User.query.filter_by(name=request.form['username']).first()
 
             if user is None:
-                error = "Invalid username. Please try again"
-                render_template('login.html', form=form, error=error)
+                loginError = "Invalid username. Please try again"
+                render_template('login.html', form=form, error=loginError)
             else:
                 if bcrypt.check_password_hash(user.password, request.form['password']):
                     login_user(user)
@@ -133,12 +133,12 @@ def login():
                     return redirect_after_login(current_user)  # from POS_helpers #
                 else:
                     error = "Username found, but invalid password. Please try again."
-                    render_template('login.html', form=form, error=error)
+                    render_template('login.html', form=form, error=loginError)
         else:
-            render_template('login.html', form=form, error=error)
+            render_template('login.html', form=form, error=loginError)
 
     # If the form was not a submit, we just need to grab the page data (GET request) #
-    return render_template('login.html', form=form, error=error)
+    return render_template('login.html', form=form, error=loginError)
 
 @app.route('/logout')
 def logout():
