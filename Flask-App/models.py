@@ -51,7 +51,6 @@ class Item(db.Model):
     def __repr__(self):
         return '{} {} {} {}'.format(self.id, self.product_id, self.inventory_cost, self.expiration_date)
 
-
 class User(db.Model):
     __tablename__ = "users"
 
@@ -88,7 +87,6 @@ class User(db.Model):
     def __repr__(self):
         return '<name {}'.format(self.name)
 
-
 class Product(db.Model):
     __tablename__ = "products"
 
@@ -120,7 +118,16 @@ class Product(db.Model):
     def __repr__(self):
         return '{} {} {} {} {} {} {} {}'.format(self.id, self. name, self.supplier_id, self.inventory_count,
                                              self.min_inventory, self.shelf_life, self.standard_price, self.sale_price)
+    
+    @staticmethod
+    def idExists(product_id):
+        result = Product.query.filter_by(id=product_id).first()
 
+        # if the id does exists, return true
+        if (result):
+            return True
+        else:
+            return False
 
 class ItemSold(db.Model):
     __tablename__ = "items_sold"
@@ -131,7 +138,7 @@ class ItemSold(db.Model):
     product_id = db.Column(db.Integer, ForeignKey('products.id'))
     price_sold = db.Column(db.Float, nullable=False)
     inventory_cost = db.Column(db.Float, nullable=False)
-    transaction_id = db.Column(db.Integer, nullable=False)
+    transaction_id = db.Column(db.Integer, ForeignKey('transactions.id'), nullable=False, )
 
     def __init__(self, item_id, price_sold, transaction_id):
         """
@@ -175,20 +182,9 @@ class ItemSold(db.Model):
         except SQLAlchemyError:
             raise SQLAlchemyError("get_cost failed.  You suck.")
 
-    # @staticmethod 
-    # def checkItemIDExists(item_id):
-    #     """
-    #     Determines if the given item ID already exists in the database
-    #     :param item_id: int
-    #     :return: boolean
-    #     """
-    #     result = 
-
-
     def __repr__(self):
         return '{} {} {} {} {} {}'.format(self.id, self.item_id, self.product_id, self.price_sold,
                                           self.inventory_cost, self.transaction_id)
-
 
 class Supplier(db.Model):
     __tablename__ = "suppliers"
@@ -209,7 +205,6 @@ class Supplier(db.Model):
 
     def __repr__(self):
         return '{} {} {}'.format(self.id, self.name, self.email)
-
 
 class Transaction(db.Model):
     __tablename__ = "transactions"
@@ -236,7 +231,6 @@ class Transaction(db.Model):
 
     def __repr__(self):
         return '{} {} {} {} {}'.format(self.id, self.cust_name, self.cust_contact, self.payment_type, self.date)
-
 
 class Discount(db.Model):
     __tablename__ = "discounts"

@@ -84,6 +84,7 @@ def load_user(user_id):
 current_user = None     # stores information on the current user logged in 
 
 # each page has its own channel for errors to prevent trailing errors
+error = None
 productError = None
 itemError = None
 itemSoldError = None
@@ -529,7 +530,11 @@ def itemDBUpdateItem():
 
     # else if the user did not enter an id, add a new item
     else:
-        POS_database.addItem(db, inputDict["product-id"], inputDict["inventory-cost"])
+        result = POS_database.addItem(db, inputDict["product-id"], inputDict["inventory-cost"])
+
+        if (result == POS_database.NO_RESULT):
+            itemError = "That product is not in the database."
+
         pagination = Item.query.paginate(1, 16)
         page = pagination.pages
         return redirect(url_for('itemsDB', page=page))
@@ -991,8 +996,8 @@ def userDBCancel():
 
 
 def deleteDBRow(dbTableName):
-    global userError
-    userError = None
+    global transactionError
+    
     if (dbTableName == "user"):
         getRowFunc = POS_display.get_user_row
         destroyRowFunc = POS_database.destroyUser
@@ -1022,17 +1027,45 @@ def deleteDBRow(dbTableName):
         destroyRowFunc = POS_database.destroyItemSold
         idFieldName = "itemsold_id"
 
+
     # get the user input from the form submit
     inputDict = getRowFunc(request)
     result = destroyRowFunc(db, inputDict[idFieldName]) 
 
-    print(result)
     if (result == POS_database.NO_RESULT):
-        userError = "That item is not in the database"
+        error = "That item is not in the database"
+        if (dbTableName == "user"):
+            userError = error
+        elif (dbTableName == "supplier"):
+            supplierError = error
+        elif (dbTableName == "product"):
+            productError = error
+        elif (dbTableName == "item"):
+            itemError = error
+        elif (dbTableName == "discount"):
+            discountError = error
+        elif (dbTableName == "transaction"):
+            transactionError = error
+        elif (dbTableName == "itemsold"):
+            itemSoldError = error
 
     # delete the row  
-    if (result == POS_database.INTEGRITY_userError):
-        userError = "Another item in your database depends on this item. You can't delete this yet."
+    if (result == POS_database.INTEGRITY_ERROR):
+        error = "Another item in your database depends on this item. You can't delete this yet."
+        if (dbTableName == "user"):
+            userError = error
+        elif (dbTableName == "supplier"):
+            supplierError = error
+        elif (dbTableName == "product"):
+            productError = error
+        elif (dbTableName == "item"):
+            itemError = error
+        elif (dbTableName == "discount"):
+            discountError = error
+        elif (dbTableName == "transaction"):
+            transactionError = error
+        elif (dbTableName == "itemsold"):
+            itemSoldError = error        
 
 # -------------------------------------------------- #
 

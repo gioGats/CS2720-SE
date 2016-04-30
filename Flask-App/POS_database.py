@@ -152,6 +152,7 @@ def getProductName(db, productID):
     :param productID: int
     :return: str (name)
     """
+
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product).filter(Product.id == productID).first()
 
@@ -224,7 +225,6 @@ def getProductInventoryCount(db, productID):
     result = db.session.query(Product).filter(Product.id == productID).first()
     # grab the name in the keyed tuple received
     return result.inventory_count  # product's current inventory count
-
 
 @getfromDB_Error
 def getProductSupplierID(db, productID):
@@ -382,11 +382,20 @@ def addItem(db, product_id, inventory_cost):
     :param inventory_cost: float
     :return: -
     """
-    # Build one
-    db.session.add(Item(product_id, inventory_cost))
-    incProduct(db, product_id)
-    # Commit it
-    db.session.commit()
+
+    # if the inputted inventory cost is empty, default it to 0.00
+    if (not inventory_cost):
+        inventory_cost = 0.00
+        
+    # if the ID does not exist then raise a no result exception
+    if (not Product.idExists(product_id)):
+        raise NoResult
+    else:
+        # Build one
+        result = db.session.add(Item(product_id, inventory_cost))
+        incProduct(db, product_id)
+        # Commit it
+        db.session.commit()
 
 
 @commitDB_Errorcatch
