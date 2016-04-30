@@ -1,9 +1,32 @@
+<!-- 
+####################################################################################################################
+# Name:             itemssoldDB.html                                                                               #
+# Last Modified:    4/30/2016                                                                                      #
+# Purpose:          displays the database table for itemssold and all functions for that table                     #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
 {% extends "databasetemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
     POS | Items Sold | DB
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
       <div class="navbar-header">
         <a class="navbar-brand" a href="/">POS Application</a>
@@ -43,17 +66,23 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
-<!-- - - - - - - - - - - - - - - - - - - - 
-    SIDE PANEL BLOCKS
-  -  - - - - - - - - - - - - - - - - - - -->     
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->  
+
+<!-- side panel header -->
 {% block sidePanelHeader %}
     Items Sold Menu
 {% endblock %}
 
+<!-- delete button form action -->
 {% block deleteURL %}
     "{{ url_for('itemsoldDBDeleteItemsold') }}"
 {% endblock %}
 
+<!-- side panel form data -->
 {% block formData %}
   <div class="form-group">
       <label for="item-id-input">Item ID: </label>
@@ -69,18 +98,26 @@
       <label for="transaction-id-input">Transaction ID: </label>
       <input type="number" class="form-control" name="transaction-id" id="transaction-id-input">  
   </div>
-
 {% endblock %}
 
+<!-- update button form action -->
 {% block updateURL %}
     "{{ url_for('itemsoldDBUpdateItemsold') }}"
 {% endblock %}
 
+<!-- cancel button form action -->
 {% block cancelURL %}
     "{{ url_for('itemsoldDBCancel') }}"
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+
+    <!-- table header -->
     <thead class="table-header">
         <tr>
             <td>Item Sold ID</td>
@@ -92,12 +129,14 @@
         </tr>
     </thead>
 
+    <!-- table body -->
     <tbody>
         {% for row in pagination.items %}
             <tr>
                 <td>{{ row.id }}</td>
                 <td>{{ row.item_id }}</td>
                 <td>{{ row.product_id }}</td>
+                <!-- force python to format decimals to 2 places -->
                 <td>{{ "${0:.2f}".format(row.price_sold) }}</td>
                 <td>{{ "${0:.2f}".format(row.inventory_cost) }}</td>
                 <td>{{ row.transaction_id }}</td>
@@ -106,9 +145,16 @@
     </tbody>
   {% endblock %}
 
-    {% block tableInput %}
+<!-- 
+#####################################################################################################
+# PAGINATION ########################################################################################
+#####################################################################################################
+-->    
+{% block tableInput %}
     <div style="font-size: 15px; background-color: white;padding: 10px; border: 5px solid black; text-align: center; ">
         <a href="{{ url_for('itemssoldDB')}}"> 1 </a>|
+
+    
 {% if pagination.has_prev %}<a href="{{ url_for('itemssoldDB', page=pagination.prev_num) }}">{{ pagination.prev_num }}..</a>{% else %}{% endif %}
     <strong>{{ pagination.page }}</strong>
 {% if pagination.has_next %}<a href="{{ url_for('itemssoldDB', page=pagination.next_num) }}">..{{ pagination.next_num }} </a>{% else %}{% endif %}

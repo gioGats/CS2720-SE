@@ -1,30 +1,56 @@
-<!-- Template for database pages, declaring a side panel content in a block for each database page. -->
+<!-- 
+####################################################################################################################
+# Name: 			databasetemplate.html                                                                          #
+# Last Modified: 	4/30/2016                                                                                      #
+# Purpose: 			template for database pages, declaring a side panel content in a block for each database page. #
+#################################################################################################################### 
+-->
 
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
 {% extends "contenttemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->
 {% block sidePanelContent %}
     <div class="side-panel-top">
+	    
+    	<!-- side panel header -->
 	    <h2 class="side-panel-header"><u>{% block sidePanelHeader %}{% endblock %}</u></h2>
+
 	    <form id="database-form">
+
+	    	<!-- id input -->
 	    	<div class="form-group">
 		    	<label for="idInput" class="side-panel-label">ID: </label>
 		        <input type="number" class="form-control" name="DatabaseID" id="idInput" min=1>
 	    	</div>
 	    	
+	    	<!-- delete button -->
 	        <div class="form-group">
 	        	<button type="submit" class="btn btn-danger side-panel-button" form="database-form" formaction={% block deleteURL %}{% endblock %} formmethod="post" data-toggle="tooltip" title="enter an ID number to delete it from the database">Delete</button>
 	        </div>
 	        
+	        <!-- side panel divider -->
 	        <div class="form-group">
 	        	<div class="side-panel-divider"></div>
 	        </div>
 
+	        <!-- side panel form data -->
 	        {% block formData %}{% endblock %}
 
+	        <!-- update button -->
 	        <div class="form-group">
 		        <button type="submit" class="btn btn-info side-panel-button" form="database-form" formaction={% block updateURL %}{% endblock %} formmethod="post" data-toggle="tooltip" title="enter an ID number to edit an ID in the database; enter no ID number to add a new item to the database">Update</button>
 	        </div>
 
+	        <!-- cancel button -->
 	        <div class="form-group">
 		        <button type="submit" class="btn btn-info side-panel-button" form="database-form" formaction={% block cancelURL %}{% endblock %} formmethod="post" data-toggle="tooltip" title="clear all text boxes and errors">Cancel</button>
 	    	</div>

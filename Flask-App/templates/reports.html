@@ -1,10 +1,32 @@
+<!-- 
+####################################################################################################################
+# Name:             cashier.html                                                                                   #
+# Last Modified:    4/30/2016                                                                                      #
+# Purpose:          displays the cashier interface when the cashier tab is clicked                                 #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
 {% extends "contenttemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
 	POS | Reports
 {% endblock %}
 
-
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
     <div class="navbar-header">
         <a class="navbar-brand" a href="/">POS Application</a>
@@ -43,11 +65,23 @@
     </div><!--/.nav-collapse -->
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->
 {% block sidePanelContent %}
     <div class="side-panel-top">
+
+        <!-- side panel main header -->
         <h2 class="side-panel-header"><u>Report Menu</u></h2>
+
+        <!-- side panel sub-title -->
         <h4 class="side-panel-header">Download a report...</h4>
+
         <form id="manager-form" action="/download" method=post>
+
+            <!-- report type input -->
             <div class="form-group">
                 <label for="report-dropdown-input">Pick a report: </label>
                 <select class="form-control" id="report-dropdown-input" name="report-dropdown" form="manager-form">
@@ -64,45 +98,65 @@
                 </select>
             </div>
             
+            <!-- start date input -->
             <div class="form-group">
                 <label for="start-date-input">Start Date </label>
                 <input class="form-control" id="start-date-input" type="date" name="report-start-date">
             </div>
 
+            <!-- end date input -->
             <div class="form-group">
                 <label for="end-date-input">End Date </label>
                 <input class="form-control" id="end-date-input" type="date" name="report-end-date">
             </div>
 
+            <!-- download report button -->
             <div class="form-group">
                 <button type="submit" name="managerReportDownload" class="btn btn-info side-panel-button" data-toggle="tooltip" title="click to download the indicated report">Download Report</button>
             </div>
+
         </form>
 
+        <!-- side panel divider -->
         <div class="form-group">
             <div class="side-panel-divider"></div>
         </div>
 
+        <!-- table custom range sub-title -->
         <h4 class="side-panel-header" data-toggle="tooltip" title="use the boxes below to generate revenue, cost, and profit for a custom range">Table Custom Range</h4>
+
         <form id="custom_range_form" action="{{ url_for('reports') }}" method=post>
+
+            <!-- start date input -->
             <div class="form-group">
                 <label for="custom_start_date_input">Start Date</label> 
                 <input type="date" class="form-control" id="custom_start_date_input" name="custom_start_date" required> 
             </div>
 
+            <!-- end date input -->
             <div class="form-group">
-                <label for="custom_end_date_input">Start Date</label>
+                <label for="custom_end_date_input">End Date</label>
                 <input type="date" class="form-control" id="custom_end_date_input" name="custom_end_date" required>
             </div>
 
+            <!-- update custom range button -->
             <div class="form-group">
                 <button type="submit" class="btn btn-info side-panel-button" data-toggle="tooltip" title="click to update custom range in the table to the left">Update Custom Range</button>
             </div>
+
         </form>
+
     </div>
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+
+    <!-- table header -->
     <thead class="table-header">
         <tr>
             <td></td>
@@ -113,18 +167,24 @@
         </tr>
     </thead>
 
+    <!-- table body -->
     <tbody>
         {% for row in reportTable.rowsList %}
             <tr>
                 <td>{{ row.name }}</td>
+                <!-- force python to format decimals to 2 places -->
                 <td>{{ "${0:.2f}".format(row.daily) }}</td>
                 <td>{{ "${0:.2f}".format(row.weekly) }}</td>
                 <td>{{ "${0:.2f}".format(row.monthly) }}</td>
                 <td>{{ "${0:.2f}".format(row.custom) }}</td>
             </tr>
         {% endfor %}
-
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE INPUT #######################################################################################
+#####################################################################################################
+-->
 {% block tableInput %}
 {% endblock %}

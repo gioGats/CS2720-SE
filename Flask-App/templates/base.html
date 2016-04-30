@@ -1,22 +1,40 @@
+<!-- 
+####################################################################################################################
+# Name:     base.html                                                                                              #
+# Last      Modified: 4/30/2016                                                                                    #
+# Purpose:  the base template for all other pages in our system                                                    #
+# Notes:    contains all html header information, styling, general navbar setup, and error display                 #
+#################################################################################################################### 
+-->
+
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 
-  <!-- Bootstrap Header Declaration -->
-  <head>
-      <title>{% block title %}{% endblock %}</title>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
-      <link rel="stylesheet" type="text/css" href="static/custom.css">
-      <link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link rel="stylesheet" type="text/css" href="static/custom.css">
+        <link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
 
-      <link rel="shortcut icon"
-            type="image/x-icon"
-            href="http://www.free-icons-download.net/images/green-dollar-sign-button-icon-12080.png"/>
-  <style>
-
+        <link rel="shortcut icon"
+              type="image/x-icon"
+              href="http://www.free-icons-download.net/images/green-dollar-sign-button-icon-12080.png"/>
+        
+<!-- 
+#####################################################################################################
+# HTML STYLING  #####################################################################################
+#####################################################################################################
+-->
+        <style>
 /*::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -50,11 +68,6 @@
 ::-webkit-scrollbar-corner {
   background: transparent;
 }*/
-
-
-/* Author: Ethan Morisette
-/* Purpose: to add custom styling on top of the bootstrap styling
-/* Notes: please alphabetize selector properties for enhanced readability */
 
 html            {background-color:#000000;}
 #pagecontent        {height:750px; margin-top:50px; padding:0px;}
@@ -149,10 +162,14 @@ div.side-panel-divider        {width:100%; margin-bottom: 50px; border:solid bla
     padding: .1em .25em;
     font-size: 150%;
 }
-  </style>
-  </head>
+        </style>
+    </head>
 
- <!-- HTML Body Code Declaration -->
+ <!-- 
+#####################################################################################################
+# HTML BODY #########################################################################################
+#####################################################################################################
+-->
  <body>
 
      <!-- Fixed navbar -->
@@ -186,7 +203,8 @@ div.side-panel-divider        {width:100%; margin-bottom: 50px; border:solid bla
 
       </div>
 
-     {% if error %}
+      <!-- error handling block -->
+      {% if error %}
         <div class="alert alert-danger" >
               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
               <p class="error"><strong>Error:</strong> {{ error }}</p>

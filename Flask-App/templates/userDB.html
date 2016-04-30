@@ -1,9 +1,33 @@
+<!-- 
+####################################################################################################################
+# Name:             userDB.html                                                                                    #
+# Last Modified:    4/30/2016                                                                                      #
+# Purpose:          display table and table functions for users database table                                     #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
+
 {% extends "databasetemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
     POS | User | DB
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
       <div class="navbar-header">
         <a class="navbar-brand" a href="/">POS Application</a>
@@ -43,29 +67,38 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->
 
-<!-- - - - - - - - - - - - - - - - - - - - 
-    SIDE PANEL BLOCKS
-  -  - - - - - - - - - - - - - - - - - - -->     
+<!-- side panel header -->
 {% block sidePanelHeader %}
     User Menu
 {% endblock %}
 
+<!-- delete button form action -->
 {% block deleteURL %}
     "{{ url_for('userDBDeleteUser') }}"
 {% endblock %}
 
+<!-- side panel form data -->
 {% block formData %}
+
+    <!-- user name input -->
     <div class="form-group">
         <label for="username-input">User Name: </label>
         <input type="text" class="form-control" name="username" id="username-input" placeholder="ex. VoldemortSnort">
     </div> 
 
+    <!-- password input -->
     <div class="form-group">
         <label for="password-input">Password: </label>
         <input type="password" class="form-control" name="password" id="password-input" placeholder="ex. ihateharrypotter">
     </div> 
 
+    <!-- permissions input -->
     <div class="form-group">
         <label for="permissionsInput">Permissions: </label>
         <select class="form-control" id="permissionsInput" name="permissions">
@@ -74,17 +107,27 @@
             <option value="3">Stocker</option>                 
         </select>
     </div> 
+
 {% endblock %}
 
+<!-- update button form action -->
 {% block updateURL %}
     "{{ url_for('userDBUpdateUser') }}"
 {% endblock %}
 
+<!-- cancel button form action -->
 {% block cancelURL %}
     "{{ url_for('userDBCancel') }}"
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+
+    <!-- table header -->
     <thead class="table-header">
         <tr>
             <td>User ID</td>
@@ -94,9 +137,11 @@
         </tr>
     </thead>
 
+    <!-- table body -->
     <tbody>
         {% for row in pagination.items %}
             <tr>
+                <!-- determine the permissions string to output -->
                 {% if row.permissions == 1 %}
                     {% set permissions_string = "Manager" %}
                 {% elif row.permissions == 2 %}
@@ -114,6 +159,11 @@
     </tbody>
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# PAGINATION ########################################################################################
+#####################################################################################################
+-->
 {% block tableInput %}
     <div style="font-size: 15px; background-color: white;padding: 10px; border: 5px solid black; text-align: center; ">
         <a href="{{ url_for('userDB')}}"> 1 </a>|

@@ -1,9 +1,32 @@
+<!-- 
+####################################################################################################################
+# Name: itemsDB.html                                                                                               #
+# Last Modified: 4/30/2016                                                                                         #
+# Purpose: displays the interface for the items database table                                                     #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
 {% extends "databasetemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
     POS | Items | DB
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
       <div class="navbar-header">
         <a class="navbar-brand" a href="/">POS Application</a>
@@ -43,37 +66,56 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
-<!-- - - - - - - - - - - - - - - - - - - - 
-    SIDE PANEL BLOCKS
-  -  - - - - - - - - - - - - - - - - - - -->     
+<!-- 
+#####################################################################################################
+# SIDE PANEL BLOCKS #################################################################################
+#####################################################################################################
+-->   
+
+<!-- header for side panel -->
 {% block sidePanelHeader %}
     Items Menu
 {% endblock %}
 
+<!-- delete button form action -->
 {% block deleteURL %}
     "{{ url_for('itemDBDeleteItem') }}"
 {% endblock %}
 
+<!-- side panel form data -->
 {% block formData %}
+
+    <!-- product id input -->
     <div class="form-group">
         <label for="product-id-input">Product ID: </label>
         <input type="number" class="form-control" name="product-id" id="product-id-input">
     </div>
+
+    <!-- inventory cost input -->
     <div class="form-group">
         <label for="inventory-cost-input">Inventory Cost: </label>
         <input type="number" class="form-control" name="inventory-cost" id="inventory-cost-input" step="0.01" min="0.00">
     </div>
 {% endblock %}
 
+<!-- update button form action -->
 {% block updateURL %}
     "{{ url_for('itemDBUpdateItem') }}"
 {% endblock %}
 
+<!-- cancel button form action -->
 {% block cancelURL %}
     "{{ url_for('itemDBCancel') }}"
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+
+    <!-- table header -->
     <thead class="table-header">
         <tr>
             <td>Item ID</td>
@@ -83,11 +125,13 @@
         </tr>
     </thead>
 
+    <!-- table body -->
     <tbody>
         {% for row in pagination.items %}
             <tr>
                 <td>{{ row.id }}</td>
                 <td>{{ row.product_id }}</td>
+                <!-- force python to format floats to 2 decimal places -->
                 <td>{{ "${0:.2f}".format(row.inventory_cost) }}</td>
                 <td>{{ row.expiration_date }}</td>
             </tr>
@@ -95,6 +139,11 @@
     </tbody>
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE INPUT #######################################################################################
+#####################################################################################################
+-->
 {% block tableInput %}
     <div style="font-size: 15px; background-color: white;padding: 10px; border: 5px solid black; text-align: center; ">
         <a href="{{ url_for('itemsDB')}}"> 1 </a>|

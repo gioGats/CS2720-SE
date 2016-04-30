@@ -1,25 +1,52 @@
-<!-- notes about blocks:
-	- all 3 main pages have a similar format (side panel, main panel, and a table)
-		> side panel specifies information about the current page (e.g. transaction ID) as well as various buttons and links
-		> main panel holds the table and all functions related to it (e.g. adding an item to the current working receipt)
-		> table holds the different tables for each of the pages 
+<!-- 
+####################################################################################################################################################
+# Name: contenttemplate.html                                                                                                                       #
+# Last Modified: 4/30/2016                                                                                                                         #
+# Purpose: to create the main page template for all pages except home and login pages                                                              #
+# Notes: all 3 main pages have a similar format (side panel, main panel, and a table)                                                              #
+#		> side panel specifies information about the current page (e.g. transaction ID) as well as various buttons and links                       #
+#		> main panel holds the table and all functions related to it (e.g. adding an item to the current working receipt)                          #
+#		> table holds the different tables for each of the pages                                                                                   #
+####################################################################################################################################################
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
 -->
 {% extends "base.html" %}
+
+<!-- 
+#####################################################################################################
+# PAGE CONTENT ######################################################################################
+#####################################################################################################
+-->
 {% block content %}
 	<div class="container-fluid" id="pagecontent">
+
+		<!-- side panel divider - takes 3 of 12 columns -->
 		<div class="col-md-3" id="sidepanel">
 			{% block sidePanelContent %}{% endblock %}
 		</div>
+
+		<!-- main panel divider - takes 9 of 12 columns -->
 		<div class="col-md-9" id="mainpanel"> 
+
+			<!-- window that holds the tables on all pages -->
 			<div id="tablewindow">
 				<table class="table table-striped">
 					{% block table %}{% endblock %}
 				</table>
 			</div>
+
+			<!-- holds pagination input  -->
 			<div id="tableinput">
 				{% block tableInput %}{% endblock %}
 			</div>
+
 		</div>
+		
 	</div>
 {% endblock %}
 

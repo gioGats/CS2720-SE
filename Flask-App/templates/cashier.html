@@ -1,14 +1,37 @@
+<!-- 
+####################################################################################################################
+# Name: 			cashier.html                                                                                   #
+# Last Modified: 	4/30/2016                                                                                      #
+# Purpose: 			displays the cashier interface when the cashier tab is clicked                                 #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
 {% extends "contenttemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
 	POS | Cashier
 {% endblock %}
 
-
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
 	<div class="navbar-header">
 	  	<a class="navbar-brand" a href="/">POS Application</a>
 	</div>
+
 	<div id="navbar" class="navbar-collapse collapse">
 	  	<ul class="nav navbar-nav navbar-right">
 	      	{% if current_user.is_authenticated %}
@@ -32,7 +55,8 @@
              {% if current_user.is_authenticated %}
                 <li>
                 {% block dropdown %}
-                 {{ super() }}
+                 	<!-- take what the parent template has and use it -->
+                 	{{ super() }}
                 {% endblock %}
                 </li>
             {% endif %}
@@ -43,47 +67,76 @@
 	</div><!--/.nav-collapse -->
 {% endblock %}
 
+
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->
 {% block sidePanelContent %}
 	<div class="side-panel-top">
 
+		<!-- side panel header -->
 		<h2 class="side-panel-header"><u>Cashier Menu</u></h2>
+			
 		<form id="cashierForm" method=post>
+
+			<!-- row number input	 -->
 			<div class="form-group">
 				<label for="row-number-input">Row Number: </label>
 				<input type="number" class="form-control" name="row_number" min=1>
 			</div>
+
+			<!-- delete button -->
 			<div class="form-group">
 				<button type="submit" class="btn btn-danger side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierDeleteRow') }}" formmethod="post" data-toggle="tooltip" title="delete an item with the indicated row ID">Delete</button>
 			</div>
 
+			<!-- side panel divider -->
 			<div class="form-group">
                 <div class="side-panel-divider"></div>
             </div>
 
+            <!-- item id input -->
 			<div class="form-group">
 				<label for="item-id-input">Item ID: </label>
 				<input type="number" class="form-control" name="item_id">
 			</div>
 
+			<!-- price per unit input -->
 			<div class="form-group">
 				<label for="price-per-unit-input">Price Per Unit: </label>
 				<input type="number" class="form-control" name="price_per_unit" step="0.01" min="0.00">
 			</div>
 
+			<!-- update button -->
 			<div class="form-group">
 				<button type="submit" class="btn btn-info side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierAddRow') }}" formmethod="post" data-toggle="tooltip" title="enter an id and click this to edit a current cart item; click this without entering an id to add a new item to the cart">Update</button>
 			</div>
+
+			<!-- cancel button -->
 			<div class="form-group">
 				<button type="submit" class="btn btn-info side-panel-button" formid="cashierForm" formaction="{{ url_for('cashierCancel') }}" formmethod="post" data-toggle="tooltip" title="clear text boxes, errors, and items in current cart">Cancel</button>
   			</div>
-    	</form>
+
+    	</form> <!-- cashierForm -->
+
+    	<!-- customer info button (leads to finish transaction)	-->
         <form action="{{ url_for('enterCustomerInfo') }}" method=post>
 			<button type="submit" class="btn btn-info side-panel-button" data-toggle="tooltip" title="click to enter the customer info and finish this transaction">Enter Customer Info</button>
 		</form>
 	</div>
 {% endblock %}
 
+
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+
+	<!-- table header -->
 	<thead class="table-header">
 		<tr>
 			<td>Row Number</td>
@@ -93,7 +146,9 @@
 		</tr>
 	</thead>
 
+	<!-- table body -->
 	<tbody>
+		<!-- myNum is a local variable created within this template to keep track of the row number to display while looping through the cashier table -->
 		{% set myNum = 0 %}
 		{% for cashierRow in cashierTable.rowsList %}
 			{% set myNum = myNum + 1 %}
@@ -101,6 +156,7 @@
 				<td> {{ myNum }} </td>
 				<td> {{ cashierRow.item_id }} </td>
 				<td> {{ cashierRow.product_name }} </td>
+				<!-- force python to format the float to 2 decimal places -->
 				<td> {{ "${0:.2f}".format(cashierRow.price) }} </td>
 			</tr>
 		{% endfor %}

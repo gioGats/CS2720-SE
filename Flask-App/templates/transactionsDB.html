@@ -1,9 +1,32 @@
+<!-- 
+####################################################################################################################
+# Name:             transactionsDB.html                                                                            #
+# Last Modified:    4/30/2016                                                                                      #
+# Purpose:          display table and table functions for transactions database table                              #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
 {% extends "databasetemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
     POS | Transactions | DB
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
       <div class="navbar-header">
         <a class="navbar-brand" a href="/">POS Application</a>
@@ -43,28 +66,38 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
-<!-- - - - - - - - - - - - - - - - - - - - 
-    SIDE PANEL BLOCKS
-  -  - - - - - - - - - - - - - - - - - - -->     
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->
+
+<!-- side panel header -->
 {% block sidePanelHeader %}
     Transactions Menu
 {% endblock %}
 
+<!-- delete button form action -->
 {% block deleteURL %}
     "{{ url_for('transactionDBDeleteTransaction') }}"
 {% endblock %}
 
+<!-- side panel form data -->
 {% block formData %}
+
+    <!-- customer name input -->
     <div class="form-group">
         <label for="customer-name-input">Customer Name: </label>
         <input type="text" class="form-control" name="customer-name" placeholder="customer name" id="customer-name-input">
     </div>
     
+    <!-- customer contact input -->
     <div class="form-group">
         <label for="customer-contatct-input">Customer Contact: </label>
         <input type="text" class="form-control" name="customer-contact" placeholder="customer contact" id="customer-contact-input">
     </div>
     
+    <!-- payment type input -->
     <div class="form-group">    
         <label for="payment-type-input">Payment Type</label>
         <select class="form-control" id="payment-type-input" name="payment-type">
@@ -78,15 +111,25 @@
 
 {% endblock %}
 
+<!-- update button form action -->
 {% block updateURL %}
     "{{ url_for('transactionDBUpdateTransaction') }}"
 {% endblock %}
 
+<!-- cancel button form action -->
 {% block cancelURL %}
     "{{ url_for('transactionDBCancel') }}"
 {% endblock %}
 
+
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+    
+    <!-- table header -->
     <thead class="table-header">
         <tr>
             <td>Transaction ID</td>
@@ -97,9 +140,11 @@
         </tr>
     </thead>
 
+    <!-- table body -->
     <tbody>
         {% for row in pagination.items %}
             <tr>
+                <!-- pick the proper string to display for payment type -->
                 {% if row.payment_type == 1 %}
                     {% set payment_string = "Cash" %}
                 {% elif row.payment_type == 2 %}
@@ -122,6 +167,11 @@
     </tbody>
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# PAGINATION ########################################################################################
+#####################################################################################################
+-->
 {% block tableInput %}
     <div style="font-size: 15px; background-color: white;padding: 10px; border: 5px solid black; text-align: center; ">
         <a href="{{ url_for('transactionsDB')}}"> 1 </a>|

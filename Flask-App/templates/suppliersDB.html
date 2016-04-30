@@ -1,9 +1,32 @@
+<!-- 
+####################################################################################################################
+# Name:             suppliersDB.html                                                                               #
+# Last Modified:    4/30/2016                                                                                      #
+# Purpose:          displays the table and table functions for the suppliers database table                        #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
 {% extends "databasetemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
     POS | Suppliers | DB
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
       <div class="navbar-header">
         <a class="navbar-brand" a href="/">POS Application</a>
@@ -43,37 +66,56 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
-<!-- - - - - - - - - - - - - - - - - - - - 
-    SIDE PANEL BLOCKS
-  -  - - - - - - - - - - - - - - - - - - -->     
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->
+<!-- side panel header -->
 {% block sidePanelHeader %}
     Suppliers Menu
 {% endblock %}
 
+<!-- delete button form action -->
 {% block deleteURL %}
     "{{ url_for('supplierDBDeleteSupplier') }}"
 {% endblock %}
 
+<!-- side panel form data -->
 {% block formData %}
-  <div class="form-group">
-      <label for="supplier-name-input">Supplier Name: </label>
-      <input type="text" class="form-control" name="supplier-name" placeholder="ex. George Washington">
-  </div>
-  <div class="form-group">
-      <label for="supplier-email-input">Supplier Email: </label>
-      <input type="email" class="form-control" name="supplier-email" placeholder="examples@example.com">
-  </div>
+
+    <!-- supplier name input -->
+    <div class="form-group">
+        <label for="supplier-name-input">Supplier Name: </label>
+        <input type="text" class="form-control" name="supplier-name" placeholder="ex. George Washington">
+    </div>
+
+    <!-- supplier email input -->
+    <div class="form-group">
+        <label for="supplier-email-input">Supplier Email: </label>
+        <input type="email" class="form-control" name="supplier-email" placeholder="examples@example.com">
+    </div>
+
 {% endblock %}
 
+<!-- update button form action -->
 {% block updateURL %}
     "{{ url_for('supplierDBUpdateSupplier') }}"
 {% endblock %}
 
+<!-- cancel button form action -->
 {% block cancelURL %}
     "{{ url_for('supplierDBCancel') }}"
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+
+    <!-- table header -->
     <thead class="table-header">
         <tr>
             <td>Supplier ID</td>
@@ -82,6 +124,7 @@
         </tr>
     </thead>
 
+    <!-- table body -->
     <tbody>
         {% for row in pagination.items %}
             <tr>
@@ -93,6 +136,11 @@
     </tbody>
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# PAGINATION ########################################################################################
+#####################################################################################################
+-->
 {% block tableInput %}
     <div style="font-size: 15px; background-color: white;padding: 10px; border: 5px solid black; text-align: center; ">
         <a href="{{ url_for('supplierDB')}}"> 1 </a>|

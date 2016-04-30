@@ -1,9 +1,32 @@
+<!-- 
+####################################################################################################################
+# Name:             discountsDB.html                                                                               #
+# Last Modified:    4/30/2016                                                                                      #
+# Purpose:          displays the discounts database table and table functions                                      #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
 {% extends "databasetemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
     POS | Discount | DB
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
       <div class="navbar-header">
         <a class="navbar-brand" a href="/">POS Application</a>
@@ -43,49 +66,68 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
-<!-- - - - - - - - - - - - - - - - - - - - 
-    SIDE PANEL BLOCKS
-  -  - - - - - - - - - - - - - - - - - - -->     
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->  
+
+<!-- side panel header -->
 {% block sidePanelHeader %}
     Discounts Menu
 {% endblock %}
 
+<!-- delete button form action -->
 {% block deleteURL %}
     "{{ url_for('discountDBDeleteDiscount') }}"
 {% endblock %}
 
+<!-- side panel form data -->
 {% block formData %}
+
+    <!-- product id input -->
     <div class="form-group">
         <label for="product-id-input">Product ID: </label>
         <input type="number" class="form-control" name="product-id" id="product-id-input">
     </div>
     
+    <!-- start date input -->
     <div class="form-group">
         <label for="start-date-input">Start Date: </label>
         <input type="date" class="form-control" name="start-date" id="start-date-input">
     </div>
 
+    <!-- end date input -->
     <div class="form-group">
         <label for="end-date-input">End Date: </label>
         <input type="date" class="form-control" name="end-date" id="end-date-input">
     </div>
 
+    <!-- percent off input -->
     <div class="form-group">
         <label for="percent-off-input" data-toggle="tooltip" title="a decimal between 0.00 and 1.00 to indicate how much percent off">Percent Off: </label>
         <input type="number" class="form-control" name="percent-off" id="percent-off-input" step="0.01" min="0.01" max="1.00">  
     </div>
-
 {% endblock %}
 
+<!-- update button form action -->
 {% block updateURL %}
     "{{ url_for('discountDBUpdateDiscount') }}"
 {% endblock %}
 
+<!-- cancel button form action -->
 {% block cancelURL %}
     "{{ url_for('discountDBCancel') }}"
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+    
+    <!-- table header -->
     <thead class="table-header">
         <tr>
             <td>Discount ID</td>
@@ -96,6 +138,7 @@
         </tr>
     </thead>
 
+    <!-- table body -->
     <tbody>
         {% for row in pagination.items %}
             <tr>
@@ -103,12 +146,18 @@
                 <td>{{ row.product_id }}</td>
                 <td>{{ row.start_date }}</td>
                 <td>{{ row.end_date }}</td>
+                <!-- force python to format decimals to 2 places -->
                 <td>{{ "{0:.2f}".format(row.discount) }}</td>
             </tr>
         {% endfor %}
     </tbody>
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# PAGINATION ########################################################################################
+#####################################################################################################
+-->
 {% block tableInput %}
     <div style="font-size: 15px; background-color: white;padding: 10px; border: 5px solid black; text-align: center; ">
         <a href="{{ url_for('discountsDB')}}"> 1 </a>|

@@ -1,9 +1,33 @@
+<!-- 
+####################################################################################################################
+# Name:             productsDB.html                                                                                #
+# Last Modified:    4/30/2016                                                                                      #
+# Purpose:          displays the cashier interface when the cashier tab is clicked                                 #
+#################################################################################################################### 
+-->
+
+<!-- 
+#####################################################################################################
+# INHERITED TEMPLATES ###############################################################################
+#####################################################################################################
+-->
+
 {% extends "databasetemplate.html" %}
 
+<!-- 
+#####################################################################################################
+# PAGE TITLE ########################################################################################
+#####################################################################################################
+-->
 {% block title %}
     POS | Products | DB
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# NAVIGATION BAR ####################################################################################
+#####################################################################################################
+-->
 {% block navbar %}
       <div class="navbar-header">
         <a class="navbar-brand" a href="/">POS Application</a>
@@ -43,17 +67,22 @@
       </div><!--/.nav-collapse -->
 {% endblock %}
 
-<!-- - - - - - - - - - - - - - - - - - - - 
-    SIDE PANEL BLOCKS
-  -  - - - - - - - - - - - - - - - - - - -->     
+<!-- 
+#####################################################################################################
+# SIDE PANEL ########################################################################################
+#####################################################################################################
+-->
+<!-- side panel header -->
 {% block sidePanelHeader %}
     Products Menu
 {% endblock %}
 
+<!-- delete button form action -->
 {% block deleteURL %}
     "{{ url_for('productDBDeleteProduct') }}"
 {% endblock %}
 
+<!-- side panel form data -->
 {% block formData %}
     <div class="form-group">
         <label for="product-name-input">Product Name: </label>
@@ -79,18 +108,26 @@
         <label for="standard-price-input">Standard Price: </label>
         <input type="number" class="form-control" name="standard-price" id="standard-price-input" step="0.01" min="0.00"> 
     </div>
-
 {% endblock %}
 
+<!-- update button form action -->
 {% block updateURL %}
     "{{ url_for('productDBUpdateProduct') }}"
 {% endblock %}
 
+<!-- cancel button form action -->
 {% block cancelURL %}
     "{{ url_for('productDBCancel') }}"
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# TABLE CONTENT #####################################################################################
+#####################################################################################################
+-->
 {% block table %}
+
+    <!-- table header -->
     <thead class="table-header">
         <tr>
             <td>Product ID</td>
@@ -103,6 +140,7 @@
         </tr>
     </thead>
 
+    <!-- table body -->
     <tbody>
         {% for row in pagination.items %}
             <tr>
@@ -112,12 +150,18 @@
                 <td>{{ row.inventory_count }}</td>
                 <td>{{ row.min_inventory }}</td>
                 <td>{{ row.shelf_life }}</td>
-                <td>{{ row.standard_price }}</td>
+                <!-- force python to format decimals to 2 decimal places -->
+                <td>{{ "${0:.2f}".format(row.standard_price) }}</td>
             </tr>
         {% endfor %}
     </tbody>
 {% endblock %}
 
+<!-- 
+#####################################################################################################
+# PAGINATION ########################################################################################
+#####################################################################################################
+-->
 {% block tableInput %}
     <div style="font-size: 15px; background-color: white;padding: 10px; border: 5px solid black; text-align: center; ">
         <a href="{{ url_for('productsDB')}}"> 1 </a>|
