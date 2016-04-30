@@ -154,6 +154,10 @@ def getProductName(db, productID):
     """
     # make the query and receive a single tuple (first() allows us to do this)
     result = db.session.query(Product).filter(Product.id == productID).first()
+
+    # if there was no result, then raise a NoResult
+    if (not result):
+        raise NoResult
     # grab the name in the keyed tuple received
     return result.name
 
@@ -1330,37 +1334,45 @@ def revenueCheck(db, time):
     :return: (revenue, cost, prophet,) tuple
     """
 
-    # print(time[0])
-    # print(time[1])
+    # print("STARTDATE", time[0])
+    # print("ENDDATE", time[1])
+    # print(type(time[0]))
     if time == 'day':
         thisMorning = dt.date.today() -dt.timedelta(days=1)
         timetup = (thisMorning, dt.date.today()+dt.timedelta(days=1),)
+        print("DAY")
     elif time == 'week':
         aWeekAgo = dt.date.today() - dt.timedelta(weeks = 1)
         timetup = (aWeekAgo, dt.date.today()+dt.timedelta(days=1),)
+        print("WEEK")
     elif time == 'month':
         aMonthAgo = dt.date.today() - dt.timedelta(weeks = 4)
         timetup = (aMonthAgo, dt.date.today()+dt.timedelta(days=1),)
+        print("MONTH")
     elif (type(time) == tuple):
         timetup = time
+        print("CUSTOM")
     else:
         raise ValueError
     items_sold = db.session.query(ItemSold).all()
+    # print(items_sold)
     in_range = []
     for itemSold in items_sold:
+        # print("gettransaction: ", getTransaction(db, itemSold.transaction_id))
         if getTransaction(db, itemSold.transaction_id)[3] >= timetup[0]:
             if getTransaction(db, itemSold.transaction_id)[3] <= timetup[1]:
                 in_range.append(itemSold)
+    # print(in_range)
     revenue = 0
     cost = 0
     for itemsold in in_range:
-        # print(itemsold)
-        print(itemsold.price_sold)
-        print(revenue)
+        # # print(itemsold)
+        # print(itemsold.price_sold)
+        # print("IN-PROCESS REVENUE:", revenue)
         revenue += itemsold.price_sold
         cost += itemsold.inventory_cost
 
-    print(revenue)
-    print(cost)
+    # print("FINAL REVENUE:", revenue)
+    # print("FINAL COST:", cost)
 
     return [revenue, cost, revenue-cost]

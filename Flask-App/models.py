@@ -175,6 +175,16 @@ class ItemSold(db.Model):
         except SQLAlchemyError:
             raise SQLAlchemyError("get_cost failed.  You suck.")
 
+    # @staticmethod 
+    # def checkItemIDExists(item_id):
+    #     """
+    #     Determines if the given item ID already exists in the database
+    #     :param item_id: int
+    #     :return: boolean
+    #     """
+    #     result = 
+
+
     def __repr__(self):
         return '{} {} {} {} {} {}'.format(self.id, self.item_id, self.product_id, self.price_sold,
                                           self.inventory_cost, self.transaction_id)

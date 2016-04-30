@@ -170,9 +170,11 @@ class CashierRow(Row):
         self.product_name = product_name
         self.price = price
 
-    def changePrice(price):
+    def changePrice(self, price):
         self.price = price
 
+    def changeItemID(self, item_id):
+        self.item_id = item_id
 
 class StockerRow(ItemRow):
     def __init__(self, product_id, name, inventory_cost, quantity=1):
@@ -284,7 +286,24 @@ class CashierTable(Table):
             item_id = self.rowsList[int(row_number)-1].item_id
         if price == '':
             price = self.rowsList[int(row_number)-1].price
-        self.rowsList[row_number-1] = CashierRow(item_id, price)
+        self.rowsList[int(row_number)-1].changeItemID(item_id)
+        self.rowsList[int(row_number)-1].changePrice(price)
+
+    def check_id_exists(self, item_id):
+        """
+        Checks to see if the given id is already in the table
+        :param item_id: int
+        :return: boolean
+        """
+        # loop through all rows in this table's rows list
+        for row in self.rowsList:
+
+            # if we find the id return true
+            if (int(row.item_id) == item_id):
+                return True
+        # if we get through the whole loop without finding the id, return false
+        return False
+
 
 
 class StockerTable(Table):
@@ -324,7 +343,6 @@ class StockerTable(Table):
             inventory_cost = self.rowsList[row_number-1].inventory_cost
 
         self.rowsList[row_number-1] = StockerRow(int(product_id), name, inventory_cost, int(quantity))
-
 
 class ReportTable(Table):
 

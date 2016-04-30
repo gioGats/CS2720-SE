@@ -27,6 +27,7 @@ from werkzeug.exceptions import HTTPException, NotFound, BadRequest
 # APPLICATION CONFIGURATION ####################################################################################################################
 ################################################################################################################################################
 
+
 # Grabs the domain name the app is running on #
 app = Flask(__name__)
 
@@ -81,10 +82,18 @@ def load_user(user_id):
 # GLOBAL VARIABLES ############################################################################################################################
 ###############################################################################################################################################
 current_user = None     # stores information on the current user logged in 
-error = None            # stores errors in the system
 
-
-
+# each page has its own channel for errors to prevent trailing errors
+productError = None
+itemError = None
+itemSoldError = None
+supplierError = None
+userError = None
+discountError = None
+transactionError = None
+reportError = None
+stockerError = None
+cashierError = None
 
 ###############################################################################################################################################
 # ROUTE DECLARATIONS ##########################################################################################################################
@@ -153,19 +162,20 @@ def logout():
 @app.route('/reports', methods=["GET", "POST"])
 @login_required
 def reports():
-
+    global reportError
+    startDate = date(1990, 5, 27)
+    endDate = datetime.date.today() + datetime.timedelta(days=1) 
+    endDate = date(1990, 6, 27)
     # get the dates for the custom rows
     # whenever the page is first loaded it will try to get the custom dates, so we raise an exception in this case
     try:
         inputDict = POS_display.get_report_custom_row(request)
+        startDate = POS_display.convert_string_to_date(inputDict["custom_start_date"])
+        endDate = POS_display.convert_string_to_date(inputDict["custom_end_date"])
         print(inputDict["custom_start_date"])
         print(inputDict["custom_end_date"])
     except BadRequest as e:
         print("Could not grab the custom row information.")
-
-    startDate = date(1990, 1, 1)
-    endDate = date(2016, 4, 28)
-
 
     # get the report table information
     reportTableDict     = getReportTableInfo(db, startDate, endDate)
@@ -178,7 +188,7 @@ def reports():
 
     # display the page
     if is_manager(current_user):
-        return render_template("reports.html", reportTable=POS_logic.report_table)
+        return render_template("reports.html", reportTable=POS_logic.report_table, error=reportError)
     else:
         return redirect('/')
 
@@ -269,17 +279,16 @@ def getReportTableInfo(db, startDate, endDate):
 @app.route('/cashier')
 @login_required
 def cashier():
-    
+    global cashierError
     if is_manager(current_user) or is_cashier(current_user):
-        return render_template("cashier.html", cashierTable=POS_logic.cashier_table, error=error)
+        return render_template("cashier.html", cashierTable=POS_logic.cashier_table, error=cashierError)
     else:
         return redirect('/')
 
-
 @app.route('/cashieradd', methods=["POST"])
 def cashierAddRow():
-    global error
-    error = None
+    global cashierError
+    cashierError = None
     # get the information from the user
     inputDict = POS_display.get_cashier_row(request)
     
@@ -288,33 +297,45 @@ def cashierAddRow():
     else:
         # get the product name and price from the database
         productID = POS_database.getItemProduct(db, inputDict["item_id"])
-        productName = POS_database.getProductName(db, productID)
+        # print("Item ID:", inputDict["item_id"])
 
-        # if the user enters a price per unit, than use that one
-        if (inputDict["price_per_unit"]):
-            pricePerUnit = int(inputDict["price_per_unit"])
-        # otherwise use the one in the database
+        # if there was no result returned that means there was no item in the database with that id
+        # so return with an cashierError
+        if (productID == POS_database.NO_RESULT):
+            cashierError = "That item is not in the database."
+        
+        # if there is a result but the id is already in the table, return an cashierError
+        elif (POS_logic.cashier_table.check_id_exists(int(inputDict["item_id"]))):
+            cashierError = "That item is already in your table!"
+        # otherwise, add the item
         else:
-            pricePerUnit = POS_database.getProductPrice(db, productID)
-        # add the received information to the local receipt table
-        POS_logic.cashier_table.add_row(inputDict["item_id"], productName, pricePerUnit)
+            productName = POS_database.getProductName(db, productID)
+
+            # if the user enters a price per unit, than use that one
+            if (inputDict["price_per_unit"]):
+                pricePerUnit = float(inputDict["price_per_unit"])
+            # otherwise use the one in the database
+            else:
+                pricePerUnit = POS_database.getProductPrice(db, productID)
+            # add the received information to the local receipt table
+            POS_logic.cashier_table.add_row(inputDict["item_id"], productName, pricePerUnit)
 
     # reload page
     return redirect(url_for('cashier'))
 
 @app.route('/cashierdelete', methods=["POST"])
 def cashierDeleteRow():
-    global error
-    error = None
+    global cashierError
+    cashierError = None
     inputDict = POS_display.get_cashier_row(request)
 
-    # if no row id was entered then print an error
+    # if no row id was entered then print an cashierError
     if (not inputDict["row_number"]):
-        error = "What are you trying to delete?"
+        cashierError = "What are you trying to delete?"
 
-    # if the row number does not exist, display an error
+    # if the row number does not exist, display an cashierError
     elif (int(inputDict["row_number"]) > POS_logic.cashier_table.get_row_count()):
-        error = "That row number is out of bounds."
+        cashierError = "That row number is out of bounds."
 
     # otherwise, delete the row number
     else:
@@ -325,13 +346,13 @@ def cashierDeleteRow():
 
 @app.route('/customerinfo', methods=["POST"])
 def enterCustomerInfo():
-    global error
-    error = None
+    global cashierError
+    cashierError = None
 
-    # if the cart is empty print an error and reload the cashier page
+    # if the cart is empty print an cashierError and reload the cashier page
     print(POS_logic.cashier_table.isEmpty())
     if (POS_logic.cashier_table.isEmpty()):
-        error = "You don't have any items in your cart!"
+        cashierError = "You don't have any items in your cart!"
         return redirect(url_for("cashier"))
 
     # otherwise go to the customerinfo page
@@ -355,9 +376,6 @@ def cashierCancel():
     return redirect(url_for('cashier'))
 
 
-
-
-
 #---------------------------------------------------------------------------------------------------------------------------------------------#
 # stocker page functions                                                                                                                      #
 #---------------------------------------------------------------------------------------------------------------------------------------------#
@@ -367,15 +385,16 @@ def cashierCancel():
 @app.route('/stocker')
 @login_required
 def stocker():
-    global error
+    global stockerError
     if is_manager(current_user) or is_stocker(current_user):
-        return render_template("stocker.html", stockerTable=POS_logic.stocker_table, error=error)
+        return render_template("stocker.html", stockerTable=POS_logic.stocker_table, error=stockerError)
     else:
         return redirect('/')
 
-
 @app.route('/stockeradd', methods=["POST"])
 def stockerAddRow():
+    global stockerError
+    stockerError = None
     # get the information from the user
     inputDict = POS_display.get_stocker_row(request)
 
@@ -384,31 +403,37 @@ def stockerAddRow():
     if (productID == ''):
         productID = POS_logic.stocker_table.rowsList[int(inputDict["row_number"])-1].product_id
 
+
     # get the product name from the database
     productName = POS_database.getProductName(db, productID)
 
-    if (inputDict["row_number"]):
-        print("I am editing!")
-        POS_logic.stocker_table.edit_row(inputDict["row_number"], productID, productName, inputDict["quantity"], inputDict["inventory_cost"])
+    # if there is no result for productName, then that means the product ID is not in the database
+    if (productName == POS_database.NO_RESULT):
+        stockerError = "That product is not in the database"
+
+    # otherwise edit/add the row
     else:
-        # add all of the information received to the local stocking table
-        POS_logic.stocker_table.add_row(productID, productName, int(inputDict['quantity']), inputDict['inventory_cost'])
+        if (inputDict["row_number"]):
+            POS_logic.stocker_table.edit_row(inputDict["row_number"], productID, productName, inputDict["quantity"], inputDict["inventory_cost"])
+        else:
+            # add all of the information received to the local stocking table
+            POS_logic.stocker_table.add_row(productID, productName, int(inputDict['quantity']), inputDict['inventory_cost'])
     
     return redirect(url_for('stocker'))
 
 @app.route('/stockerdelete', methods=["POST"])
 def stockerDeleteRow():
-    global error
-    error = None
+    global stockerError
+    stockerError = None
     inputDict = POS_display.get_stocker_row(request)
 
     # if no row id was entered then print an erro
     if (not inputDict["row_number"]):
-        error = "What are you trying to delete?"
+        stockerError = "What are you trying to delete?"
 
-    # if the enter row number is out of bounds, print error
+    # if the enter row number is out of bounds, print stockerError
     elif (int(inputDict["row_number"]) > POS_logic.stocker_table.get_row_count()):
-        error = "That row number is out of bounds!"
+        stockerError = "That row number is out of bounds!"
 
     # otherwise go ahead and delete the row
     else:
@@ -419,12 +444,12 @@ def stockerDeleteRow():
 
 @app.route('/stockercommit', methods=["POST"])
 def updateInventory():
-    global error
-    error = None
+    global stockerError
+    stockerError = None
 
-    # if there aren't any items in the inventory, print error
+    # if there aren't any items in the inventory, print stockerError
     if (POS_logic.stocker_table.isEmpty()):
-        error = "You don't have any items in your cart!"
+        stockerError = "You don't have any items in your cart!"
 
     # otherwise update the database table
     else:
@@ -455,29 +480,29 @@ def stockerCancel():
 @app.route('/itemsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
 def itemsDB(page):
-    global error
+    global itemError
 
     if is_manager(current_user) or is_stocker(current_user):
         pagination = Item.query.paginate(page, 16)
-        return render_template("itemsDB.html", pagination=pagination, error=error)
+        return render_template("itemsDB.html", pagination=pagination, error=itemError)
     else:
         return redirect(url_for('login'))
 
 @app.route('/itemdb-delete', methods=["POST"])
 @login_required
 def itemDBDeleteItem():
-    global error
-    error = None
+    global itemError
+    itemError = None
     
     inputDict = POS_display.get_item_row(request)
 
-    # if the user didn't enter an item id to delete print error
+    # if the user didn't enter an item id to delete print itemError
     if (not inputDict["item-id"]):
-        error = "What are you trying to delete?"
+        itemError = "What are you trying to delete?"
 
-    # if the id input is greater than the max id in the database, then print error
+    # if the id input is greater than the max id in the database, then print itemError
     elif (int(inputDict["item-id"]) > POS_database.getMaxItemID(db)):
-        error = "You entered an item ID that is out of bounds."
+        itemError = "You entered an item ID that is out of bounds."
         
     # otherwise delete the row
     else: 
@@ -489,8 +514,8 @@ def itemDBDeleteItem():
 
 @app.route('/itemdb-add', methods=["POST"])
 def itemDBUpdateItem():
-    global error
-    error = None
+    global itemError
+    itemError = None
 
     # get the user input from the form submit
     inputDict = POS_display.get_item_row(request)
@@ -500,7 +525,7 @@ def itemDBUpdateItem():
         result = POS_database.editItem(db, inputDict["item-id"], inputDict["product-id"], inputDict["inventory-cost"])
 
         if (result == POS_database.NO_RESULT):
-            error = "That item is not in the database."
+            itemError = "That item is not in the database."
 
     # else if the user did not enter an id, add a new item
     else:
@@ -529,30 +554,32 @@ def itemDBCancel():
 @app.route('/productsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
 def productsDB(page):
-    global error
+    global productError
 
     if is_manager(current_user) or is_stocker(current_user):
         pagination = Product.query.paginate(page, 16)
-        return render_template("productsDB.html", pagination=pagination, error=error)
+        return render_template("productsDB.html", pagination=pagination, error=productError)
     else:
         return redirect(url_for('login'))
 
 @app.route('/productdb-delete', methods=["POST"])
 @login_required
 def productDBDeleteProduct():
-    global error
-    error = None
+    global productError
+
+    # initialize the function to have no productErrors
+    productError = None
     
     inputDict = POS_display.get_product_row(request)
 
 
-    # if the user didn't enter an item id to delete print error
+    # if the user didn't enter an item id to delete print productError
     if (not inputDict["product-id"]):
-        error = "What are you trying to delete?"
+        productError = "What are you trying to delete?"
 
-    # if the id input is greater than the max id in the database, then print error
+    # if the id input is greater than the max id in the database, then print productError
     elif (int(inputDict["product-id"]) > POS_database.getMaxProductID(db)):
-        error = "You entered a product ID that is out of bounds."
+        productError = "You entered a product ID that is out of bounds."
         
     # otherwise delete the row
     else: 
@@ -564,14 +591,16 @@ def productDBDeleteProduct():
 
 @app.route('/productdb-add', methods=["POST"])
 def productDBUpdateProduct():
-    global error
-    error = None
+    global productError
+
+    # clear out the productError status
+    productError = None
     # get the user input from the form submit
     inputDict = POS_display.get_product_row(request)
 
-    # if the dictiionary doensn't have any items in it print error
+    # if the dictiionary doensn't have any items in it print productError
     if ((not inputDict["product-id"]) and (not inputDict["product-name"]) and (not inputDict["supplier-id"]) and (not inputDict["min-inventory"]) and (not inputDict["shelf-life"]) and (not inputDict["standard-price"])):
-        error = "You didn't enter anything!"
+        productError = "You didn't enter anything!"
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
@@ -579,7 +608,7 @@ def productDBUpdateProduct():
         result = POS_database.editProduct(db, inputDict["product-id"], inputDict["product-name"], inputDict["supplier-id"], inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
         
         if (result == POS_database.NO_RESULT):
-            error = "That item is not in the database."
+            productError = "That item is not in the database."
 
     # else if the user did not enter an id, add a new user
     else:
@@ -605,29 +634,29 @@ def productDBCancel():
 @app.route('/transactionsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
 def transactionsDB(page):
-    global error
+    global transactionError
 
     if is_manager(current_user) or is_cashier(current_user):
         pagination = Transaction.query.paginate(page, 16)
-        return render_template("transactionsDB.html", pagination=pagination, error=error)
+        return render_template("transactionsDB.html", pagination=pagination, error=transactionError)
     else:
         return redirect(url_for('login'))
 
 @app.route('/transactiondb-delete', methods=["POST"])
 @login_required
 def transactionDBDeleteTransaction():
-    global error
-    error = None
+    global transactionError
+    transactionError = None
     
     inputDict = POS_display.get_transaction_row(request)
 
-    # if no transaction id was entered then print an error
+    # if no transaction id was entered then print an transactionError
     if (not inputDict["transaction-id"]):
-        error = "What are you trying to delete?"
+        transactionError = "What are you trying to delete?"
 
-    # if the id input is greater than the max id in the database, then print error
+    # if the id input is greater than the max id in the database, then print transactionError
     elif (int(inputDict["transaction-id"]) > POS_database.getMaxTransactionID(db)):
-        error = "You entered a transaction ID that is out of bounds."
+        transactionError = "You entered a transaction ID that is out of bounds."
 
     # otherwise delete the row
     else: 
@@ -639,14 +668,14 @@ def transactionDBDeleteTransaction():
 
 @app.route('/transactiondb-add', methods=["POST"])
 def transactionDBUpdateTransaction():
-    global error
-    error = None
+    global transactionError
+    transactionError = None
     # get the user input from the form submit
     inputDict = POS_display.get_transaction_row(request)
 
-    # if the dictiionary doensn't have any items in it print error
+    # if the dictiionary doensn't have any items in it print transactionError
     if (not inputDict):
-        error = "You didn't enter anything!"
+        transactionError = "You didn't enter anything!"
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
@@ -654,7 +683,7 @@ def transactionDBUpdateTransaction():
     elif (inputDict["transaction-id"]):
         result = POS_database.editTransaction(db, inputDict["transaction-id"], inputDict["customer-name"], inputDict["customer-contact"], inputDict["payment-type"])
         if (result == POS_database.NO_RESULT):
-            error = "That item is not in the database."
+            transactionError = "That item is not in the database."
 
     # else if the user did not enter an id, add a new user
     else:
@@ -681,29 +710,29 @@ def transactionDBCancel():
 @app.route('/itemssoldDB/<int:page>', methods=['GET', 'POST'])
 @login_required
 def itemssoldDB(page):
-    global error
+    global itemSoldError
 
     if is_manager(current_user) or is_cashier(current_user):
         pagination = ItemSold.query.paginate(page, 16)
-        return render_template("itemssoldDB.html", pagination=pagination, error=error)
+        return render_template("itemssoldDB.html", pagination=pagination, error=itemSoldError)
     else:
         return redirect(url_for('login'))
 
 @app.route('/itemsolddb-delete', methods=["POST"])
 @login_required
 def itemsoldDBDeleteItemsold():
-    global error
-    error = None
+    global itemSoldError
+    itemSoldError = None
     
     inputDict = POS_display.get_itemsold_row(request)
 
-    # if no transaction id was entered then print an error
+    # if no transaction id was entered then print an itemSoldError
     if (not inputDict["itemsold_id"]):
-        error = "What are you trying to delete?"
+        itemSoldError = "What are you trying to delete?"
 
-    # if the id input is greater than the max id in the database, then print error
+    # if the id input is greater than the max id in the database, then print itemSoldError
     elif (int(inputDict["itemsold_id"]) > POS_database.getMaxItemSoldID(db)):
-        error = "You entered an Item Sold ID that is out of bounds."
+        itemSoldError = "You entered an Item Sold ID that is out of bounds."
         
     # otherwise delete the row
     else: 
@@ -715,15 +744,15 @@ def itemsoldDBDeleteItemsold():
 
 @app.route('/itemsolddb-add', methods=["POST"])
 def itemsoldDBUpdateItemsold():
-    global error
-    error = None
+    global itemSoldError
+    itemSoldError = None
 
     inputDict = POS_display.get_itemsold_row(request)
     #TODO database support for adding and modifying items sold
     if (inputDict["itemsold_id"]):
         result = POS_database.editItemSold(db, inputDict["itemsold_id"], inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
         if (result == POS_database.NO_RESULT):
-            error = "That item is not in the database."
+            itemSoldError = "That item is not in the database."
     else:
         POS_database.addItemSold(db, inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
 
@@ -732,6 +761,8 @@ def itemsoldDBUpdateItemsold():
 
 @app.route('/itemsolddbcancel', methods=["POST"])
 def itemsoldDBCancel():
+    global itemSoldError
+    itemSoldError = None
     return redirect(url_for('itemssoldDB'))
 
 
@@ -748,29 +779,29 @@ def itemsoldDBCancel():
 @app.route('/discountsDB/<int:page>', methods=['GET', 'POST'])
 @login_required
 def discountsDB(page):
-    global error
+    global discountError
 
     if is_manager(current_user):
         pagination = Discount.query.paginate(page, 16)
-        return render_template("discountsDB.html", pagination=pagination, error=error)
+        return render_template("discountsDB.html", pagination=pagination, error=discountError)
     else:
         return redirect(url_for('login'))
 
 @app.route('/discountdb-delete', methods=["POST"])
 @login_required
 def discountDBDeleteDiscount():
-    global error
-    error = None
+    global discountError
+    discountError = None
     
     inputDict = POS_display.get_discount_row(request)
 
-    # if the user didn't enter a dicount id to delete print error
+    # if the user didn't enter a dicount id to delete print discountError
     if (not inputDict["discount-id"]):
-        error = "What are you trying to delete?"
+        discountError = "What are you trying to delete?"
 
-    # if the id input is greater than the max id in the database, then print error
+    # if the id input is greater than the max id in the database, then print discountError
     elif (int(inputDict["discount-id"]) > POS_database.getMaxDiscountID(db)):
-        error = "You entered a discount ID that is out of bounds."
+        discountError = "You entered a discount ID that is out of bounds."
         
     # otherwise delete the row
     else: 
@@ -782,8 +813,8 @@ def discountDBDeleteDiscount():
 
 @app.route('/discountdb-add', methods=["POST"])
 def discountDBUpdateDiscount():
-    global error
-    error = None
+    global discountError
+    discountError = None
 
     # get the user input from the form submit
     inputDict = POS_display.get_discount_row(request)
@@ -793,7 +824,7 @@ def discountDBUpdateDiscount():
     if (inputDict["discount-id"]):
         result = POS_database.editDiscount(db, inputDict["discount-id"], inputDict["product-id"], inputDict["start-date"], inputDict["end-date"], inputDict["percent-off"])
         if (result == POS_database.NO_RESULT):
-            error = "That item is not in the database."
+            discountError = "That item is not in the database."
 
 
     # else if the user did not enter an id, add a new user
@@ -810,6 +841,8 @@ def discountDBUpdateDiscount():
 
 @app.route('/discountdbcancel', methods=["POST"])
 def discountDBCancel():
+    global discountError
+    discountError = None
     return redirect(url_for('discountsDB'))
 
 
@@ -826,29 +859,29 @@ def discountDBCancel():
 @app.route('/supplierDB/<int:page>', methods=['GET', 'POST'])
 @login_required
 def supplierDB(page):
-    global error
+    global supplierError
 
     if is_manager(current_user):
         pagination = Supplier.query.paginate(page, 16)
-        return render_template("suppliersDB.html", pagination=pagination, error=error)
+        return render_template("suppliersDB.html", pagination=pagination, error=supplierError)
     else:
         return redirect(url_for('login'))
 
 @app.route('/supplierdb-delete', methods=["POST"])
 @login_required
 def supplierDBDeleteSupplier():
-    global error
-    error = None
+    global supplierError
+    supplierError = None
     
     inputDict = POS_display.get_supplier_row(request)
 
-    # if the user didn't enter a supplier id to delete print error
+    # if the user didn't enter a supplier id to delete print supplierError
     if (not inputDict["supplier-id"]):
-        error = "What are you trying to delete?"
+        supplierError = "What are you trying to delete?"
 
-    # if the id input is greater than the max id in the database, then print error
+    # if the id input is greater than the max id in the database, then print supplierError
     elif (int(inputDict["supplier-id"]) > POS_database.getMaxSupplierID(db)):
-        error = "You entered a supplier ID that is out of bounds."
+        supplierError = "You entered a supplier ID that is out of bounds."
 
     # otherwise delete the row
     else:
@@ -860,8 +893,8 @@ def supplierDBDeleteSupplier():
 
 @app.route('/supplierdb-add', methods=["POST"])
 def supplierDBUpdateSupplier():
-    global error
-    error = None
+    global supplierError
+    supplierError = None
     # get the user input from the form submit
     inputDict = POS_display.get_supplier_row(request)
 
@@ -870,7 +903,7 @@ def supplierDBUpdateSupplier():
     if (inputDict["supplier-id"]):
         result = POS_database.editSupplier(db, inputDict["supplier-id"], inputDict["supplier-name"], inputDict["supplier-email"])
         if (result == POS_database.NO_RESULT):
-            error = "That item is not in the database."
+            supplierError = "That item is not in the database."
 
     # else if the user did not enter an id, add a new user
     else:
@@ -881,6 +914,8 @@ def supplierDBUpdateSupplier():
 
 @app.route('/supplierdbcancel', methods=["POST"])
 def supplierDBCancel():
+    global supplierError
+    supplierError = None
     return redirect(url_for('supplierDB'))
 
 
@@ -895,29 +930,29 @@ def supplierDBCancel():
 @app.route('/userDB/<int:page>', methods=['GET', 'POST'])
 @login_required
 def userDB(page):
-    global error
+    global userError
 
     if is_manager(current_user):
         pagination = User.query.paginate(page, 16)
-        return render_template("userDB.html", pagination=pagination, error=error)
+        return render_template("userDB.html", pagination=pagination, error=userError)
     else:
         return redirect(url_for('login'))
 
 @app.route('/userdb-delete', methods=["POST"])
 @login_required
 def userDBDeleteUser():
-    global error
-    error = None
+    global userError
+    userError = None
     
     inputDict = POS_display.get_user_row(request)
 
-    # if the user didn't enter an user id to delete print error
+    # if the user didn't enter an user id to delete print userError
     if (not inputDict["user-id"]):
-        error = "What are you trying to delete?"
+        userError = "What are you trying to delete?"
 
-    # if the id input is greater than the max id in the database, then print error
+    # if the id input is greater than the max id in the database, then print userError
     elif (int(inputDict["user-id"]) > POS_database.getMaxUserID(db)):
-        error = "You entered a user ID that is out of bounds."
+        userError = "You entered a user ID that is out of bounds."
 
     # otherwise delete the row
     else:
@@ -929,8 +964,8 @@ def userDBDeleteUser():
 
 @app.route('/userdb-add', methods=["POST"])
 def userDBUpdateUser():
-    global error
-    error = None
+    global userError
+    userError = None
     # get the user input from the form submit
     inputDict = POS_display.get_user_row(request)
 
@@ -939,7 +974,7 @@ def userDBUpdateUser():
     if (inputDict["user-id"]):
         result = POS_database.editUser(db, inputDict["user-id"], inputDict["username"], inputDict["password"], inputDict["permissions"])
         if (result == POS_database.NO_RESULT):
-            error = "That item is not in the database."
+            userError = "That item is not in the database."
 
     # else if the user did not enter an id, add a new user
     else:
@@ -950,12 +985,14 @@ def userDBUpdateUser():
 
 @app.route('/userdbcancel', methods=["POST"])
 def userDBCancel():
+    global userError
+    userError = None
     return redirect(url_for('userDB'))
 
 
 def deleteDBRow(dbTableName):
-    global error
-    error = None
+    global userError
+    userError = None
     if (dbTableName == "user"):
         getRowFunc = POS_display.get_user_row
         destroyRowFunc = POS_database.destroyUser
@@ -991,11 +1028,11 @@ def deleteDBRow(dbTableName):
 
     print(result)
     if (result == POS_database.NO_RESULT):
-        error = "That item is not in the database"
+        userError = "That item is not in the database"
 
     # delete the row  
-    if (result == POS_database.INTEGRITY_ERROR):
-        error = "Another item in your database depends on this item. You can't delete this yet."
+    if (result == POS_database.INTEGRITY_userError):
+        userError = "Another item in your database depends on this item. You can't delete this yet."
 
 # -------------------------------------------------- #
 
