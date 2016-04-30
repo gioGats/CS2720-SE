@@ -335,8 +335,7 @@ class StockerTable(Table):
         """
         if product_id == '':
             product_id = self.rowsList[row_number-1].product_id
-        if quantity == "":
-            quantity = int(quantity)
+        if quantity == '':
             quantity = self.rowsList[row_number-1].quantity
         if inventory_cost == '':
             inventory_cost = self.rowsList[row_number-1].inventory_cost

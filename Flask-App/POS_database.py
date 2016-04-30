@@ -271,10 +271,14 @@ def addProduct(db, name, supplier_id, min_inventory, shelf_life, standard_price)
     :return: -
     """
 
-    # Build one
-    db.session.add(Product(name, supplier_id, min_inventory, shelf_life, standard_price))
-    # commit our addition!
-    db.session.commit()
+    # if the ID does not exist then raise a no result exception
+    if (not Supplier.idExists(supplier_id)):
+        raise NoResult
+    else:        
+        # Build one
+        db.session.add(Product(name, supplier_id, min_inventory, shelf_life, standard_price))
+        # commit our addition!
+        db.session.commit()
 
 
 @commitDB_Errorcatch
@@ -534,10 +538,15 @@ def addItemSold(db, item_id, price_sold, transaction_id):
     :param permissions: int (1-3)
     :return: -
     """
-    # Create the thing!
-    db.session.add(ItemSold(item_id, price_sold, transaction_id))
-    # Commit our change!
-    db.session.commit()
+        
+    # if the ID does not exist then raise a no result exception
+    if (not Item.idExists(item_id) or not Transaction.idExists(transaction_id)):
+        raise NoResult
+    else:
+        # Create the thing!
+        db.session.add(ItemSold(item_id, price_sold, transaction_id))
+        # Commit our change!
+        db.session.commit()
 
 
 
@@ -694,10 +703,15 @@ def addDiscount(db, productID, discPercent, startDate, endDate):
     :param endDate: datetime object
     :return: -
     """
-    # Create the discount portion
-    db.session.add(Discount(productID, startDate, endDate, discPercent))
-    # Save it to the database
-    db.session.commit()
+
+    # if the ID does not exist then raise a no result exception
+    if (not Product.idExists(productID)):
+        raise NoResult
+    else:
+        # Create the discount portion
+        db.session.add(Discount(productID, startDate, endDate, discPercent))
+        # Save it to the database
+        db.session.commit()
 
 
 @commitDB_Errorcatch

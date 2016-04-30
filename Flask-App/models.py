@@ -51,6 +51,16 @@ class Item(db.Model):
     def __repr__(self):
         return '{} {} {} {}'.format(self.id, self.product_id, self.inventory_cost, self.expiration_date)
 
+    @staticmethod
+    def idExists(item_id):
+        result = Item.query.filter_by(id=item_id).first()
+
+        # if the id does exists, return true
+        if (result):
+            return True
+        else:
+            return False
+
 class User(db.Model):
     __tablename__ = "users"
 
@@ -206,6 +216,16 @@ class Supplier(db.Model):
     def __repr__(self):
         return '{} {} {}'.format(self.id, self.name, self.email)
 
+    @staticmethod
+    def idExists(supplier_id):
+        result = Supplier.query.filter_by(id=supplier_id).first()
+
+        # if the id does exists, return true
+        if (result):
+            return True
+        else:
+            return False
+
 class Transaction(db.Model):
     __tablename__ = "transactions"
 
@@ -231,6 +251,16 @@ class Transaction(db.Model):
 
     def __repr__(self):
         return '{} {} {} {} {}'.format(self.id, self.cust_name, self.cust_contact, self.payment_type, self.date)
+
+    @staticmethod
+    def idExists(transaction_id):
+        result = Transaction.query.filter_by(id=transaction_id).first()
+
+        # if the id does exists, return true
+        if (result):
+            return True
+        else:
+            return False
 
 class Discount(db.Model):
     __tablename__ = "discounts"

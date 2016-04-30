@@ -93,7 +93,7 @@ discountError = None
 transactionError = None
 reportError = None
 stockerError = None
-productError = None
+cashierError = None
 loginError = None
 
 ###############################################################################################################################################
@@ -280,20 +280,23 @@ def getReportTableInfo(db, startDate, endDate):
 @app.route('/cashier')
 @login_required
 def cashier():
-    global productError
+    global cashierError
     if is_manager(current_user) or is_cashier(current_user):
-        return render_template("cashier.html", cashierTable=POS_logic.cashier_table, error=productError)
+        return render_template("cashier.html", cashierTable=POS_logic.cashier_table, error=cashierError)
     else:
         return redirect('/')
 
 @app.route('/cashieradd', methods=["POST"])
 def cashierAddRow():
-    global productError
-    productError = None
+    global cashierError
+    cashierError = None
     # get the information from the user
     inputDict = POS_display.get_cashier_row(request)
     
-    if (inputDict["row_number"]):
+
+    if (not inputDict["row_number"] and not inputDict["item_id"] and not inputDict["price_per_unit"]):
+        cashierError = "You didn't enter anything!"
+    elif (inputDict["row_number"]):
         POS_logic.cashier_table.edit_row(inputDict["row_number"], inputDict["item_id"], inputDict["price_per_unit"])
     else:
         # get the product name and price from the database
@@ -303,11 +306,11 @@ def cashierAddRow():
         # if there was no result returned that means there was no item in the database with that id
         # so return with an productError
         if (productID == POS_database.NO_RESULT):
-            productError = "That item is not in the database."
+            cashierError = "That item is not in the database."
         
         # if there is a result but the id is already in the table, return an productError
         elif (POS_logic.cashier_table.check_id_exists(int(inputDict["item_id"]))):
-            productError = "That item is already in your table!"
+            cashierError = "That item is already in your table!"
         # otherwise, add the item
         else:
             productName = POS_database.getProductName(db, productID)
@@ -326,17 +329,17 @@ def cashierAddRow():
 
 @app.route('/cashierdelete', methods=["POST"])
 def cashierDeleteRow():
-    global productError
-    productError = None
+    global cashierError
+    cashierError = None
     inputDict = POS_display.get_cashier_row(request)
 
-    # if no row id was entered then print an productError
+    # if no row id was entered then print an cashierError
     if (not inputDict["row_number"]):
-        productError = "What are you trying to delete?"
+        cashierError = "What are you trying to delete?"
 
-    # if the row number does not exist, display an productError
+    # if the row number does not exist, display an cashierError
     elif (int(inputDict["row_number"]) > POS_logic.cashier_table.get_row_count()):
-        productError = "That row number is out of bounds."
+        cashierError = "That row number is out of bounds."
 
     # otherwise, delete the row number
     else:
@@ -347,13 +350,13 @@ def cashierDeleteRow():
 
 @app.route('/customerinfo', methods=["POST"])
 def enterCustomerInfo():
-    global productError
-    productError = None
+    global cashierError
+    cashierError = None
 
-    # if the cart is empty print an productError and reload the cashier page
+    # if the cart is empty print an cashierError and reload the cashier page
     print(POS_logic.cashier_table.isEmpty())
     if (POS_logic.cashier_table.isEmpty()):
-        productError = "You don't have any items in your cart!"
+        cashierError = "You don't have any items in your cart!"
         return redirect(url_for("cashier"))
 
     # otherwise go to the customerinfo page
@@ -373,8 +376,8 @@ def finishTransaction():
 
 @app.route('/cashiercancel', methods=["POST"])
 def cashierCancel():
-    global productError
-    productError = None
+    global cashierError
+    cashierError = None
     POS_logic.cashier_table.clear_table()
     return redirect(url_for('cashier'))
 
@@ -400,29 +403,68 @@ def stockerAddRow():
     stockerError = None
     # get the information from the user
     inputDict = POS_display.get_stocker_row(request)
-
-    productID = inputDict['product_id']
-
-    if (productID == ''):
-        productID = POS_logic.stocker_table.rowsList[int(inputDict["row_number"])-1].product_id
+    
 
 
-    # get the product name from the database
-    productName = POS_database.getProductName(db, productID)
-
-    # if there is no result for productName, then that means the product ID is not in the database
-    if (productName == POS_database.NO_RESULT):
-        stockerError = "That product is not in the database"
-
-    # otherwise edit/add the row
+    if (not inputDict["row_number"] and not inputDict["product_id"] and not inputDict["quantity"] and not inputDict["inventory_cost"]):
+        stockerError = "You didn't enter anything!"
+    # if the user enters a number they want to edit!
+    elif (inputDict["row_number"]):
+        productName = POS_database.getProductName(db, inputDict["product_id"])
+    
+        # if there is no result for productName, then that means the product ID is not in the database
+        if (productName == POS_database.NO_RESULT):
+            stockerError = "That product is not in the database"
+        POS_logic.stocker_table.edit_row(int(inputDict["row_number"]), inputDict["product_id"], productName, inputDict["quantity"], inputDict["inventory_cost"])
+    # otherwise, they want to add something!
     else:
-        if (inputDict["row_number"]):
-            POS_logic.stocker_table.edit_row(inputDict["row_number"], productID, productName, inputDict["quantity"], float(inputDict["inventory_cost"]))
+        # if the user did not enter and inventory cost, give it a default value
+        if (not inputDict["inventory_cost"]):
+            inventory_cost = 0.00
+        # otherwise use the one they entered
         else:
+            inventory_cost = inputDict["inventory_cost"]
+
+        # if the user did not enter a quantity, give it a default value
+        if (not inputDict["quantity"]):
+            quantity = 0
+        # otherwise use the one they entered
+        else:
+            quantity = inputDict["quantity"]
+        # get the product name from the database
+        productName = POS_database.getProductName(db, inputDict["product_id"])
+    
+        # if there is no result for productName, then that means the product ID is not in the database
+        if (productName == POS_database.NO_RESULT):
+            stockerError = "That product is not in the database"
+        else:    
             # add all of the information received to the local stocking table
-            POS_logic.stocker_table.add_row(productID, productName, int(inputDict['quantity']), float(inputDict['inventory_cost']))
+            POS_logic.stocker_table.add_row(inputDict["product_id"], productName, int(quantity), float(inventory_cost))
     
     return redirect(url_for('stocker'))
+
+    # productID = inputDict['product_id']
+
+    # if (productID == ''):
+    #     productID = POS_logic.stocker_table.rowsList[int(inputDict["row_number"])-1].product_id
+
+
+    # # get the product name from the database
+    # productName = POS_database.getProductName(db, productID)
+
+    # # if there is no result for productName, then that means the product ID is not in the database
+    # if (productName == POS_database.NO_RESULT):
+    #     stockerError = "That product is not in the database"
+
+    # # otherwise edit/add the row
+    # else:
+    #     if (inputDict["row_number"]):
+    #         POS_logic.stocker_table.edit_row(int(inputDict["row_number"]), productID, productName, inputDict["quantity"], float(inputDict["inventory_cost"]))
+    #     else:
+    #         # add all of the information received to the local stocking table
+    #         POS_logic.stocker_table.add_row(productID, productName, int(inputDict['quantity']), float(inputDict['inventory_cost']))
+    
+    # return redirect(url_for('stocker'))
 
 @app.route('/stockerdelete', methods=["POST"])
 def stockerDeleteRow():
@@ -623,7 +665,9 @@ def productDBUpdateProduct():
 
     # else if the user did not enter an id, add a new user
     else:
-        POS_database.addProduct(db, inputDict["product-name"], inputDict["supplier-id"],  inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
+        result = POS_database.addProduct(db, inputDict["product-name"], inputDict["supplier-id"],  inputDict["min-inventory"], inputDict["shelf-life"], inputDict["standard-price"])
+        if (result == POS_database.NO_RESULT):
+            productError = "That item is not in the database."
 
     # reload the page
     return redirect(url_for('productsDB'))
@@ -764,12 +808,15 @@ def itemsoldDBUpdateItemsold():
 
     inputDict = POS_display.get_itemsold_row(request)
     #TODO database support for adding and modifying items sold
+
     if (inputDict["itemsold_id"]):
         result = POS_database.editItemSold(db, inputDict["itemsold_id"], inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
         if (result == POS_database.NO_RESULT):
             itemSoldError = "That item is not in the database."
     else:
-        POS_database.addItemSold(db, inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
+        result = POS_database.addItemSold(db, inputDict["item-id"], inputDict["price-sold"], inputDict["transaction-id"])
+        if (result == POS_database.NO_RESULT):
+            itemSoldError = "That item is not in the database."
 
     # reload the page
     return redirect(url_for('itemssoldDB'))
@@ -834,22 +881,29 @@ def discountDBUpdateDiscount():
     # get the user input from the form submit
     inputDict = POS_display.get_discount_row(request)
 
+    # i guess dates return -1 when nothing is entered in the date boxes!
+    if (inputDict["start-date"] == -1):
+        start_date = date.today()
+    else:
+        start_date = inputDict["start-date"]
+    if (inputDict["end-date"] == -1):
+        end_date = date.today()
+    else:
+        end_date = inputDict["end-date"]
+
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
     if (inputDict["discount-id"]):
-        result = POS_database.editDiscount(db, inputDict["discount-id"], inputDict["product-id"], inputDict["start-date"], inputDict["end-date"], inputDict["percent-off"])
+        result = POS_database.editDiscount(db, inputDict["discount-id"], inputDict["product-id"], start_date, end_date, inputDict["percent-off"])
         if (result == POS_database.NO_RESULT):
             discountError = "That item is not in the database."
 
 
     # else if the user did not enter an id, add a new user
     else:
-        POS_database.addDiscount(db, inputDict["product-id"], inputDict["percent-off"], inputDict["start-date"], inputDict["end-date"])
-
-    print(inputDict["product-id"])
-    print(inputDict["percent-off"])
-    print(inputDict["start-date"])
-    print(inputDict["end-date"])
+        result = POS_database.addDiscount(db, inputDict["product-id"], inputDict["percent-off"], start_date, end_date)
+        if (result == POS_database.NO_RESULT):
+            discountError = "That item is not in the database."
 
     # reload the page
     return redirect(url_for('discountsDB'))
@@ -915,7 +969,10 @@ def supplierDBUpdateSupplier():
 
     #  if the user did enter an id number, check if its valid and modify user if it is
     #TODO check if the entered id number is valid
-    if (inputDict["supplier-id"]):
+
+    if (not inputDict["supplier-id"] and not inputDict["supplier-name"] and not inputDict["supplier-email"]):
+        supplierError = "You didn't enter anything!"
+    elif (inputDict["supplier-id"]):
         result = POS_database.editSupplier(db, inputDict["supplier-id"], inputDict["supplier-name"], inputDict["supplier-email"])
         if (result == POS_database.NO_RESULT):
             supplierError = "That item is not in the database."
@@ -993,7 +1050,12 @@ def userDBUpdateUser():
 
     # else if the user did not enter an id, add a new user
     else:
-        POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
+        if (not inputDict["username"]):
+            userError = "You must specify a username to add a user"
+        elif (not inputDict["password"]):
+            userError = "You must specify a password to add a user"
+        else:    
+            POS_database.addUser(db, inputDict["username"], inputDict["password"], inputDict["permissions"])
 
     # reload the page
     return redirect(url_for('userDB'))
