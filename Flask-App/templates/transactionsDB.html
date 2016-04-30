@@ -92,7 +92,7 @@
             <td>Transaction ID</td>
             <td>Customer Name</td>
             <td>Customer Contact</td>
-            <td data-toggle="tooltip" title="1: Cash, 2: Credit, 3: Debit, 4: Check, 5: Other">Payment Type</td>
+            <td>Payment Type</td>
             <td>Date</td>
         </tr>
     </thead>
@@ -100,10 +100,22 @@
     <tbody>
         {% for row in pagination.items %}
             <tr>
+                {% if row.payment_type == 1 %}
+                    {% set payment_string = "Cash" %}
+                {% elif row.payment_type == 2 %}
+                    {% set payment_string = "Credit" %}
+                {% elif row.payment_type == 3 %}
+                    {% set payment_string = "Debit" %}
+                {% elif row.payment_type == 4 %}
+                    {% set payment_string = "Check" %}
+                {% elif row.payment_type == 5 %}
+                    {% set payment_string = "Other" %}
+                {% endif %}
+
                 <td>{{ row.id }}</td>
                 <td>{{ row.cust_name }}</td>
                 <td>{{ row.cust_contact }}</td>
-                <td>{{ row.payment_type }}</td>
+                <td>{{ payment_string }}</td>
                 <td>{{ row.date }}</td>
             </tr>
         {% endfor %}

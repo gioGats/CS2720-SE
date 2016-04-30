@@ -117,10 +117,10 @@
         {% for row in reportTable.rowsList %}
             <tr>
                 <td>{{ row.name }}</td>
-                <td>{{ row.daily }}</td>
-                <td>{{ row.weekly }}</td>
-                <td>{{ row.monthly }}</td>
-                <td>{{ row.custom }}</td>
+                <td>{{ "${0:.2f}".format(row.daily) }}</td>
+                <td>{{ "${0:.2f}".format(row.weekly) }}</td>
+                <td>{{ "${0:.2f}".format(row.monthly) }}</td>
+                <td>{{ "${0:.2f}".format(row.custom) }}</td>
             </tr>
         {% endfor %}
 

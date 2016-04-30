@@ -101,7 +101,7 @@
 				<td> {{ myNum }} </td>
 				<td> {{ cashierRow.item_id }} </td>
 				<td> {{ cashierRow.product_name }} </td>
-				<td> {{ cashierRow.price }} </td>
+				<td> {{ "${0:.2f}".format(cashierRow.price) }} </td>
 			</tr>
 		{% endfor %}
 	</tbody>

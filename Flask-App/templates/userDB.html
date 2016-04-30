@@ -90,17 +90,25 @@
             <td>User ID</td>
             <td>User Name</td>
             <td>Password</td>
-            <td data-toggle="tooltip" title="1: manager; 2: cashier; 3: stocker">Permissions</td>
+            <td>Permissions</td>
         </tr>
     </thead>
 
     <tbody>
         {% for row in pagination.items %}
             <tr>
+                {% if row.permissions == 1 %}
+                    {% set permissions_string = "Manager" %}
+                {% elif row.permissions == 2 %}
+                    {% set permissions_string = "Cashier" %}
+                {% elif row.permissions == 3 %}
+                    {% set permissions_string = "Stocker" %}
+                {% endif %}
+
                 <td>{{ row.id }}</td>
                 <td>{{ row.name }}</td>
                 <td>{{ row.password }}</td>
-                <td>{{ row.permissions }}</td>
+                <td>{{ permissions_string }}</td>
             </tr>
         {% endfor %}
     </tbody>

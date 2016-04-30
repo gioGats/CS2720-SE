@@ -103,7 +103,7 @@
                 <td>{{ row.product_id }}</td>
                 <td>{{ row.start_date }}</td>
                 <td>{{ row.end_date }}</td>
-                <td>{{ row.discount }}</td>
+                <td>{{ "{0:.2f}".format(row.discount) }}</td>
             </tr>
         {% endfor %}
     </tbody>

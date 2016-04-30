@@ -417,10 +417,10 @@ def stockerAddRow():
     # otherwise edit/add the row
     else:
         if (inputDict["row_number"]):
-            POS_logic.stocker_table.edit_row(inputDict["row_number"], productID, productName, inputDict["quantity"], inputDict["inventory_cost"])
+            POS_logic.stocker_table.edit_row(inputDict["row_number"], productID, productName, inputDict["quantity"], float(inputDict["inventory_cost"]))
         else:
             # add all of the information received to the local stocking table
-            POS_logic.stocker_table.add_row(productID, productName, int(inputDict['quantity']), inputDict['inventory_cost'])
+            POS_logic.stocker_table.add_row(productID, productName, int(inputDict['quantity']), float(inputDict['inventory_cost']))
     
     return redirect(url_for('stocker'))
 

@@ -111,7 +111,7 @@
                 <td> {{ stockerRow.name }} </td>
                 <td> {{ stockerRow.product_id }} </td>
                 <td> {{ stockerRow.quantity }} </td>
-                <td> {{ stockerRow.inventory_cost }} </td>
+                <td> {{ "${0:.2f}".format(stockerRow.inventory_cost) }} </td>
             </tr>
         {% endfor %}
     </tbody>
