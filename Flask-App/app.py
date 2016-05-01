@@ -143,12 +143,38 @@ def login():
 @app.route('/logout')
 def logout():
     global current_user
+    global productError
+    global itemError
+    global itemSoldError
+    global supplierError
+    global userError
+    global discountError
+    global transactionError
+    global reportError
+    global stockerError
+    global cashierError
+    global loginError
+
     if current_user is None:
         flash("You are already signed out.")
         return redirect(url_for('login'))
     logout_user()
     current_user = None
     flash('You have been successfully logged out.')
+
+    # clear out all errors for this session 
+    productError        = None
+    itemError           = None
+    itemSoldError       = None
+    supplierError       = None
+    userError           = None
+    discountError       = None
+    transactionError    = None
+    reportError         = None
+    stockerError        = None
+    cashierError        = None
+    loginError          = None
+
     return redirect(url_for('login'))
 
 
@@ -288,16 +314,26 @@ def cashier():
 
 @app.route('/cashieradd', methods=["POST"])
 def cashierAddRow():
+    # clear out any errors on the cashierError channel
     global cashierError
     cashierError = None
+
     # get the information from the user
     inputDict = POS_display.get_cashier_row(request)
     
 
+
+
     if (not inputDict["row_number"] and not inputDict["item_id"] and not inputDict["price_per_unit"]):
         cashierError = "You didn't enter anything!"
     elif (inputDict["row_number"]):
-        POS_logic.cashier_table.edit_row(inputDict["row_number"], inputDict["item_id"], inputDict["price_per_unit"])
+        if (inputDict["price_per_unit"]):
+            pricePerUnit = float(inputDict["price_per_unit"])
+        # otherwise use the one in the database
+        else:
+            pricePerUnit = POS_database.getProductPrice(db, productID)
+
+        POS_logic.cashier_table.edit_row(inputDict["row_number"], inputDict["item_id"], pricePerUnit)
     else:
         # get the product name and price from the database
         productID = POS_database.getItemProduct(db, inputDict["item_id"])
